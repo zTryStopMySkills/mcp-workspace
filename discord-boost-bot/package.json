@@ -1,0 +1,14 @@
+{
+  "name": "discord-boost-bot",
+  "version": "1.0.0",
+  "description": "Bot de Discord para servicio de boosting de Call of Duty",
+  "main": "bot/index.js",
+  "scripts": {
+    "start": "node bot/index.js",
+    "deploy": "node bot/deploy-commands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.7"
+  }
+}

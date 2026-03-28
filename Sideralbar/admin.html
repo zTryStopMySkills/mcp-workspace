@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Sideral Bar</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .recent-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.7rem 1rem;
+      background: var(--bg-card2);
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+    }
+    .recent-name { flex: 1; font-size: 0.88rem; }
+    .recent-cat { font-size: 0.72rem; color: var(--cream-muted); }
+    .quick-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .quick-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+      cursor: pointer; transition: all var(--transition); flex: 1; min-width: 160px;
+      text-align: center;
+    }
+    .quick-card:hover { border-color: var(--gold); background: var(--bg-card2); transform: translateY(-2px); }
+    .quick-card .quick-icon { font-size: 2rem; margin-bottom: 0.7rem; }
+    .quick-card .quick-label { font-size: 0.82rem; color: var(--cream-muted); }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen" style="display:none">
+  <div class="login-box">
+    <div class="login-logo">SIDERAL</div>
+    <div class="login-sub">Panel de Administración</div>
+    <div class="login-divider"></div>
+
+    <div id="login-error" class="login-error">Contraseña incorrecta</div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label" for="admin-password">Contraseña</label>
+        <input class="form-input" type="password" id="admin-password" placeholder="••••••••••" autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn-login">Acceder al Panel</button>
+    </form>
+
+    <p class="login-hint">Panel privado · Solo para el equipo de Sideral Bar</p>
+
+    <div style="margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1rem">
+      <a href="index.html" style="font-size:0.72rem;color:var(--cream-muted);letter-spacing:0.1em">
+        ← Volver al sitio web
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADMIN APP ── -->
+<div id="admin-app">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-main">SIDERAL</span>
+      <span class="sidebar-logo-sub">Panel de Control</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">General</div>
+      <div class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">◈</span> Dashboard
+      </div>
+
+      <div class="nav-section-label">Carta</div>
+      <div class="nav-item" data-page="menu">
+        <span class="nav-icon">✦</span> Gestionar Carta
+      </div>
+
+      <div class="nav-section-label">Sistema</div>
+      <div class="nav-item" data-page="settings">
+        <span class="nav-icon">⚙</span> Ajustes
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="index.html" target="_blank" style="display:block;text-align:center;font-size:0.72rem;color:var(--cream-muted);margin-bottom:0.8rem;letter-spacing:0.1em;text-transform:uppercase">
+        Ver sitio web →
+      </a>
+      <button class="btn-logout" id="btn-logout">⎋ Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-actions">
+        <a href="index.html" target="_blank" class="topbar-link">Ver Web →</a>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="admin-page active" id="page-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">📂</div>
+            <span class="stat-number" id="stat-categories">0</span>
+            <div class="stat-label">Categorías</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🍽️</div>
+            <span class="stat-number" id="stat-dishes">0</span>
+            <div class="stat-label">Platos en carta</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <span class="stat-number" id="stat-active">0</span>
+            <div class="stat-label">Platos activos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🙈</div>
+            <span class="stat-number" id="stat-inactive">0</span>
+            <div class="stat-label">Platos ocultos</div>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <div class="quick-card" onclick="navigateTo('menu');document.getElementById('btn-new-dish').click()">
+            <div class="quick-icon">➕</div>
+            <div class="quick-label">Añadir plato</div>
+          </div>
+          <div class="quick-card" onclick="navigateTo('menu');document.getElementById('btn-new-category').click()">
+            <div class="quick-icon">📁</div>
+            <div class="quick-label">Nueva categoría</div>
+          </div>
+          <div class="quick-card" onclick="window.open('index.html','_blank')">
+            <div class="quick-icon">🌐</div>
+            <div class="quick-label">Ver web</div>
+          </div>
+          <div class="quick-card" onclick="navigateTo('settings')">
+            <div class="quick-icon">⚙️</div>
+            <div class="quick-label">Ajustes</div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:1rem;color:var(--cream)">Vista rápida de la carta</h3>
+          <div id="recent-list"></div>
+        </div>
+      </div>
+
+      <!-- ── MENU ── -->
+      <div class="admin-page" id="page-menu">
+        <div class="page-header">
+          <h2 class="page-title">Gestión de la Carta</h2>
+          <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+            <button class="btn btn-outline" id="btn-new-category">+ Nueva Categoría</button>
+            <button class="btn btn-gold" id="btn-new-dish">+ Nuevo Plato</button>
+          </div>
+        </div>
+
+        <p style="font-size:0.82rem;color:var(--cream-muted);margin-bottom:1.5rem">
+          Haz clic en una categoría para ver y gestionar sus platos. Puedes ocultar platos sin borrarlos.
+        </p>
+
+        <div class="categories-list" id="categories-list">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div class="admin-page" id="page-settings">
+        <h2 class="page-title" style="margin-bottom:1.5rem">Ajustes</h2>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.5rem">Información</h3>
+          <p style="font-size:0.83rem;color:var(--cream-muted);margin-bottom:1rem">
+            El panel guarda los cambios automáticamente en el navegador (localStorage). Para que los cambios se vean en otros dispositivos, deberás exportar y reemplazar el archivo <code style="color:var(--gold)">js/data.js</code>.
+          </p>
+          <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+            <button class="btn btn-gold" onclick="exportData()">⬇ Exportar carta (JSON)</button>
+            <button class="btn btn-outline" onclick="document.getElementById('import-file').click()">⬆ Importar carta (JSON)</button>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)">
+          </div>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.5rem">Contraseña Admin</h3>
+          <p style="font-size:0.83rem;color:var(--cream-muted)">
+            La contraseña actual es <strong style="color:var(--gold)">sideral2024</strong>. Para cambiarla, edita la variable <code style="color:var(--gold)">ADMIN_PASSWORD</code> en el archivo <code style="color:var(--gold)">js/admin.js</code>.
+          </p>
+        </div>
+
+        <div class="danger-zone">
+          <h3>⚠️ Zona de peligro</h3>
+          <p>Resetear la carta eliminará todos los cambios y restaurará los datos originales de la carta. Esta acción no se puede deshacer.</p>
+          <button class="btn btn-danger" id="btn-reset-data">🔄 Resetear carta original</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ── MODAL: CATEGORÍA ── -->
+<div class="modal-overlay" id="modal-category">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-cat-title">Nueva Categoría</h3>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="cat-nombre">Nombre de la categoría *</label>
+          <input class="form-input" type="text" id="cat-nombre" placeholder="Ej: Postres">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cat-emoji">Icono (emoji)</label>
+          <input class="form-input" type="text" id="cat-emoji" placeholder="✦" maxlength="4">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cat-descripcion">Descripción</label>
+        <input class="form-input" type="text" id="cat-descripcion" placeholder="Ej: Dulces tentaciones para terminar">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline modal-cancel">Cancelar</button>
+      <button class="btn btn-gold" id="btn-save-category">Guardar categoría</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: PLATO ── -->
+<div class="modal-overlay" id="modal-dish">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-dish-title">Nuevo Plato</h3>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select class="form-select" id="dish-categoria">
+          <!-- Options generated by JS -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="dish-nombre">Nombre del plato *</label>
+        <input class="form-input" type="text" id="dish-nombre" placeholder="Ej: Croquetas caseras de boletus">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="dish-descripcion">Descripción</label>
+        <textarea class="form-textarea" id="dish-descripcion" placeholder="Descripción del plato, ingredientes principales..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="dish-precio">Precio (€) *</label>
+          <input class="form-input" type="text" id="dish-precio" placeholder="Ej: 14,50 o 4,50 / 9,00 / 14,50">
+          <span class="form-hint">Puedes escribir varios precios separados por " / "</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dish-unidad">Unidad</label>
+          <input class="form-input" type="text" id="dish-unidad" placeholder="plato, tapa, ud., ración...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Imagen del plato</label>
+        <div class="img-upload">
+          <input type="file" id="dish-image-file" accept="image/*">
+          <div class="img-upload-icon">📸</div>
+          <div class="img-upload-text">Arrastra una imagen o haz clic para subir</div>
+          <div class="img-upload-hint">PNG, JPG, WEBP hasta 5MB</div>
+        </div>
+        <div style="margin-top:0.8rem">
+          <label class="form-label">O pega una URL de imagen</label>
+          <input class="form-input" type="text" id="dish-imagen-url" placeholder="https://...">
+        </div>
+        <img id="dish-img-preview" class="img-preview" src="" alt="Preview">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="dish-rating">Valoración (1-5)</label>
+          <input class="form-input" type="number" id="dish-rating" min="1" max="5" step="0.1" value="4.5">
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:0.2rem">
+          <label class="form-check">
+            <input type="checkbox" id="dish-disponible" checked>
+            <span>Plato disponible (visible en carta)</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Badge / Etiqueta</label>
+        <div class="badge-chips">
+          <div class="badge-chip" data-badge="">Sin etiqueta</div>
+          <div class="badge-chip" data-badge="Especial Chef">Especial Chef</div>
+          <div class="badge-chip" data-badge="Top Chef">Top Chef</div>
+          <div class="badge-chip" data-badge="Fan Favorito">Fan Favorito</div>
+          <div class="badge-chip" data-badge="Best Seller">Best Seller</div>
+          <div class="badge-chip" data-badge="Estrella de la Carta">Estrella de la Carta</div>
+          <div class="badge-chip" data-badge="Ibérico">Ibérico</div>
+          <div class="badge-chip" data-badge="Vegano">Vegano</div>
+          <div class="badge-chip" data-badge="Premium">Premium</div>
+          <div class="badge-chip" data-badge="Nuevo">Nuevo</div>
+          <div class="badge-chip" data-badge="Recomendado">Recomendado</div>
+          <div class="badge-chip" data-badge="Para compartir">Para compartir</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline modal-cancel">Cancelar</button>
+      <button class="btn btn-gold" id="btn-save-dish">Guardar plato</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST CONTAINER ── -->
+<div id="toast-container"></div>
+
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  // Export/Import helpers
+  function exportData() {
+    const data = getMenuData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sideral-carta.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Carta exportada correctamente', 'success');
+  }
+
+  function importData(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!data.categorias) throw new Error('Formato incorrecto');
+        saveMenuData(data);
+        menuData = data;
+        renderCurrentPage();
+        toast('Carta importada correctamente', 'success');
+      } catch(err) {
+        toast('Error al importar: ' + err.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+Cargando comandos...
+  📦 Comando cargado: /add-account
+  📦 Comando cargado: /add-booster
+  📦 Comando cargado: /add-service
+  📦 Comando cargado: /assign-order
+  📦 Comando cargado: /complete-order
+  📦 Comando cargado: /edit-service
+  📦 Comando cargado: /list-services
+  📦 Comando cargado: /remove-booster
+  📦 Comando cargado: /remove-service
+  📦 Comando cargado: /set-price
+  📦 Comando cargado: /stats
+  📦 Comando cargado: /catalog
+  📦 Comando cargado: /claim
+  📦 Comando cargado: /help
+  📦 Comando cargado: /my-jobs
+  📦 Comando cargado: /my-orders
+  📦 Comando cargado: /order
+  🔔 Evento cargado: interactionCreate
+  🔔 Evento cargado: ready
+✅ Bot conectado como TOP1% bot#9113
+(node:21432) DeprecationWarning: The ready event has been renamed to clientReady to distinguish it from the gateway READY event and will only emit under that name in v15. Please use clientReady instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)

@@ -1,0 +1,114 @@
+{
+  "negocio": {
+    "nombre": "El Rincón de Salteras",
+    "tagline": "Sabor, tradición y excelencia",
+    "telefono": "+34 954 96 61 84",
+    "whatsapp": "34954966184",
+    "email": "",
+    "direccion": "C/ Juan Ramón Jiménez, 29, 41909 Salteras, Sevilla",
+    "instagram": "@elrincondesalteras",
+    "instagramUrl": "https://www.instagram.com/elrincondesalteras/",
+    "horario": {
+      "lunes": { "abierto": true, "turnos": ["20:30–23:30"] },
+      "martes": { "abierto": false, "turnos": [] },
+      "miercoles": { "abierto": true, "turnos": ["13:00–17:00"] },
+      "jueves": { "abierto": true, "turnos": ["13:00–17:00"] },
+      "viernes": { "abierto": true, "turnos": ["12:30–17:30", "20:30–23:30"] },
+      "sabado": { "abierto": true, "turnos": ["13:00–17:30", "20:30–23:30"] },
+      "domingo": { "abierto": true, "turnos": ["13:00–17:30", "20:30–23:45"] }
+    },
+    "rating": { "google": "4.4", "reseñas": "736", "thefork": "9.2" },
+    "capacidad": "~140 plazas (interior + VIP + terraza)",
+    "precioMedio": "15–30 €/persona"
+  },
+  "hero": {
+    "headline": "A fuego lento, desde el corazón",
+    "subheadline": "Las mejores carnes a la brasa de Salteras, en un rincón que Rubén construyó para que nunca quieras irte.",
+    "ctaPrimario": "Reservar mesa",
+    "ctaSecundario": "Ver la carta",
+    "badge": "4.4 ★ · 736 reseñas · 9.2 TheFork",
+    "imagen": "/media/hero-bg.jpg"
+  },
+  "especialidades": [
+    {
+      "id": "picana",
+      "nombre": "Picaña a la brasa",
+      "descripcion": "La reina de nuestra parrilla. Madurada, cortada y braseada en el momento.",
+      "emoji": "🥩",
+      "destacado": true
+    },
+    {
+      "id": "chuleton",
+      "nombre": "Chuletón",
+      "descripcion": "Para los que saben que la carne habla por sí sola.",
+      "emoji": "🔥",
+      "destacado": true
+    },
+    {
+      "id": "cachopo",
+      "nombre": "Cachopo artesano",
+      "descripcion": "Relleno a diario. Crujiente por fuera, jugoso por dentro. El que te hace volver.",
+      "emoji": "🍽️",
+      "destacado": true
+    },
+    {
+      "id": "croquetas",
+      "nombre": "Croquetas caseras",
+      "descripcion": "La receta de siempre. Bechamel de 48 horas. No negociable.",
+      "emoji": "✨",
+      "destacado": false
+    },
+    {
+      "id": "menu",
+      "nombre": "Menú del día",
+      "descripcion": "De martes a domingo al mediodía. Cocina de mercado, precio honesto, siempre con brasa.",
+      "emoji": "🍷",
+      "destacado": false
+    },
+    {
+      "id": "terraza",
+      "nombre": "Terraza y VIP",
+      "descripcion": "Dos ambientes, una misma calidez. Para una tarde tranquila o una noche que no se olvida.",
+      "emoji": "🌿",
+      "destacado": false
+    }
+  ],
+  "testimoniales": [
+    {
+      "texto": "La mejor carne que he comido en la provincia de Sevilla. El trato, además, es increíble.",
+      "nombre": "María J.",
+      "rating": 5,
+      "fuente": "Google"
+    },
+    {
+      "texto": "El nuevo local es una pasada. La terraza en verano es de esas que no quieres dejar.",
+      "nombre": "Antonio R.",
+      "rating": 5,
+      "fuente": "Google"
+    },
+    {
+      "texto": "Rubén y su equipo hacen que te sientas como en casa desde que entras. Y la picaña... imposible pedir más.",
+      "nombre": "Laura M.",
+      "rating": 5,
+      "fuente": "Google"
+    }
+  ],
+  "galeria": [
+    { "src": "/media/gallery-1.jpg", "alt": "Picaña a la brasa El Rincón", "tipo": "plato" },
+    { "src": "/media/gallery-2.jpg", "alt": "Chuletón El Rincón de Salteras", "tipo": "plato" },
+    { "src": "/media/gallery-3.jpg", "alt": "Interior del restaurante", "tipo": "ambiente" },
+    { "src": "/media/gallery-4.jpg", "alt": "Cachopo artesano", "tipo": "plato" },
+    { "src": "/media/gallery-5.jpg", "alt": "Terraza El Rincón", "tipo": "terraza" },
+    { "src": "/media/gallery-6.jpg", "alt": "Croquetas caseras", "tipo": "plato" }
+  ],
+  "secciones": {
+    "hero": true,
+    "especialidades": true,
+    "historia": true,
+    "galeria": true,
+    "testimoniales": true,
+    "reserva": true,
+    "contacto": true
+  },
+  "updatedAt": "2026-03-28T00:00:00.000Z"
+}

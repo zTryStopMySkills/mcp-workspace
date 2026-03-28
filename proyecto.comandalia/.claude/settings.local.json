@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Claude --dangerously-skip-permissions"
+    ]
+  }
+}

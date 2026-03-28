@@ -1,0 +1,47 @@
+{
+  "ranked_boost": [
+    {
+      "id": "bronze_silver",
+      "name": "Bronce → Plata",
+      "emoji": "🥉",
+      "price": 10,
+      "description": "Subida de Bronce a Plata en Ranked"
+    },
+    {
+      "id": "silver_gold",
+      "name": "Plata → Oro",
+      "emoji": "🥈",
+      "price": 15,
+      "description": "Subida de Plata a Oro en Ranked"
+    },
+    {
+      "id": "gold_platinum",
+      "name": "Oro → Platino",
+      "emoji": "🥇",
+      "price": 25,
+      "description": "Subida de Oro a Platino en Ranked"
+    },
+    {
+      "id": "platinum_diamond",
+      "name": "Platino → Diamante",
+      "emoji": "💎",
+      "price": 40,
+      "description": "Subida de Platino a Diamante en Ranked"
+    },
+    {
+      "id": "diamond_crimson",
+      "name": "Diamante → Crimson",
+      "emoji": "🔴",
+      "price": 60,
+      "description": "Subida de Diamante a Crimson en Ranked"
+    },
+    {
+      "id": "crimson_iridescent",
+      "name": "Crimson → Iridescent",
+      "emoji": "🌈",
+      "price": 100,
+      "description": "Subida de Crimson a Iridescent en Ranked"
+    }
+  ],
+  "accounts": []
+}

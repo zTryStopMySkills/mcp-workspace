@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-admin-dark text-gray-200;
+  }
+}
+
+@layer components {
+  .admin-card {
+    @apply bg-admin-card border border-admin-border rounded-xl p-6;
+  }
+  .admin-btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  }
+  .admin-btn-primary {
+    @apply admin-btn bg-admin-primary text-gray-900 hover:bg-yellow-500;
+  }
+  .admin-btn-danger {
+    @apply admin-btn bg-admin-danger text-white hover:bg-red-600;
+  }
+  .admin-btn-secondary {
+    @apply admin-btn bg-admin-border text-gray-200 hover:bg-gray-600;
+  }
+  .admin-input {
+    @apply w-full bg-gray-800 border border-admin-border rounded-lg px-4 py-2.5 text-gray-200 focus:outline-none focus:ring-2 focus:ring-admin-primary focus:border-transparent;
+  }
+  .admin-label {
+    @apply block text-sm font-medium text-gray-400 mb-1.5;
+  }
+}
