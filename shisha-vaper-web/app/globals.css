@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+/* ── SHISHA VAPER SEVILLA — Design Tokens ── */
+:root {
+  /* Brand colors — fiel al logo original */
+  --gold:        #F5C01A;
+  --gold-light:  #FFD84A;
+  --gold-muted:  rgba(245, 192, 26, 0.45);
+  --gold-dim:    rgba(245, 192, 26, 0.12);
+  --black:       #0D0D0D;
+  --card:        #111111;
+  --card-hover:  #161616;
+  --border:      rgba(245, 192, 26, 0.2);
+  --text:        #F5F0E8;
+  --text-muted:  rgba(245, 240, 232, 0.55);
+  --smoke:       rgba(245, 192, 26, 0.06);
+
+  /* Background */
+  --background:  #0D0D0D;
+  --foreground:  #F5F0E8;
+
+  /* Gradients */
+  --grad-hero:   radial-gradient(ellipse at 50% 0%, rgba(245,192,26,0.18) 0%, transparent 65%);
+  --grad-section: linear-gradient(180deg, transparent 0%, rgba(245,192,26,0.04) 50%, transparent 100%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-gold:       var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-card:       var(--card);
+  --color-border:     var(--border);
+  --font-bebas:       "Bebas Neue", sans-serif;
+  --font-cinzel:      "Cinzel", serif;
+  --font-body:        "Inter", sans-serif;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Lenis maneja el scroll suave — desactivar el nativo */
+html { scroll-behavior: auto; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--gold-muted); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ── Selection ── */
+::selection { background: var(--gold-muted); color: var(--gold-light); }
+
+/* ── Arabic / Damask pattern overlay ── */
+.damask-bg {
+  position: relative;
+}
+.damask-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M60 10 C45 25 25 25 10 40 C25 55 25 75 10 90 C25 75 45 75 60 90 C75 75 95 75 110 90 C95 75 95 55 110 40 C95 25 75 25 60 10Z' fill='none' stroke='rgba(212,160,23,0.06)' stroke-width='1'/%3E%3Ccircle cx='60' cy='60' r='8' fill='none' stroke='rgba(212,160,23,0.04)' stroke-width='1'/%3E%3Cpath d='M60 52 L68 60 L60 68 L52 60Z' fill='none' stroke='rgba(212,160,23,0.05)' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Gold separator ornament ── */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+.ornament::before,
+.ornament::after {
+  content: '';
+  flex: 1;
+  max-width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-muted));
+}
+.ornament::after {
+  background: linear-gradient(90deg, var(--gold-muted), transparent);
+}
+
+/* ── Typography utilities ── */
+.font-bebas { font-family: "Bebas Neue", sans-serif; letter-spacing: 0.04em; }
+.font-cinzel { font-family: "Cinzel", serif; }
+
+/* ── Gold glow ── */
+.gold-glow {
+  filter: drop-shadow(0 0 18px rgba(212,160,23,0.4));
+}
+
+/* ── Card base ── */
+.card-base {
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.card-base:hover {
+  border-color: var(--gold-muted);
+  box-shadow: 0 8px 40px rgba(212,160,23,0.12);
+}
+
+/* ── Skeleton Shimmer ── */
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+.skeleton-block {
+  background: linear-gradient(
+    90deg,
+    rgba(30,30,20,1) 25%,
+    rgba(50,45,20,0.8) 50%,
+    rgba(30,30,20,1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+.skeleton-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 2px;
+}
+
+/* ── Premium: Magnetic & FLIP ── */
+.magnetic-target {
+  will-change: transform;
+}
+
+/* ── Exploded view section ── */
+.exploded-section {
+  position: relative;
+  height: 300vh;
+}
+.exploded-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── Admin ── */
+.admin-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.admin-sidebar-link:hover,
+.admin-sidebar-link.active {
+  background: var(--gold-dim);
+  color: var(--gold-light);
+}
+
+/* ── Glass card — HeroScrollGlass ── */
+.glass-card {
+  background: rgba(13, 13, 13, 0.55);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid rgba(245, 192, 26, 0.22);
+  border-radius: 6px;
+}

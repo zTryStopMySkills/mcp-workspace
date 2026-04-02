@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
+  <defs>
+    <linearGradient id="shaftGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5a3e08"/>
+      <stop offset="20%" stop-color="#B8920F"/>
+      <stop offset="40%" stop-color="#D4A017"/>
+      <stop offset="50%" stop-color="#F0C040"/>
+      <stop offset="60%" stop-color="#D4A017"/>
+      <stop offset="80%" stop-color="#B8920F"/>
+      <stop offset="100%" stop-color="#5a3e08"/>
+    </linearGradient>
+    <linearGradient id="plateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B6914"/>
+      <stop offset="30%" stop-color="#D4A017"/>
+      <stop offset="50%" stop-color="#F0C040"/>
+      <stop offset="70%" stop-color="#D4A017"/>
+      <stop offset="100%" stop-color="#6B4F10"/>
+    </linearGradient>
+    <linearGradient id="connectorGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4a3206"/>
+      <stop offset="30%" stop-color="#C49A14"/>
+      <stop offset="50%" stop-color="#E8B820"/>
+      <stop offset="70%" stop-color="#C49A14"/>
+      <stop offset="100%" stop-color="#4a3206"/>
+    </linearGradient>
+    <filter id="metalSheen">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Main shaft — central pole -->
+  <rect x="94" y="20" width="12" height="200" rx="6" fill="url(#shaftGrad)"/>
+  <!-- Shaft highlight line -->
+  <rect x="97" y="20" width="3" height="200" rx="1.5" fill="#F0C040" opacity="0.3"/>
+  <!-- Shaft shadow edge -->
+  <rect x="103" y="20" width="2" height="200" rx="1" fill="#4a3206" opacity="0.6"/>
+
+  <!-- Connector rings (decorative bands on shaft) -->
+  <g fill="url(#connectorGrad)">
+    <rect x="90" y="55" width="20" height="8" rx="3"/>
+    <rect x="90" y="100" width="20" height="8" rx="3"/>
+    <rect x="90" y="145" width="20" height="8" rx="3"/>
+    <rect x="90" y="185" width="20" height="8" rx="3"/>
+  </g>
+  <!-- Ring highlights -->
+  <g fill="#F0C040" opacity="0.4">
+    <rect x="92" y="56" width="16" height="2" rx="1"/>
+    <rect x="92" y="101" width="16" height="2" rx="1"/>
+    <rect x="92" y="146" width="16" height="2" rx="1"/>
+    <rect x="92" y="186" width="16" height="2" rx="1"/>
+  </g>
+
+  <!-- Ashtray / tray plate -->
+  <ellipse cx="100" cy="215" rx="52" ry="10" fill="url(#plateGrad)" opacity="0.95"/>
+  <ellipse cx="100" cy="213" rx="48" ry="8" fill="#111"/>
+  <ellipse cx="100" cy="213" rx="48" ry="8" fill="none" stroke="url(#plateGrad)" stroke-width="1.2" opacity="0.7"/>
+  <!-- Tray rim detail -->
+  <ellipse cx="100" cy="210" rx="44" ry="5" fill="none" stroke="#D4A017" stroke-width="0.6" opacity="0.4"/>
+  <!-- Tray center hole -->
+  <ellipse cx="100" cy="213" rx="10" ry="4" fill="#0D0D0D"/>
+  <ellipse cx="100" cy="213" rx="10" ry="4" fill="none" stroke="url(#connectorGrad)" stroke-width="1.5"/>
+
+  <!-- Tray small decorative dots -->
+  <g fill="#D4A017" opacity="0.35">
+    <circle cx="65" cy="213" r="2"/>
+    <circle cx="75" cy="216" r="1.5"/>
+    <circle cx="125" cy="213" r="2"/>
+    <circle cx="135" cy="216" r="1.5"/>
+    <circle cx="100" cy="218" r="1.5"/>
+    <circle cx="100" cy="208" r="1.5"/>
+  </g>
+
+  <!-- Top connector (connects shaft to bowl) -->
+  <rect x="87" y="10" width="26" height="18" rx="5" fill="url(#connectorGrad)"/>
+  <rect x="91" y="14" width="18" height="10" rx="3" fill="#111"/>
+  <!-- Connector top rim -->
+  <ellipse cx="100" cy="10" rx="14" ry="5" fill="url(#plateGrad)" opacity="0.9"/>
+
+  <!-- Arabesque engraving on shaft sections -->
+  <g stroke="#D4A017" stroke-width="0.5" fill="none" opacity="0.25">
+    <path d="M 100 70 L 103 75 L 100 80 L 97 75 Z"/>
+    <path d="M 100 115 L 103 120 L 100 125 L 97 120 Z"/>
+    <path d="M 100 160 L 103 165 L 100 170 L 97 165 Z"/>
+  </g>
+</svg>

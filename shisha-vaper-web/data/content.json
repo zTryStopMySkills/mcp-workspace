@@ -1,0 +1,292 @@
+{
+  "negocio": {
+    "nombre": "Shisha Vaper Sevilla",
+    "slogan": "El Ritual del Placer",
+    "tagline": "Cada calada, una historia",
+    "descripcion": "La tienda especializada en shishas, cachimbas y vapers premium de Sevilla. Desde 2025, traemos al corazón de la ciudad lo mejor del mundo de la narguilé y el vapeo.",
+    "direccion": "Sevilla, España",
+    "telefono": "",
+    "whatsapp": "",
+    "email": "",
+    "instagram": "@shisha_vaper_sevilla",
+    "horario": {
+      "semana": "",
+      "fin_semana": ""
+    },
+    "rating": "5.0",
+    "resenas": 0,
+    "since": "2025",
+    "maps_url": "https://maps.google.com/?q=Shisha+Vaper+Sevilla"
+  },
+  "seo": {
+    "title": "Shisha Vaper Sevilla | Tienda de Shishas y Vapers Premium",
+    "description": "Descubre la mejor selección de shishas, vapers y accesorios premium en Sevilla. Experiencia única, productos exclusivos desde 2025.",
+    "keywords": "shisha sevilla, vaper sevilla, cachimba sevilla, hookah sevilla, tienda shisha, tienda vaper, accesorios shisha, mazas shisha"
+  },
+  "categorias": [
+    {
+      "id": "shishas",
+      "nombre": "Shishas",
+      "descripcion": "Cachimbas y hookahs premium de las mejores marcas del mundo",
+      "icono": "flame"
+    },
+    {
+      "id": "vapers",
+      "nombre": "Vapers & E-cigs",
+      "descripcion": "Dispositivos de vaporización de última generación",
+      "icono": "wind"
+    },
+    {
+      "id": "mazas",
+      "nombre": "Mazas & Tabaco",
+      "descripcion": "Mezclas exclusivas y sabores únicos para tu shisha",
+      "icono": "sparkles"
+    },
+    {
+      "id": "accesorios",
+      "nombre": "Accesorios",
+      "descripcion": "Todo lo que necesitas para la experiencia perfecta",
+      "icono": "package"
+    },
+    {
+      "id": "liquidos",
+      "nombre": "Líquidos E-cig",
+      "descripcion": "Sales de nicotina, freebase y líquidos premium para vapear",
+      "icono": "droplets"
+    },
+    {
+      "id": "cargas",
+      "nombre": "Cargas & Pods",
+      "descripcion": "Pods, cargas y consumibles para tu dispositivo",
+      "icono": "zap"
+    }
+  ],
+  "productos": [
+    {
+      "id": "p1",
+      "nombre": "Shisha Árabe Classic",
+      "categoria": "shishas",
+      "precio": 79.99,
+      "precio_antes": null,
+      "stock": 8,
+      "descripcion": "Shisha tradicional árabe con vástago de latón y base de cristal soplado. Altura 65cm. Incluye manguera y cazoleta.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Hookah_Shisha.jpg",
+      "activo": true,
+      "destacado": true,
+      "sku": "SHA-001"
+    },
+    {
+      "id": "p2",
+      "nombre": "Shisha Premium Gold Edition",
+      "categoria": "shishas",
+      "precio": 149.99,
+      "precio_antes": 179.99,
+      "stock": 3,
+      "descripcion": "Shisha de lujo con acabados dorados de 24K. Vástago de acero inoxidable, base de cristal artesanal. Edición limitada.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/d/db/Flickr_-_DavidDennisPhotos.com_-_Hookah-Shisha_Pipes.jpg",
+      "activo": true,
+      "destacado": true,
+      "sku": "SHA-002"
+    },
+    {
+      "id": "p3",
+      "nombre": "Vaper Box Mod Pro",
+      "categoria": "vapers",
+      "precio": 59.99,
+      "precio_antes": null,
+      "stock": 12,
+      "descripcion": "Box mod regulable 80W con pantalla OLED. Compatible con todos los tanques estándar. Batería 18650 (no incluida).",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Box_Mod_For_Vaping_%28144491549%29.jpeg",
+      "activo": true,
+      "destacado": false,
+      "sku": "VAP-001"
+    },
+    {
+      "id": "p4",
+      "nombre": "Pod System Ultra",
+      "categoria": "vapers",
+      "precio": 34.99,
+      "precio_antes": null,
+      "stock": 20,
+      "descripcion": "Sistema de pod compacto con bobina de malla. 900mAh. Carga USB-C. Ideal para sales de nicotina.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/d/da/2023_Lost_Vape_Ursa_Nano_Pod.jpg",
+      "activo": true,
+      "destacado": true,
+      "sku": "VAP-002"
+    },
+    {
+      "id": "p5",
+      "nombre": "Maza Al Fakher Menta 250g",
+      "categoria": "mazas",
+      "precio": 12.99,
+      "precio_antes": null,
+      "stock": 30,
+      "descripcion": "La menta más fresca del mercado. Al Fakher es el estándar de calidad en mazas de shisha. 250 gramos.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Prince%2C_Konoz_%26_Shams_Alasil_Shisha_Tobacco.jpg",
+      "activo": true,
+      "destacado": false,
+      "sku": "MAZ-001"
+    },
+    {
+      "id": "p6",
+      "nombre": "Pack Iniciación Shisha",
+      "categoria": "accesorios",
+      "precio": 24.99,
+      "precio_antes": 34.99,
+      "stock": 15,
+      "descripcion": "Todo lo que necesitas para empezar: carbones, cazoleta de silicona, pinzas y pantalla de aluminio.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Pod_mod-based_vaping_devices.jpg",
+      "activo": true,
+      "destacado": true,
+      "sku": "ACC-001"
+    },
+    {
+      "id": "p7",
+      "nombre": "SMOK G-Priv 220W",
+      "categoria": "vapers",
+      "precio": 74.99,
+      "precio_antes": 89.99,
+      "stock": 5,
+      "descripcion": "Mod premium con pantalla táctil de 2.4\". Potencia regulable 6-220W. Pantalla TFT color. Doble 18650.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Smok-g-priv-220w-touch-screen-mod.jpg",
+      "activo": true,
+      "destacado": true,
+      "sku": "VAP-003"
+    },
+    {
+      "id": "p8",
+      "nombre": "Cachimba Shisha Hookah",
+      "categoria": "shishas",
+      "precio": 54.99,
+      "precio_antes": null,
+      "stock": 6,
+      "descripcion": "Shisha compacta de alta calidad con base robusta. Perfecta para uso doméstico o terrazas. 55cm de altura.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Shisha_hookah.jpg",
+      "activo": true,
+      "destacado": false,
+      "sku": "SHA-003"
+    },
+    {
+      "id": "p9",
+      "nombre": "Surtido Tabaco Shisha Mix",
+      "categoria": "mazas",
+      "precio": 18.99,
+      "precio_antes": null,
+      "stock": 25,
+      "descripcion": "Pack variado con 3 sabores distintos: menta, doble manzana y uva. 50g cada uno. Ideal para descubrir.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Prince%2C_Konoz_%26_Shams_Alasil_Shisha_Tobacco.jpg",
+      "activo": true,
+      "destacado": false,
+      "sku": "MAZ-002"
+    },
+    {
+      "id": "p10",
+      "nombre": "Vape Pen Kit Starter",
+      "categoria": "vapers",
+      "precio": 22.99,
+      "precio_antes": null,
+      "stock": 18,
+      "descripcion": "Kit completo de inicio para vapear: vape pen, cargador USB y dos resistencias de repuesto. Fácil de usar.",
+      "imagen": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Vape_Pen_-_E-Cigarette_%2825245589669%29.jpg",
+      "activo": true,
+      "destacado": false,
+      "sku": "VAP-004"
+    }
+  ],
+  "ventas": [],
+  "galeria": [
+    {
+      "id": "g1",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Hookah_Shisha.jpg",
+      "alt": "Shisha hookah premium"
+    },
+    {
+      "id": "g2",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/db/Flickr_-_DavidDennisPhotos.com_-_Hookah-Shisha_Pipes.jpg",
+      "alt": "Colección de cachimbas y hookahs"
+    },
+    {
+      "id": "g3",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Shisha-edit.png",
+      "alt": "Shisha detalle premium"
+    },
+    {
+      "id": "g4",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Prince%2C_Konoz_%26_Shams_Alasil_Shisha_Tobacco.jpg",
+      "alt": "Mazas y tabacos para shisha"
+    },
+    {
+      "id": "g5",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Box_Mod_For_Vaping_%28144491549%29.jpeg",
+      "alt": "Box mod vaper premium"
+    },
+    {
+      "id": "g6",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Smok-g-priv-220w-touch-screen-mod.jpg",
+      "alt": "SMOK G-Priv mod táctil"
+    },
+    {
+      "id": "g7",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/31/Vape_clouds_from_using_vape_mod_device.jpg",
+      "alt": "Nubes de vapor"
+    },
+    {
+      "id": "g8",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/da/2023_Lost_Vape_Ursa_Nano_Pod.jpg",
+      "alt": "Pod system compacto"
+    },
+    {
+      "id": "g9",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/51/Hookah_2.jpg",
+      "alt": "Hookah tradicional"
+    },
+    {
+      "id": "g10",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Pod_mod-based_vaping_devices.jpg",
+      "alt": "Dispositivos pod mod"
+    },
+    {
+      "id": "g11",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Using_vape_mod_device_outdoors.jpg",
+      "alt": "Vapeo al aire libre"
+    },
+    {
+      "id": "g12",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Shisha_hookah.jpg",
+      "alt": "Shisha hookah artesanal"
+    }
+  ],
+  "testimoniales": [
+    {
+      "id": 1,
+      "nombre": "Carlos M.",
+      "texto": "La mejor tienda de shishas en Sevilla sin duda. Tienen productos que no encuentras en ningún otro sitio. Atención personalizada y 10.",
+      "estrellas": 5,
+      "fecha": "2025-12-01"
+    },
+    {
+      "id": 2,
+      "nombre": "Sofía R.",
+      "texto": "Me asesoraron perfectamente para elegir mi primera shisha. Salí con todo lo necesario y super contenta con la compra.",
+      "estrellas": 5,
+      "fecha": "2026-01-15"
+    },
+    {
+      "id": 3,
+      "nombre": "Ahmed K.",
+      "texto": "Calidad y variedad increíble. El ambiente de la tienda te transporta. Volvería mil veces.",
+      "estrellas": 5,
+      "fecha": "2026-02-20"
+    }
+  ],
+  "config": {
+    "adminPassword": "shisha2025",
+    "whatsappMensaje": "Hola! Me interesa uno de vuestros productos. ¿Podéis informarme?",
+    "moneda": "€",
+    "mostrarPrecios": true,
+    "whatsappNumero": "",
+    "emailContacto": "",
+    "metodosPago": ["Efectivo", "Tarjeta"],
+    "instagram": "https://www.instagram.com/shisha_vaper_sevilla/"
+  }
+}

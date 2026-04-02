@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 320" fill="none">
+  <defs>
+    <radialGradient id="bg2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a1200" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#0D0D0D" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1200"/>
+      <stop offset="40%" stop-color="#111"/>
+      <stop offset="100%" stop-color="#080800"/>
+    </linearGradient>
+    <linearGradient id="edge2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3a2900"/>
+      <stop offset="30%" stop-color="#D4A017"/>
+      <stop offset="50%" stop-color="#F0C040"/>
+      <stop offset="70%" stop-color="#D4A017"/>
+      <stop offset="100%" stop-color="#3a2900"/>
+    </linearGradient>
+    <linearGradient id="screen2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#001826"/>
+      <stop offset="100%" stop-color="#00080f"/>
+    </linearGradient>
+    <linearGradient id="led2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4A017" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#F0C040" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#D4A017" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="4" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="screenGlow2">
+      <feGaussianBlur stdDeviation="2.5" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <ellipse cx="140" cy="260" rx="80" ry="55" fill="url(#bg2)"/>
+  <ellipse cx="140" cy="300" rx="55" ry="8" fill="#D4A017" opacity="0.08" filter="url(#glow2)"/>
+
+  <!-- Main device body -->
+  <rect x="90" y="55" width="100" height="240" rx="16" fill="url(#body2)" stroke="url(#edge2)" stroke-width="1.8"/>
+
+  <!-- LED side strips -->
+  <rect x="90" y="130" width="4" height="100" rx="2" fill="url(#led2)" opacity="0.9" filter="url(#glow2)"/>
+  <rect x="186" y="130" width="4" height="100" rx="2" fill="url(#led2)" opacity="0.9" filter="url(#glow2)"/>
+
+  <!-- OLED Screen -->
+  <rect x="100" y="70" width="80" height="100" rx="8" fill="url(#screen2)" filter="url(#screenGlow2)"/>
+  <rect x="102" y="72" width="76" height="96" rx="7" fill="none" stroke="#D4A017" stroke-width="0.7" opacity="0.45"/>
+
+  <!-- Battery bar -->
+  <rect x="112" y="82" width="36" height="12" rx="3" fill="none" stroke="#D4A017" stroke-width="1" opacity="0.55"/>
+  <rect x="114" y="84" width="28" height="8" rx="2" fill="#D4A017" opacity="0.45"/>
+  <rect x="148" y="85.5" width="4" height="5" rx="1.5" fill="#D4A017" opacity="0.35"/>
+
+  <!-- Wattage -->
+  <text x="140" y="118" text-anchor="middle" font-family="monospace" font-size="22" font-weight="bold" fill="#D4A017" opacity="0.9">40W</text>
+
+  <!-- Resistance -->
+  <text x="140" y="133" text-anchor="middle" font-family="monospace" font-size="9" fill="#D4A017" opacity="0.5">0.6 Ω</text>
+
+  <!-- Mode text -->
+  <text x="140" y="150" text-anchor="middle" font-family="monospace" font-size="7" letter-spacing="2" fill="rgba(212,160,23,0.35)">POWER MODE</text>
+  <text x="140" y="162" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(212,160,23,0.3)">PUFFS: 248</text>
+
+  <!-- Fire button -->
+  <rect x="94" y="185" width="92" height="38" rx="10" fill="#0a0900" stroke="url(#edge2)" stroke-width="1.4"/>
+  <rect x="98" y="189" width="84" height="30" rx="8" fill="#111100" opacity="0.8"/>
+  <rect x="102" y="193" width="76" height="22" rx="5" fill="none" stroke="#D4A017" stroke-width="0.7" opacity="0.4"/>
+  <text x="140" y="207" text-anchor="middle" font-family="sans-serif" font-size="9" letter-spacing="4" fill="#D4A017" opacity="0.7">FIRE</text>
+
+  <!-- +/- buttons -->
+  <rect x="98" y="232" width="36" height="22" rx="7" fill="#0a0900" stroke="#D4A017" stroke-width="1" opacity="0.5"/>
+  <text x="116" y="247" text-anchor="middle" font-family="monospace" font-size="14" fill="#D4A017" opacity="0.7">+</text>
+  <rect x="146" y="232" width="36" height="22" rx="7" fill="#0a0900" stroke="#D4A017" stroke-width="1" opacity="0.5"/>
+  <text x="164" y="247" text-anchor="middle" font-family="monospace" font-size="14" fill="#D4A017" opacity="0.7">−</text>
+
+  <!-- USB-C -->
+  <rect x="120" y="278" width="40" height="10" rx="5" fill="#0D0D0D" stroke="#D4A017" stroke-width="0.8" opacity="0.45"/>
+  <rect x="125" y="280" width="30" height="6" rx="3" fill="none" stroke="#D4A017" stroke-width="0.5" opacity="0.25"/>
+
+  <!-- SVS branding on body -->
+  <text x="140" y="272" text-anchor="middle" font-family="sans-serif" font-size="8" letter-spacing="5" fill="#D4A017" opacity="0.2">SVS</text>
+
+  <!-- Pod top -->
+  <rect x="96" y="22" width="88" height="38" rx="10" fill="url(#edge2)" opacity="0.85" stroke="url(#edge2)" stroke-width="1.2"/>
+  <rect x="100" y="25" width="80" height="32" rx="8" fill="#1a1200"/>
+  <rect x="106" y="29" width="68" height="22" rx="5" fill="#0a0800" stroke="#D4A017" stroke-width="0.5" opacity="0.5"/>
+  <!-- Pod liquid level -->
+  <rect x="107" y="37" width="66" height="13" rx="4" fill="#D4A017" opacity="0.1"/>
+  <text x="140" y="37" text-anchor="middle" font-family="sans-serif" font-size="6" letter-spacing="3" fill="#D4A017" opacity="0.4">POD</text>
+
+  <!-- Mouthpiece -->
+  <rect x="108" y="8" width="64" height="18" rx="9" fill="url(#edge2)" opacity="0.7"/>
+  <rect x="113" y="10" width="54" height="14" rx="7" fill="#0D0D0D"/>
+  <ellipse cx="140" cy="9" rx="18" ry="5" fill="#111"/>
+  <ellipse cx="140" cy="8" rx="18" ry="5" fill="none" stroke="#D4A017" stroke-width="0.7" opacity="0.4"/>
+</svg>

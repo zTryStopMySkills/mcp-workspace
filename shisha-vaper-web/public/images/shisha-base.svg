@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" fill="none">
+  <defs>
+    <radialGradient id="glassGrad" cx="38%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#2a1f00" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#1a1300" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0D0D0D" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="glassShine" cx="30%" cy="25%" r="50%">
+      <stop offset="0%" stop-color="#D4A017" stop-opacity="0.25"/>
+      <stop offset="60%" stop-color="#D4A017" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#D4A017" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rimGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B6914"/>
+      <stop offset="30%" stop-color="#D4A017"/>
+      <stop offset="50%" stop-color="#F0C040"/>
+      <stop offset="70%" stop-color="#D4A017"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </linearGradient>
+    <linearGradient id="neckGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6B4F10"/>
+      <stop offset="25%" stop-color="#C49A14"/>
+      <stop offset="50%" stop-color="#E8B820"/>
+      <stop offset="75%" stop-color="#C49A14"/>
+      <stop offset="100%" stop-color="#6B4F10"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Ambient glow beneath base -->
+  <ellipse cx="100" cy="215" rx="55" ry="8" fill="#D4A017" opacity="0.15" filter="url(#softglow)"/>
+
+  <!-- Base foot ring -->
+  <ellipse cx="100" cy="205" rx="52" ry="7" fill="url(#rimGold)" opacity="0.9"/>
+  <ellipse cx="100" cy="203" rx="46" ry="5" fill="#0D0D0D"/>
+  <ellipse cx="100" cy="203" rx="46" ry="5" fill="none" stroke="url(#rimGold)" stroke-width="1.2" opacity="0.6"/>
+
+  <!-- Main glass body — large teardrop vase -->
+  <path d="
+    M 100 30
+    C 130 30 158 55 165 90
+    C 172 120 168 155 158 178
+    C 148 200 128 208 100 208
+    C 72 208 52 200 42 178
+    C 32 155 28 120 35 90
+    C 42 55 70 30 100 30 Z
+  " fill="url(#glassGrad)" stroke="url(#rimGold)" stroke-width="1.5" opacity="0.95"/>
+
+  <!-- Glass shine overlay -->
+  <path d="
+    M 100 30
+    C 130 30 158 55 165 90
+    C 172 120 168 155 158 178
+    C 148 200 128 208 100 208
+    C 72 208 52 200 42 178
+    C 32 155 28 120 35 90
+    C 42 55 70 30 100 30 Z
+  " fill="url(#glassShine)"/>
+
+  <!-- Inner liquid surface -->
+  <ellipse cx="100" cy="130" rx="45" ry="18" fill="#D4A017" opacity="0.06"/>
+
+  <!-- Arabesque etched decoration on glass -->
+  <g opacity="0.18" stroke="#D4A017" stroke-width="0.8" fill="none">
+    <!-- Diamond pattern -->
+    <path d="M 100 65 L 115 80 L 100 95 L 85 80 Z"/>
+    <path d="M 100 65 L 100 50 M 115 80 L 130 80 M 100 95 L 100 110 M 85 80 L 70 80"/>
+    <!-- Circular ornament -->
+    <circle cx="100" cy="80" r="8"/>
+    <circle cx="100" cy="80" r="4"/>
+    <!-- Floral at bottom -->
+    <path d="M 100 165 C 100 155 108 150 115 155 C 108 155 108 165 100 165 Z"/>
+    <path d="M 100 165 C 100 155 92 150 85 155 C 92 155 92 165 100 165 Z"/>
+    <path d="M 100 165 C 108 165 113 158 110 152 C 108 158 100 158 100 165 Z"/>
+    <path d="M 100 165 C 92 165 87 158 90 152 C 92 158 100 158 100 165 Z"/>
+    <circle cx="100" cy="163" r="3"/>
+  </g>
+
+  <!-- Gold band around middle -->
+  <path d="M 38 130 C 42 138 58 144 100 144 C 142 144 158 138 162 130" stroke="url(#rimGold)" stroke-width="2" fill="none" opacity="0.7"/>
+  <path d="M 38 124 C 42 132 58 138 100 138 C 142 138 158 132 162 124" stroke="url(#rimGold)" stroke-width="1" fill="none" opacity="0.4"/>
+
+  <!-- Neck of the vase -->
+  <rect x="88" y="14" width="24" height="20" rx="4" fill="url(#neckGold)" opacity="0.95"/>
+  <rect x="90" y="16" width="20" height="16" rx="3" fill="#111" opacity="0.8"/>
+  <rect x="88" y="14" width="24" height="4" rx="2" fill="url(#rimGold)"/>
+  <rect x="88" y="30" width="24" height="4" rx="1" fill="url(#rimGold)" opacity="0.7"/>
+
+  <!-- Top rim -->
+  <ellipse cx="100" cy="32" rx="15" ry="5" fill="url(#rimGold)" opacity="0.9"/>
+  <ellipse cx="100" cy="30" rx="12" ry="3.5" fill="#0D0D0D"/>
+
+  <!-- Hose port on side -->
+  <ellipse cx="160" cy="110" rx="8" ry="6" fill="url(#neckGold)" opacity="0.9" transform="rotate(-10 160 110)"/>
+  <ellipse cx="160" cy="110" rx="5" ry="4" fill="#0D0D0D" transform="rotate(-10 160 110)"/>
+  <ellipse cx="160" cy="110" rx="5" ry="4" fill="none" stroke="#D4A017" stroke-width="0.8" opacity="0.5" transform="rotate(-10 160 110)"/>
+
+  <!-- Water line inside glass -->
+  <path d="M 46 148 C 60 142 80 140 100 140 C 120 140 140 142 154 148" stroke="#D4A017" stroke-width="0.6" fill="none" opacity="0.15"/>
+</svg>

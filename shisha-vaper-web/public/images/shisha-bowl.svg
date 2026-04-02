@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 140" fill="none">
+  <defs>
+    <radialGradient id="bowlGrad" cx="40%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#3d2a00"/>
+      <stop offset="50%" stop-color="#1e1400"/>
+      <stop offset="100%" stop-color="#0D0D0D"/>
+    </radialGradient>
+    <radialGradient id="coalGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff6a00" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#cc4400" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#1a0a00" stop-opacity="0.8"/>
+    </radialGradient>
+    <linearGradient id="bowlRim" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6B4F10"/>
+      <stop offset="25%" stop-color="#C49A14"/>
+      <stop offset="50%" stop-color="#F0C040"/>
+      <stop offset="75%" stop-color="#C49A14"/>
+      <stop offset="100%" stop-color="#6B4F10"/>
+    </linearGradient>
+    <linearGradient id="screenGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B6914" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#D4A017" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#6B4F10" stop-opacity="0.9"/>
+    </linearGradient>
+    <filter id="emberGlow">
+      <feGaussianBlur stdDeviation="4" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="smokeBlur">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+
+  <!-- Smoke wisps rising from bowl -->
+  <g opacity="0.2" filter="url(#smokeBlur)">
+    <path d="M 95 8 Q 92 4 95 0" stroke="#D4A017" stroke-width="2" fill="none"/>
+    <path d="M 100 6 Q 104 2 101 -2" stroke="#D4A017" stroke-width="1.5" fill="none"/>
+    <path d="M 105 9 Q 108 4 106 0" stroke="#D4A017" stroke-width="1.8" fill="none"/>
+  </g>
+
+  <!-- Coal ember glow — behind everything -->
+  <ellipse cx="100" cy="38" rx="28" ry="10" fill="#cc4400" opacity="0.3" filter="url(#emberGlow)"/>
+
+  <!-- Bowl main body — clay/ceramic shape -->
+  <path d="
+    M 68 75
+    C 68 90 78 100 100 100
+    C 122 100 132 90 132 75
+    L 125 42
+    C 120 30 115 24 100 24
+    C 85 24 80 30 75 42
+    Z
+  " fill="url(#bowlGrad)" stroke="url(#bowlRim)" stroke-width="1.5"/>
+
+  <!-- Bowl interior dark -->
+  <ellipse cx="100" cy="50" rx="20" ry="12" fill="#0D0D0D" opacity="0.8"/>
+
+  <!-- Coal/charcoal on top -->
+  <ellipse cx="100" cy="38" rx="22" ry="8" fill="url(#coalGrad)" opacity="0.85"/>
+  <!-- Coal glow highlights -->
+  <ellipse cx="100" cy="36" rx="14" ry="5" fill="#ff8c00" opacity="0.4" filter="url(#emberGlow)"/>
+  <ellipse cx="100" cy="36" rx="8" ry="3" fill="#ffaa00" opacity="0.5"/>
+
+  <!-- Foil / heat management screen -->
+  <ellipse cx="100" cy="44" rx="24" ry="9" fill="url(#screenGold)" opacity="0.7"/>
+  <!-- Screen holes pattern -->
+  <g fill="none" stroke="#0D0D0D" stroke-width="1" opacity="0.6">
+    <circle cx="100" cy="44" r="2"/>
+    <circle cx="90" cy="44" r="1.5"/>
+    <circle cx="110" cy="44" r="1.5"/>
+    <circle cx="95" cy="40" r="1.5"/>
+    <circle cx="105" cy="40" r="1.5"/>
+    <circle cx="95" cy="48" r="1.5"/>
+    <circle cx="105" cy="48" r="1.5"/>
+  </g>
+
+  <!-- Bowl rim collar -->
+  <ellipse cx="100" cy="44" rx="25" ry="10" fill="none" stroke="url(#bowlRim)" stroke-width="2"/>
+
+  <!-- Bowl bottom connector to shaft -->
+  <rect x="93" y="95" width="14" height="30" rx="5" fill="url(#bowlRim)" opacity="0.9"/>
+  <rect x="96" y="98" width="8" height="24" rx="3" fill="#111"/>
+
+  <!-- Decorative grooves on bowl -->
+  <g stroke="#D4A017" stroke-width="0.6" fill="none" opacity="0.3">
+    <path d="M 75 65 C 85 70 115 70 125 65"/>
+    <path d="M 72 57 C 84 63 116 63 128 57"/>
+    <path d="M 70 50 C 83 56 117 56 130 50"/>
+  </g>
+
+  <!-- Arabesque embossed on bowl side -->
+  <g stroke="#D4A017" stroke-width="0.7" fill="none" opacity="0.2">
+    <path d="M 100 60 L 106 66 L 100 72 L 94 66 Z"/>
+    <circle cx="100" cy="66" r="3"/>
+    <path d="M 100 55 L 100 50 M 107 67 L 112 67 M 100 77 L 100 82 M 93 67 L 88 67"/>
+  </g>
+</svg>
