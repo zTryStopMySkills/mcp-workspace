@@ -1,0 +1,220 @@
+{
+  "config": {
+    "nombre": "Bodega Aljarafe",
+    "telefono": "633 208 857",
+    "telefonoHref": "+34633208857",
+    "email": "",
+    "direccion": "C/ Virgen de Loreto 51, 41950 Castilleja de la Cuesta, Sevilla",
+    "horario": {
+      "lunes": "11:30 - 17:00 / 20:00 - 00:00",
+      "martes": "11:30 - 17:00 / 20:00 - 00:00",
+      "miercoles": "11:30 - 17:00 / 20:00 - 00:00",
+      "jueves": "11:30 - 17:00 / 20:00 - 00:00",
+      "viernes": "11:30 - 17:00 / 20:00 - 00:00",
+      "sabado": "11:30 - 17:00 / 20:00 - 00:00",
+      "domingo": "11:30 - 17:00 / 20:00 - 00:00"
+    },
+    "redesSociales": {
+      "instagram": "https://www.instagram.com/bodegasaljarafe/",
+      "facebook": ""
+    },
+    "mapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3170.0!2d-6.0!3d37.38!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sBodega+Aljarafe!5e0!3m2!1ses!2ses!4v1",
+    "mapsDirectUrl": "https://maps.google.com/?q=Bodega+Aljarafe+Calle+Virgen+de+Loreto+51+Castilleja+de+la+Cuesta",
+    "rating": "9/10",
+    "resenas": "1.100+"
+  },
+  "especialidades": [
+    {
+      "id": "t-bone-carsegal",
+      "nombre": "T-Bone Carsegal",
+      "descripcion": "Madurado 20 días. La pieza más completa del bueye en su expresión más pura.",
+      "precio": "40€/kg",
+      "icono": "🥩",
+      "destacado": true
+    },
+    {
+      "id": "cebon-irlandes",
+      "nombre": "Cebón Irlandés",
+      "descripcion": "Entre 30 y 60 días de maduración. Terneza y sabor de las verdes praderas atlánticas.",
+      "precio": "50€/kg",
+      "icono": "🥩",
+      "destacado": false
+    },
+    {
+      "id": "rubia-gallega",
+      "nombre": "Rubia Gallega",
+      "descripcion": "La nobleza de la vaca rubia. Grasa infiltrada, sabor profundo y untuoso.",
+      "precio": "70€/kg",
+      "icono": "🥩",
+      "destacado": true
+    },
+    {
+      "id": "lomo-buey",
+      "nombre": "Lomo de Buey",
+      "descripcion": "Más de 120 días de maduración. La carne más preciada, para los que saben.",
+      "precio": "120€/kg",
+      "icono": "🥩",
+      "destacado": true
+    },
+    {
+      "id": "iberico-bellota",
+      "nombre": "Cerdo Ibérico de Bellota",
+      "descripcion": "Solomillo, presa y pluma. El ibérico que merece ese nombre.",
+      "precio": "Consultar",
+      "icono": "🐷",
+      "destacado": false
+    },
+    {
+      "id": "chacinas-joselito",
+      "nombre": "Chacinas Joselito",
+      "descripcion": "Jamón, lomito, caña de lomo. El mejor jamón del mundo, en tu mesa.",
+      "precio": "Consultar",
+      "icono": "🍖",
+      "destacado": false
+    }
+  ],
+  "carta": [
+    {
+      "categoria": "Entrantes",
+      "orden": 1,
+      "platos": [
+        {
+          "id": "papas-arrugadas",
+          "nombre": "Papas Arrugás con Mojo Picón",
+          "frase": "Lo clásico que nunca falla",
+          "descripcion": "Papas canarias con mojo rojo picante artesanal",
+          "precio": "9€",
+          "foto": null,
+          "destacado": null,
+          "alergenos": [],
+          "apto_para": ["vegano", "celiaco"],
+          "libre_de": ["gluten", "lactosa"]
+        },
+        {
+          "id": "revuelto",
+          "nombre": "Revuelto de la Casa",
+          "frase": "Huevo de campo y temporada",
+          "descripcion": "Revuelto con productos de temporada y huevo de campo",
+          "precio": "10.50€",
+          "foto": null,
+          "destacado": null,
+          "alergenos": ["huevo"],
+          "apto_para": ["vegetariano"],
+          "libre_de": ["gluten"]
+        }
+      ]
+    },
+    {
+      "categoria": "Carnes a la Brasa",
+      "orden": 2,
+      "platos": [
+        {
+          "id": "t-bone-carta",
+          "nombre": "T-Bone Carsegal",
+          "frase": "Madurado 20 días a la brasa de encina",
+          "descripcion": "Pieza entera a la brasa de encina y olivo, sal en escamas",
+          "precio": "40€/kg",
+          "foto": null,
+          "destacado": "El más pedido",
+          "alergenos": [],
+          "apto_para": ["celiaco"],
+          "libre_de": ["gluten", "lactosa"]
+        },
+        {
+          "id": "rubia-gallega-carta",
+          "nombre": "Rubia Gallega",
+          "frase": "La nobleza de la vaca rubia del norte",
+          "descripcion": "Grasa infiltrada, sabor profundo. A la brasa de carbón vegetal",
+          "precio": "70€/kg",
+          "foto": null,
+          "destacado": "Especialidad",
+          "alergenos": [],
+          "apto_para": ["celiaco"],
+          "libre_de": ["gluten", "lactosa"]
+        },
+        {
+          "id": "lomo-buey-carta",
+          "nombre": "Lomo de Buey 120+ días",
+          "frase": "La carne más preciada, para los que saben",
+          "descripcion": "Maduración extrema. Sabor único e inimitable",
+          "precio": "120€/kg",
+          "foto": null,
+          "destacado": "Temporada",
+          "alergenos": [],
+          "apto_para": ["celiaco"],
+          "libre_de": ["gluten", "lactosa"]
+        }
+      ]
+    },
+    {
+      "categoria": "Ibérico & Chacinas",
+      "orden": 3,
+      "platos": [
+        {
+          "id": "jamon-joselito",
+          "nombre": "Jamón Joselito",
+          "frase": "El mejor jamón del mundo, en tu mesa",
+          "descripcion": "Cortado a cuchillo, en lonchas finas. Sin más.",
+          "precio": "Consultar",
+          "foto": null,
+          "destacado": "Especialidad",
+          "alergenos": [],
+          "apto_para": ["celiaco"],
+          "libre_de": ["gluten"]
+        },
+        {
+          "id": "iberico-presa",
+          "nombre": "Presa Ibérica de Bellota",
+          "frase": "La pieza más jugosa del cerdo ibérico",
+          "descripcion": "A la brasa, con su grasa infiltrada perfectamente derretida",
+          "precio": "Consultar",
+          "foto": null,
+          "destacado": null,
+          "alergenos": [],
+          "apto_para": ["celiaco"],
+          "libre_de": ["gluten"]
+        }
+      ]
+    },
+    {
+      "categoria": "Postres",
+      "orden": 4,
+      "platos": [
+        {
+          "id": "coulant",
+          "nombre": "Coulant de Chocolate",
+          "frase": "El final perfecto",
+          "descripcion": "Bizcocho tibio con interior fundido de chocolate negro",
+          "precio": "4.50€",
+          "foto": null,
+          "destacado": null,
+          "alergenos": ["huevo", "gluten", "lactosa"],
+          "apto_para": ["vegetariano"],
+          "libre_de": []
+        }
+      ]
+    }
+  ],
+  "galeria": [],
+  "testimonios": [
+    {
+      "nombre": "María González",
+      "texto": "La mejor carne del Aljarafe, con su toque idóneo de sal. Tierna y jugosa, en su punto justo. Sitio de referencia.",
+      "rating": 5,
+      "fecha": "2024"
+    },
+    {
+      "nombre": "Carlos Rodríguez",
+      "texto": "Cuatro generaciones de hosteleros que se nota en cada detalle. Un ambiente que invita a repetir y una carne excepcional.",
+      "rating": 5,
+      "fecha": "2024"
+    },
+    {
+      "nombre": "Ana Martínez",
+      "texto": "El Joselito aquí es otra cosa. Y la Rubia Gallega, simplemente perfecta. Uno de esos lugares donde siempre aciertas.",
+      "rating": 5,
+      "fecha": "2025"
+    }
+  ],
+  "updatedAt": ""
+}

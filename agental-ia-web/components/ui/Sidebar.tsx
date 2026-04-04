@@ -1,0 +1,186 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  LayoutDashboard,
+  MessageCircle,
+  FolderOpen,
+  Users,
+  Upload,
+  LogOut,
+  X,
+  ChevronRight,
+  BookOpen,
+  GraduationCap,
+  Monitor
+} from "lucide-react";
+import { initials } from "@/lib/utils";
+
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const agentLinks = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/chat", label: "Chat Comunidad", icon: MessageCircle },
+  { href: "/documentos", label: "Documentos", icon: FolderOpen },
+  { href: "/workspace", label: "Mi Escritorio", icon: Monitor },
+  { href: "/curso", label: "Curso Comercial", icon: GraduationCap },
+  { href: "/guia", label: "Guía de uso", icon: BookOpen }
+];
+
+const adminLinks = [
+  { href: "/admin", label: "Panel Admin", icon: LayoutDashboard },
+  { href: "/admin/agentes", label: "Agentes", icon: Users },
+  { href: "/admin/documentos", label: "Subir Docs", icon: Upload }
+];
+
+export function Sidebar({ open, onClose }: SidebarProps) {
+  const pathname = usePathname();
+  const { data: session } = useSession();
+  const isAdmin = session?.user.role === "admin";
+
+  const content = (
+    <div className="flex flex-col h-full">
+      {/* Logo header */}
+      <div className="flex items-center justify-between px-5 py-5 border-b border-white/8">
+        <Link href="/dashboard" className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#00D4AA]/30 bg-[#0D1117] flex items-center justify-center shrink-0">
+            <Image
+              src="/logo.jpg"
+              alt="Agental.IA"
+              width={32}
+              height={32}
+              className="object-contain"
+            />
+          </div>
+          <span className="font-bold text-lg tracking-tight truncate">
+            <span className="text-[#C9A84C]">Agental</span>
+            <span className="text-[#00D4AA]">.IA</span>
+          </span>
+        </Link>
+        <button
+          onClick={onClose}
+          className="lg:hidden text-[#8B95A9] hover:text-white transition-colors ml-2 shrink-0"
+        >
+          <X size={20} />
+        </button>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+        {isAdmin && (
+          <p className="text-xs font-medium text-[#8B95A9]/70 uppercase tracking-wider px-3 mb-2">
+            Mi espacio
+          </p>
+        )}
+        {agentLinks.map((link) => {
+          const Icon = link.icon;
+          const active = pathname === link.href || pathname.startsWith(link.href + "/");
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={onClose}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                active
+                  ? "bg-[#00D4AA]/15 text-[#00D4AA] border border-[#00D4AA]/25"
+                  : "text-[#8B95A9] hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <Icon size={18} />
+              {link.label}
+              {active && <ChevronRight size={14} className="ml-auto text-[#00D4AA]/70" />}
+            </Link>
+          );
+        })}
+
+        {isAdmin && (
+          <>
+            <p className="text-xs font-medium text-[#8B95A9]/70 uppercase tracking-wider px-3 mt-5 mb-2">
+              Administración
+            </p>
+            {adminLinks.map((link) => {
+              const Icon = link.icon;
+              const active = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={onClose}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                    active
+                      ? "bg-[#C9A84C]/15 text-[#C9A84C] border border-[#C9A84C]/25"
+                      : "text-[#8B95A9] hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <Icon size={18} />
+                  {link.label}
+                  {active && <ChevronRight size={14} className="ml-auto text-[#C9A84C]/70" />}
+                </Link>
+              );
+            })}
+          </>
+        )}
+      </nav>
+
+      {/* User section */}
+      <div className="px-3 py-4 border-t border-white/8">
+        <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/[0.04] border border-white/8">
+          <div className="w-9 h-9 rounded-full bg-[#00D4AA]/20 border border-[#00D4AA]/30 flex items-center justify-center text-xs font-bold text-[#00D4AA] shrink-0">
+            {session?.user.name ? initials(session.user.name) : "?"}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-white truncate">{session?.user.name}</p>
+            <p className="text-xs text-[#8B95A9]">@{session?.user.nick}</p>
+          </div>
+          <button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="text-[#8B95A9] hover:text-red-400 transition-colors shrink-0"
+            title="Cerrar sesión"
+          >
+            <LogOut size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex flex-col w-64 bg-white/[0.03] border-r border-white/8 h-screen sticky top-0">
+        {content}
+      </aside>
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onClose}
+              className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            />
+            <motion.aside
+              initial={{ x: -280 }}
+              animate={{ x: 0 }}
+              exit={{ x: -280 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="lg:hidden fixed left-0 top-0 h-full w-64 bg-[#0D1117] border-r border-white/8 z-50"
+            >
+              {content}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

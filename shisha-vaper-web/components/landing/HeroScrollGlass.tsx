@@ -1,14 +1,14 @@
 "use client";
-import { useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import MagneticButton from "@/components/ui/MagneticButton";
 
 /* ─────────────────────────────────────────────
-   SLIDES DATA
+   SLIDES — una por categoría
    ───────────────────────────────────────────── */
 interface Slide {
-  foto: string | null;
-  gradient: string;
+  img: string;
+  isPhoto?: boolean;
   tag: string;
   titulo: string;
   sub: string;
@@ -18,345 +18,413 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    foto: null,
-    gradient: "linear-gradient(135deg, #0a1628 0%, #1a2a50 40%, #0d1d3a 100%)",
+    img: "/images/product-shisha.svg",
     tag: "SHISHAS",
     titulo: "Shishas & Cachimbas",
-    sub: "Tu tienda de confianza para vapear con estilo",
-    cta: "Ver colección",
+    sub: "Modelos de importación exclusivos. Cristal artesanal, latón y acero inoxidable.",
+    cta: "Ver shishas",
     href: "#productos",
   },
   {
-    foto: "/images/instagram/fizzy-150k.jpg",
-    gradient: "linear-gradient(135deg, #1a0a00 0%, #3d1800 40%, #1a0800 100%)",
+    img: "/images/product-vaper.svg",
     tag: "VAPERS",
     titulo: "Vapers & Desechables",
-    sub: "Tecnología, diseño y sabores que marcan la diferencia",
+    sub: "Las últimas tecnologías de vapeo. Box mods, pods y desechables de alta gama.",
     cta: "Ver vapers",
     href: "#productos",
   },
   {
-    foto: null,
-    gradient: "linear-gradient(135deg, #0a1a0a 0%, #1a3a20 40%, #0a1a10 100%)",
-    tag: "HOOKAS",
-    titulo: "Hookas Premium",
-    sub: "Modelos exclusivos de importación, selección propia",
-    cta: "Ver hookas",
-    href: "#productos",
-  },
-  {
-    foto: null,
-    gradient: "linear-gradient(135deg, #1a1500 0%, #3a2d00 40%, #1a1400 100%)",
-    tag: "MAZAS",
+    img: "/images/shisha-bowl.svg",
+    tag: "MAZAS & TABACO",
     titulo: "Mazas & Tabacos",
-    sub: "Más de 50 sabores · Al Fakher · Adalya · Fumari",
+    sub: "Más de 50 sabores disponibles. Al Fakher · Adalya · Fumari · Darkside.",
     cta: "Ver mazas",
     href: "#productos",
   },
   {
-    foto: null,
-    gradient: "linear-gradient(135deg, #100a1a 0%, #2a1840 40%, #100a1a 100%)",
+    img: "/images/shisha-shaft.svg",
+    tag: "ACCESORIOS",
+    titulo: "Accesorios & Carbones",
+    sub: "Todo lo que necesitas para disfrutar al máximo tu shisha o vaper.",
+    cta: "Ver accesorios",
+    href: "#productos",
+  },
+  {
+    img: "/images/vaper-pod.svg",
+    tag: "LÍQUIDOS & PODS",
+    titulo: "Líquidos & Cargas",
+    sub: "Sales de nicotina, base libre, pods de repuesto y accesorios de vapeo.",
+    cta: "Ver líquidos",
+    href: "#productos",
+  },
+  {
+    img: "/logo-oficial.jpg",
+    isPhoto: true,
     tag: "TIENDA",
     titulo: "Shisha Vaper Sevilla",
-    sub: "Más que una tienda · Un espacio para la comunidad",
+    sub: "Más que una tienda — un espacio para la comunidad. Encuéntranos en Sevilla.",
     cta: "Cómo llegar",
     href: "#contacto",
   },
 ];
 
-/* Rangos de visibilidad por slide (leve overlap → efecto apilado) */
-const RANGES: [number, number][] = [
-  [0.00, 0.22],
-  [0.18, 0.42],
-  [0.38, 0.62],
-  [0.58, 0.82],
-  [0.78, 1.00],
+/* Productos en los laterales, uno por slide */
+const SIDE_PAIRS: [string, string][] = [
+  ["/images/shisha-base.svg",    "/images/shisha-bowl.svg"],
+  ["/images/vaper-pod.svg",      "/images/product-vaper.svg"],
+  ["/images/shisha-bowl.svg",    "/images/shisha-shaft.svg"],
+  ["/images/shisha-shaft.svg",   "/images/shisha-base.svg"],
+  ["/images/vaper-pod.svg",      "/images/product-vaper.svg"],
+  ["/images/product-shisha.svg", "/images/vaper-pod.svg"],
 ];
 
 /* ─────────────────────────────────────────────
-   GLASS SLIDE  (un componente por slide → hooks válidos)
+   VARIANTES DE ANIMACIÓN
    ───────────────────────────────────────────── */
-const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
+const cardVariants = {
+  enter: (d: number) => ({ opacity: 0, y: d > 0 ? 55 : -55, scale: 0.95 }),
+  center: { opacity: 1, y: 0, scale: 1 },
+  exit: (d: number) => ({ opacity: 0, y: d > 0 ? -55 : 55, scale: 0.95 }),
+};
 
-function GlassSlide({
-  slide,
-  scrollYProgress,
-  enter,
-  exit,
-  zIndex,
-}: {
-  slide: Slide;
-  scrollYProgress: MotionValue<number>;
-  enter: number;
-  exit: number;
-  zIndex: number;
-}) {
-  const r: [number, number, number, number] = [
-    clamp01(enter - 0.05),
-    clamp01(enter + 0.08),
-    clamp01(exit  - 0.08),
-    clamp01(exit),
-  ];
-
-  const opacity = useTransform(scrollYProgress, r, [0, 1, 1, 0]);
-  const scale   = useTransform(scrollYProgress, r, [0.93, 1, 1, 0.90]);
-  const y       = useTransform(scrollYProgress, r, [44, 0, 0, -32]);
-
-  return (
-    <motion.div
-      className="absolute inset-0 flex items-center justify-center"
-      style={{ opacity, scale, y, zIndex }}
-    >
-      <div className="glass-card w-[min(660px,90vw)] h-[78vh] flex flex-col overflow-hidden">
-
-        {/* ── Foto / gradiente placeholder ── */}
-        <div className="relative flex-[0_0_56%] overflow-hidden">
-          {slide.foto ? (
-            <img
-              src={slide.foto}
-              alt={slide.titulo}
-              className="w-full h-full object-cover object-center"
-            />
-          ) : (
-            <div className="w-full h-full relative" style={{ background: slide.gradient }}>
-              <svg
-                className="absolute inset-0 m-auto opacity-10"
-                width="120" height="120" viewBox="0 0 120 120"
-                fill="none" aria-hidden="true"
-              >
-                <circle cx="60" cy="60" r="55" stroke="#F5C01A" strokeWidth="1"/>
-                <path
-                  d="M60 20 C40 35 20 35 5 50 C20 65 20 85 5 100 C20 85 40 85 60 100 C80 85 100 85 115 100 C100 85 100 65 115 50 C100 35 80 35 60 20Z"
-                  stroke="#F5C01A" strokeWidth="0.8"
-                />
-                <circle cx="60" cy="60" r="12" stroke="#F5C01A" strokeWidth="0.8"/>
-              </svg>
-            </div>
-          )}
-
-          {/* Bottom fade */}
-          <div
-            className="absolute inset-x-0 bottom-0 h-24 pointer-events-none"
-            style={{ background: "linear-gradient(to top, rgba(13,13,13,0.85), transparent)" }}
-          />
-
-          {/* Tag badge */}
-          <div
-            className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-[0.35em] uppercase"
-            style={{
-              background: "rgba(13,13,13,0.75)",
-              border: "1px solid rgba(245,192,26,0.45)",
-              color: "#F5C01A",
-              fontFamily: "var(--font-cinzel)",
-              backdropFilter: "blur(8px)",
-              borderRadius: "2px",
-            }}
-          >
-            {slide.tag}
-          </div>
-        </div>
-
-        {/* ── Texto + CTA ── */}
-        <div className="flex flex-col justify-between flex-1 px-7 py-6">
-          <div>
-            <h2
-              className="leading-none mb-2"
-              style={{
-                fontFamily: "var(--font-bebas)",
-                fontSize: "clamp(36px, 6vw, 54px)",
-                color: "#F5F0E8",
-                letterSpacing: "0.02em",
-              }}
-            >
-              {slide.titulo}
-            </h2>
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: "rgba(245,240,232,0.55)", fontFamily: "var(--font-body)" }}
-            >
-              {slide.sub}
-            </p>
-          </div>
-
-          <MagneticButton
-            className="self-start cursor-pointer"
-            onClick={() => {
-              document.querySelector(slide.href)?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            <button
-              className="px-6 py-2.5 text-xs tracking-[0.3em] uppercase transition-colors"
-              style={{
-                fontFamily: "var(--font-cinzel)",
-                border: "1px solid rgba(245,192,26,0.55)",
-                color: "#F5C01A",
-                background: "rgba(245,192,26,0.04)",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(245,192,26,0.10)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(245,192,26,0.04)"; }}
-            >
-              {slide.cta} →
-            </button>
-          </MagneticButton>
-        </div>
-
-      </div>
-    </motion.div>
-  );
-}
+const sideVariants = {
+  enter: (d: number) => ({ opacity: 0, x: d > 0 ? 70 : -70, scale: 0.8 }),
+  center: { opacity: 1, x: 0, scale: 1 },
+  exit: (d: number) => ({ opacity: 0, x: d > 0 ? -70 : 70, scale: 0.8 }),
+};
 
 /* ─────────────────────────────────────────────
-   PROGRESS DOT  (componente propio → hooks válidos)
-   ───────────────────────────────────────────── */
-function ProgressDot({
-  scrollYProgress,
-  enter,
-  exit,
-}: {
-  scrollYProgress: MotionValue<number>;
-  enter: number;
-  exit: number;
-}) {
-  const rd: [number, number, number, number] = [
-    clamp01(enter - 0.05),
-    clamp01(enter + 0.06),
-    clamp01(exit  - 0.06),
-    clamp01(exit),
-  ];
-  const dotOpacity = useTransform(scrollYProgress, rd, [0.22, 1, 1, 0.22]);
-  const dotH       = useTransform(scrollYProgress, rd, [10, 28, 28, 10]);
-  return (
-    <motion.div
-      className="w-[3px] rounded-full"
-      style={{ height: dotH, opacity: dotOpacity, background: "#F5C01A" }}
-    />
-  );
-}
-
-/* ─────────────────────────────────────────────
-   HERO SCROLL GLASS  — componente principal
+   COMPONENTE PRINCIPAL
    ───────────────────────────────────────────── */
 export default function HeroScrollGlass() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(0);
+  const [dir, setDir] = useState(1);
+  const sectionRef  = useRef<HTMLElement>(null);
+  const activeRef   = useRef(0);   // siempre sincronizado con active
+  const inView      = useRef(false);
+  const locked      = useRef(false);
+  const touchStartY = useRef(0);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
+  /* Avanzar o retroceder slide */
+  const go = useCallback((delta: number) => {
+    if (locked.current) return;
+    const cur  = activeRef.current;
+    const next = Math.max(0, Math.min(SLIDES.length - 1, cur + delta));
+    if (next === cur) return;
 
-  /* Parallax del texto decorativo de fondo */
-  const bgTextY    = useTransform(scrollYProgress, [0, 1], [0, -80]);
-  /* Glow que pulsa con el scroll */
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.35, 0.90, 0.35]);
-  /* CTA final */
-  const ctaOpacity = useTransform(scrollYProgress, [0.84, 0.92], [0, 1]);
-  const ctaY       = useTransform(scrollYProgress, [0.84, 0.92], [20, 0]);
-  /* Scroll hint */
-  const hintOpacity = useTransform(scrollYProgress, [0, 0.07], [1, 0]);
+    locked.current = true;
+    setTimeout(() => { locked.current = false; }, 750);
+
+    activeRef.current = next;
+    setDir(delta > 0 ? 1 : -1);
+    setActive(next);
+  }, []);
+
+  const getLenis = () =>
+    typeof window !== "undefined"
+      ? (window as unknown as Record<string, { stop: () => void; start: () => void }>).__lenis
+      : null;
+
+  /* Wheel-jacking: 1 tick = 1 slide, Lenis pausado mientras estamos en la sección */
+  useEffect(() => {
+    const sect = sectionRef.current;
+    if (!sect) return;
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        inView.current = e.intersectionRatio >= 0.75;
+        if (inView.current) {
+          getLenis()?.stop();
+        } else {
+          getLenis()?.start();
+        }
+      },
+      { threshold: [0, 0.75, 1] },
+    );
+    io.observe(sect);
+
+    const onWheel = (e: WheelEvent) => {
+      if (!inView.current) return;
+      const cur = activeRef.current;
+
+      /* Último slide + scroll abajo → reanudar Lenis y dejar pasar */
+      if (cur >= SLIDES.length - 1 && e.deltaY > 0) {
+        getLenis()?.start();
+        return;
+      }
+      /* Primer slide + scroll arriba → dejar pasar */
+      if (cur <= 0 && e.deltaY < 0) {
+        getLenis()?.start();
+        return;
+      }
+
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      go(e.deltaY > 0 ? 1 : -1);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    return () => {
+      getLenis()?.start(); // siempre restaurar al desmontar
+      window.removeEventListener("wheel", onWheel, { capture: true });
+      io.disconnect();
+    };
+  }, [go]);
+
+  /* Touch (mobile) */
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartY.current - e.changedTouches[0].clientY;
+    if (Math.abs(diff) > 50) go(diff > 0 ? 1 : -1);
+  };
+
+  const slide = SLIDES[active];
+  const [leftImg, rightImg] = SIDE_PAIRS[active];
 
   return (
-    <section ref={sectionRef} className="exploded-section damask-bg">
-      <div className="exploded-sticky">
+    <section
+      ref={sectionRef}
+      className="relative h-screen overflow-hidden damask-bg"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Glow de fondo */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 40%, rgba(245,192,26,0.09) 0%, transparent 65%)",
+        }}
+      />
 
-        {/* ── Glow radial ── */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
+      {/* Logo — fondo a baja opacidad */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo-oficial.jpg"
+          alt=""
+          className="w-[clamp(200px,30vw,340px)] object-contain select-none"
           style={{
-            background: "radial-gradient(ellipse at 50% 40%, rgba(245,192,26,0.10) 0%, transparent 60%)",
-            opacity: glowOpacity,
+            opacity: 0.09,
+            filter: "drop-shadow(0 0 60px rgba(245,192,26,0.4))",
           }}
         />
+      </div>
 
-        {/* ── Texto decorativo de fondo ── */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
-          style={{ y: bgTextY }}
-        >
-          <span
-            className="text-[20vw] font-black leading-none select-none whitespace-nowrap"
-            style={{
-              fontFamily: "var(--font-bebas)",
-              color: "rgba(245,192,26,0.03)",
-              letterSpacing: "-0.02em",
-            }}
+      {/* ── Producto lateral IZQUIERDO ── */}
+      <div className="absolute left-[3%] lg:left-[5%] top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-2 pointer-events-none z-10">
+        <AnimatePresence mode="wait" custom={dir}>
+          <motion.div
+            key={`left-${active}`}
+            custom={dir}
+            variants={sideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center gap-2"
           >
-            SHISHA VAPER
-          </span>
-        </motion.div>
-
-        {/* ── Cards apiladas ── */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          {SLIDES.map((slide, i) => (
-            <GlassSlide
-              key={i}
-              slide={slide}
-              scrollYProgress={scrollYProgress}
-              enter={RANGES[i][0]}
-              exit={RANGES[i][1]}
-              zIndex={i + 1}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={leftImg}
+              alt=""
+              className="w-20 h-20 object-contain"
+              style={{ filter: "drop-shadow(0 0 16px rgba(245,192,26,0.4))" }}
             />
-          ))}
-        </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-        {/* ── Progress dots — lateral derecho ── */}
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-20">
-          {RANGES.map(([enter, exit], i) => (
-            <ProgressDot
-              key={i}
-              scrollYProgress={scrollYProgress}
-              enter={enter}
-              exit={exit}
+      {/* ── Producto lateral DERECHO ── */}
+      <div className="absolute right-[3%] lg:right-[5%] top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-2 pointer-events-none z-10">
+        <AnimatePresence mode="wait" custom={dir}>
+          <motion.div
+            key={`right-${active}`}
+            custom={dir}
+            variants={sideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.42, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center gap-2"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={rightImg}
+              alt=""
+              className="w-20 h-20 object-contain"
+              style={{ filter: "drop-shadow(0 0 16px rgba(245,192,26,0.4))" }}
             />
-          ))}
-        </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-        {/* ── CTA final ── */}
-        <motion.div
-          className="absolute bottom-14 left-1/2 -translate-x-1/2 z-20"
-          style={{ opacity: ctaOpacity, y: ctaY }}
-        >
-          <MagneticButton
-            className="cursor-pointer"
+      {/* ── Slide principal ── */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <AnimatePresence mode="wait" custom={dir}>
+          <motion.div
+            key={active}
+            custom={dir}
+            variants={cardVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="glass-card w-[min(660px,90vw)] flex flex-col overflow-hidden"
+            style={{ height: "72vh" }}
+          >
+            {/* Área de imagen */}
+            <div className="relative flex-[0_0_56%] overflow-hidden bg-[#0D0D0D] flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={slide.img}
+                alt={slide.titulo}
+                className={`transition-all duration-500 ${
+                  slide.isPhoto
+                    ? "w-full h-full object-cover object-center opacity-75"
+                    : "w-[65%] max-w-[220px] object-contain"
+                }`}
+                style={
+                  !slide.isPhoto
+                    ? { filter: "drop-shadow(0 0 28px rgba(245,192,26,0.35))" }
+                    : undefined
+                }
+              />
+
+              {/* Fade inferior */}
+              <div
+                className="absolute inset-x-0 bottom-0 h-24 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(13,13,13,0.92), transparent)",
+                }}
+              />
+
+              {/* Tag */}
+              <div
+                className="absolute top-4 left-4 px-3 py-1 text-[10px] tracking-[0.35em] uppercase"
+                style={{
+                  background: "rgba(13,13,13,0.75)",
+                  border: "1px solid rgba(245,192,26,0.45)",
+                  color: "#F5C01A",
+                  fontFamily: "var(--font-cinzel)",
+                  backdropFilter: "blur(8px)",
+                  borderRadius: "2px",
+                }}
+              >
+                {slide.tag}
+              </div>
+
+              {/* Contador */}
+              <div
+                className="absolute top-4 right-4 text-[11px]"
+                style={{
+                  color: "rgba(245,192,26,0.35)",
+                  fontFamily: "var(--font-cinzel)",
+                }}
+              >
+                {String(active + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}
+              </div>
+            </div>
+
+            {/* Texto y CTA */}
+            <div className="flex flex-col justify-between flex-1 px-7 py-6">
+              <div>
+                <h2
+                  className="leading-none mb-2"
+                  style={{
+                    fontFamily: "var(--font-bebas)",
+                    fontSize: "clamp(36px, 6vw, 54px)",
+                    color: "#F5F0E8",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {slide.titulo}
+                </h2>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "rgba(245,240,232,0.55)" }}
+                >
+                  {slide.sub}
+                </p>
+              </div>
+
+              <MagneticButton
+                className="self-start cursor-pointer"
+                onClick={() => {
+                  document
+                    .querySelector(slide.href)
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                <button
+                  className="px-6 py-2.5 text-xs tracking-[0.3em] uppercase transition-colors"
+                  style={{
+                    fontFamily: "var(--font-cinzel)",
+                    border: "1px solid rgba(245,192,26,0.55)",
+                    color: "#F5C01A",
+                    background: "rgba(245,192,26,0.04)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(245,192,26,0.10)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(245,192,26,0.04)";
+                  }}
+                >
+                  {slide.cta} →
+                </button>
+              </MagneticButton>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Progress dots — clicables */}
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-20">
+        {SLIDES.map((_, i) => (
+          <button
+            key={i}
             onClick={() => {
-              document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" });
+              const d = i - activeRef.current;
+              if (d === 0) return;
+              activeRef.current = i;
+              setDir(d > 0 ? 1 : -1);
+              setActive(i);
             }}
-          >
-            <button
-              className="px-8 py-3 text-sm tracking-[0.3em] uppercase"
-              style={{
-                fontFamily: "var(--font-cinzel)",
-                border: "1px solid rgba(245,192,26,0.6)",
-                color: "#F5C01A",
-                background: "rgba(13,13,13,0.85)",
-                backdropFilter: "blur(12px)",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(245,192,26,0.08)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(13,13,13,0.85)"; }}
-            >
-              Ver toda la colección
-            </button>
-          </MagneticButton>
-        </motion.div>
+            className="w-[3px] rounded-full cursor-pointer transition-all duration-300"
+            style={{
+              height: i === active ? "28px" : "10px",
+              background:
+                i === active
+                  ? "#F5C01A"
+                  : "rgba(245,192,26,0.25)",
+            }}
+          />
+        ))}
+      </div>
 
-        {/* ── Scroll hint ── */}
-        <motion.div
-          className="absolute bottom-7 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
-          style={{ opacity: hintOpacity }}
-        >
+      {/* Scroll hint */}
+      {active < SLIDES.length - 1 && (
+        <div className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
           <span
             className="text-[9px] tracking-[0.4em] uppercase"
-            style={{ color: "rgba(245,192,26,0.4)", fontFamily: "var(--font-cinzel)" }}
+            style={{
+              color: "rgba(245,192,26,0.35)",
+              fontFamily: "var(--font-cinzel)",
+            }}
           >
-            Scroll para descubrir
+            Scroll
           </span>
           <motion.div
-            className="w-px h-7 bg-[rgba(245,192,26,0.3)]"
-            animate={{ scaleY: [1, 0.3, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
+            className="w-px h-6 bg-[rgba(245,192,26,0.3)]"
+            animate={{ scaleY: [1, 0.2, 1] }}
+            transition={{ duration: 1.4, repeat: Infinity }}
           />
-        </motion.div>
-
-      </div>
+        </div>
+      )}
     </section>
   );
 }

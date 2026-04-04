@@ -34,10 +34,10 @@ export default function Categories() {
             <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#F5C01A]" />
           </motion.div>
           <motion.h2
-            initial={{ y: 30, opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ type: "spring", stiffness: 75, damping: 16 }}
             className="text-[clamp(40px,7vw,72px)] leading-none text-white"
             style={{ fontFamily: "var(--font-bebas)", letterSpacing: "0.03em" }}
           >
@@ -55,9 +55,9 @@ export default function Categories() {
                 href={`#productos`}
                 initial={{ y: 40, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                whileHover={{ y: -4 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ type: "spring", stiffness: 75, damping: 16, delay: i * 0.08 }}
+                whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                 className="group relative p-6 card-base rounded-sm cursor-pointer block overflow-hidden"
               >
                 {/* Hover glow */}

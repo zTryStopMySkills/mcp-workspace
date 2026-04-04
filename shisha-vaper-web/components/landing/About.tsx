@@ -50,46 +50,17 @@ export default function About() {
                 </div>
               ))}
 
-              {/* Content inside frame */}
+              {/* Content inside frame — Logo oficial */}
               <div
-                className="absolute inset-4 flex flex-col items-center justify-center text-center"
-                style={{ background: "linear-gradient(135deg, #111111 0%, #0D0D0D 100%)" }}
+                className="absolute inset-4 flex items-center justify-center"
+                style={{ background: "#0D0D0D" }}
               >
-                {/* Arabic ornament SVG */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="mb-6"
-                >
-                  <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                    <circle cx="40" cy="40" r="35" stroke="rgba(245,192,26,0.3)" strokeWidth="1" />
-                    <circle cx="40" cy="40" r="26" stroke="rgba(245,192,26,0.15)" strokeWidth="1" />
-                    <path
-                      d="M40 8 L44 18 L54 15 L48 24 L58 28 L48 32 L52 42 L42 38 L40 50 L38 38 L28 42 L32 32 L22 28 L32 24 L26 15 L36 18Z"
-                      fill="rgba(245,192,26,0.6)"
-                    />
-                    <circle cx="40" cy="40" r="6" fill="rgba(245,192,26,0.8)" />
-                  </svg>
-                </motion.div>
-
-                <p
-                  className="text-[clamp(28px,5vw,42px)] text-[#F5C01A] mb-2"
-                  style={{ fontFamily: "var(--font-bebas)", letterSpacing: "0.05em" }}
-                >
-                  SHISHA VAPER
-                </p>
-                <p
-                  className="text-[10px] tracking-[0.5em] text-[rgba(245,192,26,0.6)] uppercase mb-6"
-                  style={{ fontFamily: "var(--font-cinzel)" }}
-                >
-                  Sevilla
-                </p>
-
-                <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#F5C01A] to-transparent mb-6" />
-
-                <p className="text-sm text-[rgba(245,240,232,0.5)] leading-relaxed px-4">
-                  Donde la tradición árabe y la cultura vaper se encuentran en el corazón de Sevilla.
-                </p>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logo-oficial.jpg"
+                  alt="Shisha Vaper Sevilla"
+                  className="w-[85%] max-w-[340px] object-contain drop-shadow-[0_0_24px_rgba(245,192,26,0.2)]"
+                />
               </div>
             </div>
           </motion.div>

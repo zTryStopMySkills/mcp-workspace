@@ -144,7 +144,8 @@ body {
 /* ── Exploded view section ── */
 .exploded-section {
   position: relative;
-  height: 300vh;
+  height: 400vh;
+  margin-bottom: 8vh;
 }
 .exploded-sticky {
   position: sticky;

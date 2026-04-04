@@ -144,10 +144,12 @@ function ShishaModel({
   const HOSE_EXP = v3( 2.10, -0.35,  0.55);
   const ZERO     = v3(0, 0, 0);
 
-  useFrame((_s, delta) => {
+  useFrame((state, delta) => {
     const alpha = 1 - Math.pow(0.03, delta); // frame-rate independent
     if (autoRotate && rootRef.current && explodedProgress < 0.05) {
+      const t = state.clock.elapsedTime;
       rootRef.current.rotation.y += delta * 0.48;
+      rootRef.current.rotation.x = Math.sin(t * 0.38) * 0.14; // cabeceo suave
     }
     const exp = explodedProgress > 0;
     if (vaseRef.current) lerpGroup(vaseRef.current, exp ? VASE_EXP : ZERO, alpha);
@@ -363,34 +365,90 @@ function ShishaModel({
    ───────────────────────────────────────────────────────────── */
 function VaperModel({ autoRotate }: { autoRotate: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
-  useFrame((_s, delta) => {
-    if (autoRotate && groupRef.current) groupRef.current.rotation.y += delta * 0.6;
+  useFrame((state, delta) => {
+    if (autoRotate && groupRef.current) {
+      const t = state.clock.elapsedTime;
+      groupRef.current.rotation.y += delta * 0.6;
+      groupRef.current.rotation.x = Math.sin(t * 0.42) * 0.18; // cabeceo arriba/abajo
+    }
   });
 
-  const bodyMat   = new THREE.MeshStandardMaterial({ color: "#1A1A1A", metalness: 0.6,  roughness: 0.4 });
-  const goldM     = new THREE.MeshStandardMaterial({ color: "#F5C01A", metalness: 0.9,  roughness: 0.15 });
-  const screenMat = new THREE.MeshStandardMaterial({ color: "#00CFFF", emissive: "#0066AA", emissiveIntensity: 0.8, roughness: 0.1 });
-  const btnMat    = new THREE.MeshStandardMaterial({ color: "#2A2A2A", metalness: 0.7,  roughness: 0.3 });
-  const ledMat    = new THREE.MeshStandardMaterial({ color: "#F5C01A", emissive: "#F5C01A", emissiveIntensity: 1.5 });
+  const bodyMat  = new THREE.MeshStandardMaterial({ color: "#1C1C1E", metalness: 0.75, roughness: 0.25 });
+  const goldM    = new THREE.MeshStandardMaterial({ color: "#F5C01A", metalness: 0.95, roughness: 0.1  });
+  const glassMat = new THREE.MeshPhysicalMaterial({ color: "#88CCFF", transmission: 0.85, thickness: 0.15, roughness: 0.0, transparent: true, opacity: 0.55 });
+  const ledMat   = new THREE.MeshStandardMaterial({ color: "#F5C01A", emissive: "#F5C01A", emissiveIntensity: 2.0 });
+  const btnMat   = new THREE.MeshStandardMaterial({ color: "#2E2E30", metalness: 0.8, roughness: 0.2 });
+  const screenM  = new THREE.MeshStandardMaterial({ color: "#00CFFF", emissive: "#0055AA", emissiveIntensity: 1.0, roughness: 0.05 });
 
   return (
-    <group ref={groupRef} position={[0, -0.2, 0]}>
-      <mesh position={[0, 0, 0]} material={bodyMat}><boxGeometry args={[0.65, 1.6, 0.35]} /></mesh>
-      {([ [-0.325,0,0.175],[0.325,0,0.175],[-0.325,0,-0.175],[0.325,0,-0.175] ] as [number,number,number][]).map(([x,y,z],i)=>(
-        <mesh key={i} position={[x,y,z]} material={goldM}><boxGeometry args={[0.015,1.62,0.015]}/></mesh>
+    <group ref={groupRef} position={[0, 0, 0]}>
+      {/* ── Cuerpo principal cilíndrico ── */}
+      <mesh position={[0, 0, 0]} material={bodyMat}>
+        <cylinderGeometry args={[0.14, 0.16, 2.0, 32]} />
+      </mesh>
+
+      {/* Anillo dorado superior */}
+      <mesh position={[0, 0.9, 0]} material={goldM}>
+        <torusGeometry args={[0.155, 0.018, 10, 40]} />
+      </mesh>
+
+      {/* Anillo dorado inferior */}
+      <mesh position={[0, -0.9, 0]} material={goldM}>
+        <torusGeometry args={[0.165, 0.018, 10, 40]} />
+      </mesh>
+
+      {/* ── Boquilla superior ── */}
+      <mesh position={[0, 1.12, 0]} material={new THREE.MeshStandardMaterial({ color: "#2A2A2A", metalness: 0.6, roughness: 0.3 })}>
+        <cylinderGeometry args={[0.07, 0.14, 0.22, 24]} />
+      </mesh>
+      <mesh position={[0, 1.3, 0]} material={new THREE.MeshStandardMaterial({ color: "#1A1A1A", metalness: 0.5, roughness: 0.4 })}>
+        <cylinderGeometry args={[0.045, 0.07, 0.2, 20]} />
+      </mesh>
+      {/* Abertura de vapor (mouthpiece glass) */}
+      <mesh position={[0, 1.42, 0]} material={glassMat}>
+        <cylinderGeometry args={[0.035, 0.045, 0.08, 16]} />
+      </mesh>
+
+      {/* ── Panel lateral: display OLED ── */}
+      <mesh position={[0.145, 0.25, 0]} material={screenM} rotation={[0, -Math.PI / 2, 0]}>
+        <planeGeometry args={[0.30, 0.22]} />
+      </mesh>
+      {/* Bisel pantalla */}
+      <mesh position={[0.1445, 0.25, 0]} material={new THREE.MeshStandardMaterial({ color: "#0A0A0A" })} rotation={[0, -Math.PI / 2, 0]}>
+        <planeGeometry args={[0.35, 0.27]} />
+      </mesh>
+
+      {/* ── Botón de fuego ── */}
+      <mesh position={[-0.155, 0.1, 0]} rotation={[0, 0, Math.PI / 2]} material={btnMat}>
+        <cylinderGeometry args={[0.028, 0.028, 0.06, 16]} />
+      </mesh>
+      {/* Botones + / – */}
+      {[0.38, 0.58].map((y, i) => (
+        <mesh key={i} position={[-0.15, y, 0]} material={btnMat}>
+          <cylinderGeometry args={[0.02, 0.02, 0.04, 12]} />
+        </mesh>
       ))}
-      <mesh position={[0,0.3,0.178]} material={screenMat}><planeGeometry args={[0.38,0.32]}/></mesh>
-      <mesh position={[0,0.3,0.177]} material={new THREE.MeshStandardMaterial({color:"#0A0A0A",metalness:0.5,roughness:0.3})}><planeGeometry args={[0.44,0.38]}/></mesh>
-      <mesh position={[0.34,0.25,0]} material={goldM}><boxGeometry args={[0.04,0.38,0.22]}/></mesh>
-      <mesh position={[0.34,-0.18,0.06]} material={btnMat}><boxGeometry args={[0.035,0.12,0.1]}/></mesh>
-      <mesh position={[0.34,-0.18,-0.06]} material={btnMat}><boxGeometry args={[0.035,0.12,0.1]}/></mesh>
-      <mesh position={[0,0.92,0]} material={new THREE.MeshStandardMaterial({color:"#2A2A2A",metalness:0.7,roughness:0.2,transparent:true,opacity:0.9})}><cylinderGeometry args={[0.18,0.22,0.42,24]}/></mesh>
-      <mesh position={[0,0.92,0]} material={new THREE.MeshPhysicalMaterial({color:"#88BBFF",transmission:0.8,thickness:0.2,roughness:0,transparent:true,opacity:0.5})}><cylinderGeometry args={[0.15,0.15,0.25,24]}/></mesh>
-      {[0.76,1.06].map((y,i)=><mesh key={i} position={[0,y,0]} material={goldM}><torusGeometry args={[0.2,0.015,8,32]}/></mesh>)}
-      <mesh position={[0,1.22,0]} material={goldM}><cylinderGeometry args={[0.055,0.08,0.2,16]}/></mesh>
-      <mesh position={[0,-0.81,0.12]} material={new THREE.MeshStandardMaterial({color:"#111",metalness:0.8,roughness:0.2})}><boxGeometry args={[0.12,0.04,0.02]}/></mesh>
-      <mesh position={[0,-0.82,0]} material={ledMat}><boxGeometry args={[0.6,0.008,0.32]}/></mesh>
-      {[-0.15,0,0.15].map((x,i)=><mesh key={i} position={[x,-0.65,0.18]} material={new THREE.MeshStandardMaterial({color:"#0A0A0A"})}><boxGeometry args={[0.04,0.18,0.01]}/></mesh>)}
+
+      {/* ── LED indicator strip (base) ── */}
+      <mesh position={[0, -1.02, 0]} material={ledMat}>
+        <torusGeometry args={[0.1, 0.012, 8, 32]} />
+      </mesh>
+
+      {/* ── Base con puerto USB-C ── */}
+      <mesh position={[0, -1.06, 0]} material={new THREE.MeshStandardMaterial({ color: "#111", metalness: 0.9, roughness: 0.15 })}>
+        <cylinderGeometry args={[0.155, 0.155, 0.08, 32]} />
+      </mesh>
+      {/* Ranura USB-C */}
+      <mesh position={[0, -1.12, 0]} material={new THREE.MeshStandardMaterial({ color: "#080808" })}>
+        <boxGeometry args={[0.07, 0.025, 0.04]} />
+      </mesh>
+
+      {/* ── Textura decorativa: bandas finas ── */}
+      {[-0.55, -0.15, 0.55].map((y, i) => (
+        <mesh key={i} position={[0, y, 0]} material={new THREE.MeshStandardMaterial({ color: "#252525", metalness: 0.6, roughness: 0.4 })}>
+          <torusGeometry args={[0.145, 0.008, 6, 36]} />
+        </mesh>
+      ))}
     </group>
   );
 }

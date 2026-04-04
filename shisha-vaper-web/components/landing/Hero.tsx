@@ -1,8 +1,8 @@
 "use client";
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type TargetAndTransition } from "framer-motion";
-import Image from "next/image";
 import content from "@/data/content.json";
+// useScroll kept for opacity fade-out on scroll
 
 /* Glassmorphism floating product card */
 function GlassCard({
@@ -26,11 +26,12 @@ function GlassCard({
 }) {
   return (
     <motion.div
-      className="absolute hidden lg:block"
+      className="absolute hidden lg:block cursor-pointer"
       style={motionStyle}
       initial={initial}
       animate={animateProp}
       transition={transition}
+      whileHover={{ y: -10, scale: 1.04, transition: { type: "spring", stiffness: 280, damping: 20 } }}
     >
       <div
         className="relative overflow-hidden rounded-sm"
@@ -92,8 +93,6 @@ export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
-  const yLeft   = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const yRight  = useTransform(scrollYProgress, [0, 1], [0, -90]);
   const opacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
 
   const whatsappUrl = content.negocio.whatsapp
@@ -123,10 +122,10 @@ export default function Hero() {
 
       {/* ── Left glassmorphism card: Shisha ── */}
       <GlassCard
-        imageUrl="https://upload.wikimedia.org/wikipedia/commons/c/c1/Hookah_Shisha.jpg"
+        imageUrl="/images/product-shisha.svg"
         label="Shisha Premium"
         price="Desde 54.99€"
-        motionStyle={{ y: yLeft, left: "6%", top: "50%", translateY: "-50%" }}
+        motionStyle={{ left: "6%", top: "50%", translateY: "-50%" }}
         style={{ transform: "rotate(-4deg)" }}
         initial={{ opacity: 0, x: -60 }}
         animate={{ opacity: 1, x: 0 }}
@@ -135,10 +134,10 @@ export default function Hero() {
 
       {/* ── Right glassmorphism card: Vaper ── */}
       <GlassCard
-        imageUrl="https://upload.wikimedia.org/wikipedia/commons/b/b9/Box_Mod_For_Vaping_%28144491549%29.jpeg"
+        imageUrl="/images/product-vaper.svg"
         label="Vapers & Mods"
         price="Desde 22.99€"
-        motionStyle={{ y: yRight, right: "6%", top: "50%", translateY: "-50%" }}
+        motionStyle={{ right: "6%", top: "50%", translateY: "-50%" }}
         style={{ transform: "rotate(4deg)" }}
         initial={{ opacity: 0, x: 60 }}
         animate={{ opacity: 1, x: 0 }}
@@ -147,11 +146,12 @@ export default function Hero() {
 
       {/* ── Extra card top-right: Mazas ── */}
       <motion.div
-        className="absolute hidden xl:block"
-        style={{ y: yRight, right: "12%", top: "15%", translateY: "-50%" }}
+        className="absolute hidden xl:block cursor-pointer"
+        style={{ right: "12%", top: "15%", translateY: "-50%" }}
         initial={{ opacity: 0, x: 40, y: -20 }}
         animate={{ opacity: 0.65, x: 0, y: 0 }}
         transition={{ duration: 1.1, delay: 0.9 }}
+        whileHover={{ y: -6, opacity: 0.9, transition: { type: "spring", stiffness: 280, damping: 20 } }}
       >
         <div
           className="relative overflow-hidden rounded-sm"
@@ -168,9 +168,9 @@ export default function Hero() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Prince%2C_Konoz_%26_Shams_Alasil_Shisha_Tobacco.jpg"
+            src="/images/shisha-bowl.svg"
             alt="Mazas"
-            className="w-full h-full object-cover opacity-70"
+            className="w-full h-full object-contain p-3 opacity-70"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D]/80 to-transparent" />
           <p className="absolute bottom-2 left-2 text-[9px] tracking-widest text-[rgba(245,192,26,0.7)] uppercase" style={{ fontFamily: "var(--font-cinzel)" }}>
@@ -181,11 +181,12 @@ export default function Hero() {
 
       {/* ── Extra card bottom-left: Pod ── */}
       <motion.div
-        className="absolute hidden xl:block"
-        style={{ y: yLeft, left: "12%", bottom: "18%" }}
+        className="absolute hidden xl:block cursor-pointer"
+        style={{ left: "12%", bottom: "18%" }}
         initial={{ opacity: 0, x: -30, y: 20 }}
         animate={{ opacity: 0.6, x: 0, y: 0 }}
         transition={{ duration: 1.1, delay: 1.0 }}
+        whileHover={{ y: -6, opacity: 0.85, transition: { type: "spring", stiffness: 280, damping: 20 } }}
       >
         <div
           className="relative overflow-hidden rounded-sm"
@@ -202,9 +203,9 @@ export default function Hero() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/d/da/2023_Lost_Vape_Ursa_Nano_Pod.jpg"
+            src="/images/vaper-pod.svg"
             alt="Pod"
-            className="w-full h-full object-cover opacity-70"
+            className="w-full h-full object-contain p-3 opacity-70"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D]/80 to-transparent" />
           <p className="absolute bottom-2 left-2 text-[9px] tracking-widest text-[rgba(245,192,26,0.7)] uppercase" style={{ fontFamily: "var(--font-cinzel)" }}>
@@ -248,28 +249,22 @@ export default function Hero() {
         style={{ opacity }}
         className="relative z-10 text-center px-6 max-w-2xl mx-auto"
       >
-        {/* Logo mark */}
+        {/* Logo principal — prominente */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="flex justify-center mb-6"
+          initial={{ opacity: 0, scale: 0.85, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="flex justify-center mb-8"
         >
-          <div
-            className="relative w-16 h-16 rounded-full overflow-hidden"
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-oficial.jpg"
+            alt="Shisha Vaper Sevilla"
+            className="w-[clamp(140px,22vw,210px)] object-contain"
             style={{
-              border: "1px solid rgba(245,192,26,0.35)",
-              boxShadow: "0 0 30px rgba(245,192,26,0.2), inset 0 0 20px rgba(245,192,26,0.05)",
+              filter: "drop-shadow(0 0 32px rgba(245,192,26,0.35)) drop-shadow(0 0 64px rgba(245,192,26,0.15))",
             }}
-          >
-            <Image
-              src="/logo.jpg"
-              alt="Shisha Vaper Sevilla"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+          />
         </motion.div>
 
         {/* Since line */}

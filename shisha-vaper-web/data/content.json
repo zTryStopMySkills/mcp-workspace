@@ -70,7 +70,7 @@
       "precio_antes": null,
       "stock": 8,
       "descripcion": "Shisha tradicional árabe con vástago de latón y base de cristal soplado. Altura 65cm. Incluye manguera y cazoleta.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Hookah_Shisha.jpg",
+      "imagen": "/images/product-shisha.svg",
       "activo": true,
       "destacado": true,
       "sku": "SHA-001"
@@ -83,7 +83,7 @@
       "precio_antes": 179.99,
       "stock": 3,
       "descripcion": "Shisha de lujo con acabados dorados de 24K. Vástago de acero inoxidable, base de cristal artesanal. Edición limitada.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/d/db/Flickr_-_DavidDennisPhotos.com_-_Hookah-Shisha_Pipes.jpg",
+      "imagen": "/images/product-shisha.svg",
       "activo": true,
       "destacado": true,
       "sku": "SHA-002"
@@ -96,7 +96,7 @@
       "precio_antes": null,
       "stock": 12,
       "descripcion": "Box mod regulable 80W con pantalla OLED. Compatible con todos los tanques estándar. Batería 18650 (no incluida).",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Box_Mod_For_Vaping_%28144491549%29.jpeg",
+      "imagen": "/images/product-vaper.svg",
       "activo": true,
       "destacado": false,
       "sku": "VAP-001"
@@ -109,7 +109,7 @@
       "precio_antes": null,
       "stock": 20,
       "descripcion": "Sistema de pod compacto con bobina de malla. 900mAh. Carga USB-C. Ideal para sales de nicotina.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/d/da/2023_Lost_Vape_Ursa_Nano_Pod.jpg",
+      "imagen": "/images/vaper-pod.svg",
       "activo": true,
       "destacado": true,
       "sku": "VAP-002"
@@ -122,7 +122,7 @@
       "precio_antes": null,
       "stock": 30,
       "descripcion": "La menta más fresca del mercado. Al Fakher es el estándar de calidad en mazas de shisha. 250 gramos.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Prince%2C_Konoz_%26_Shams_Alasil_Shisha_Tobacco.jpg",
+      "imagen": "/images/shisha-bowl.svg",
       "activo": true,
       "destacado": false,
       "sku": "MAZ-001"
@@ -135,7 +135,7 @@
       "precio_antes": 34.99,
       "stock": 15,
       "descripcion": "Todo lo que necesitas para empezar: carbones, cazoleta de silicona, pinzas y pantalla de aluminio.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Pod_mod-based_vaping_devices.jpg",
+      "imagen": "/images/shisha-shaft.svg",
       "activo": true,
       "destacado": true,
       "sku": "ACC-001"
@@ -148,7 +148,7 @@
       "precio_antes": 89.99,
       "stock": 5,
       "descripcion": "Mod premium con pantalla táctil de 2.4\". Potencia regulable 6-220W. Pantalla TFT color. Doble 18650.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Smok-g-priv-220w-touch-screen-mod.jpg",
+      "imagen": "/images/product-vaper.svg",
       "activo": true,
       "destacado": true,
       "sku": "VAP-003"
@@ -161,7 +161,7 @@
       "precio_antes": null,
       "stock": 6,
       "descripcion": "Shisha compacta de alta calidad con base robusta. Perfecta para uso doméstico o terrazas. 55cm de altura.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Shisha_hookah.jpg",
+      "imagen": "/images/product-shisha.svg",
       "activo": true,
       "destacado": false,
       "sku": "SHA-003"
@@ -174,7 +174,7 @@
       "precio_antes": null,
       "stock": 25,
       "descripcion": "Pack variado con 3 sabores distintos: menta, doble manzana y uva. 50g cada uno. Ideal para descubrir.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Prince%2C_Konoz_%26_Shams_Alasil_Shisha_Tobacco.jpg",
+      "imagen": "/images/shisha-bowl.svg",
       "activo": true,
       "destacado": false,
       "sku": "MAZ-002"
@@ -187,75 +187,14 @@
       "precio_antes": null,
       "stock": 18,
       "descripcion": "Kit completo de inicio para vapear: vape pen, cargador USB y dos resistencias de repuesto. Fácil de usar.",
-      "imagen": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Vape_Pen_-_E-Cigarette_%2825245589669%29.jpg",
+      "imagen": "/images/vaper-pod.svg",
       "activo": true,
       "destacado": false,
       "sku": "VAP-004"
     }
   ],
   "ventas": [],
-  "galeria": [
-    {
-      "id": "g1",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Hookah_Shisha.jpg",
-      "alt": "Shisha hookah premium"
-    },
-    {
-      "id": "g2",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/d/db/Flickr_-_DavidDennisPhotos.com_-_Hookah-Shisha_Pipes.jpg",
-      "alt": "Colección de cachimbas y hookahs"
-    },
-    {
-      "id": "g3",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Shisha-edit.png",
-      "alt": "Shisha detalle premium"
-    },
-    {
-      "id": "g4",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Prince%2C_Konoz_%26_Shams_Alasil_Shisha_Tobacco.jpg",
-      "alt": "Mazas y tabacos para shisha"
-    },
-    {
-      "id": "g5",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Box_Mod_For_Vaping_%28144491549%29.jpeg",
-      "alt": "Box mod vaper premium"
-    },
-    {
-      "id": "g6",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Smok-g-priv-220w-touch-screen-mod.jpg",
-      "alt": "SMOK G-Priv mod táctil"
-    },
-    {
-      "id": "g7",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/3/31/Vape_clouds_from_using_vape_mod_device.jpg",
-      "alt": "Nubes de vapor"
-    },
-    {
-      "id": "g8",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/d/da/2023_Lost_Vape_Ursa_Nano_Pod.jpg",
-      "alt": "Pod system compacto"
-    },
-    {
-      "id": "g9",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/5/51/Hookah_2.jpg",
-      "alt": "Hookah tradicional"
-    },
-    {
-      "id": "g10",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Pod_mod-based_vaping_devices.jpg",
-      "alt": "Dispositivos pod mod"
-    },
-    {
-      "id": "g11",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Using_vape_mod_device_outdoors.jpg",
-      "alt": "Vapeo al aire libre"
-    },
-    {
-      "id": "g12",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Shisha_hookah.jpg",
-      "alt": "Shisha hookah artesanal"
-    }
-  ],
+  "galeria": [],
   "testimoniales": [
     {
       "id": 1,

@@ -1,0 +1,51 @@
+{
+  "name": "Agental.IA — Portal de Agentes",
+  "short_name": "Agental.IA",
+  "description": "Plataforma privada para agentes comerciales de Agental.IA",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#0D1117",
+  "theme_color": "#0D1117",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Ver mi panel principal",
+      "url": "/dashboard",
+      "icons": [{ "src": "/logo.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Chat",
+      "short_name": "Chat",
+      "description": "Chat del equipo",
+      "url": "/chat",
+      "icons": [{ "src": "/logo.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Documentos",
+      "short_name": "Docs",
+      "description": "Ver documentos",
+      "url": "/documentos",
+      "icons": [{ "src": "/logo.jpg", "sizes": "96x96" }]
+    }
+  ]
+}

@@ -17,6 +17,8 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     });
 
     lenisRef.current = lenis;
+    // Exponer globalmente para que HeroScrollGlass pueda pausar/reanudar
+    (window as unknown as Record<string, unknown>).__lenis = lenis;
 
     // Sync Lenis with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);

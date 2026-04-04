@@ -28,9 +28,10 @@ export default function Gallery() {
             <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#F5C01A]" />
           </motion.div>
           <motion.h2
-            initial={{ y: 30, opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ type: "spring", stiffness: 75, damping: 16 }}
             className="text-[clamp(40px,7vw,72px)] leading-none text-white"
             style={{ fontFamily: "var(--font-bebas)", letterSpacing: "0.03em" }}
           >
@@ -43,10 +44,10 @@ export default function Gallery() {
             {(content.galeria as { url: string; alt?: string }[]).map((img, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: (i % 8) * 0.07 }}
+                initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ type: "spring", stiffness: 80, damping: 18, delay: (i % 8) * 0.08 }}
                 className={`group relative overflow-hidden bg-[#111] border border-[rgba(245,192,26,0.06)] ${
                   i === 0 ? "col-span-2 row-span-2" : ""
                 }`}
@@ -86,8 +87,13 @@ export default function Gallery() {
                   whileHover={{ borderColor: "rgba(245,192,26,0.25)" }}
                   transition={{ duration: 0.2 }}
                 >
-                  <div className="text-center p-4">
-                    <Images size={i === 0 ? 48 : 24} className="text-[rgba(245,192,26,0.15)] mx-auto" />
+                  <div className="flex items-center justify-center p-4 w-full h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/logo-oficial.jpg"
+                      alt="Shisha Vaper Sevilla"
+                      className={`object-contain opacity-30 ${i === 0 ? "max-w-[200px]" : "max-w-[100px]"}`}
+                    />
                   </div>
                   {/* Animated shimmer */}
                   <motion.div

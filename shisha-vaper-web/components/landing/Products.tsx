@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useCallback, useEffect, lazy, Suspense } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring, animate } from "framer-motion";
 import { Tag, Package, X } from "lucide-react";
 import { gsap } from "gsap";
@@ -7,11 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import content from "@/data/content.json";
 import { formatPrice } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
-import SkeletonCard from "@/components/ui/SkeletonCard";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const ProductViewer3D = lazy(() => import("@/components/ProductViewer3D"));
 
 /* ─── Product Modal (FLIP destination) ──────────────────────────────────── */
 function ProductModal({
@@ -153,7 +150,6 @@ function ProductCard({ product, index, whatsappBase }: {
   whatsappBase: string | null;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [show3D, setShow3D] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   // Desktop mouse tilt
@@ -203,7 +199,7 @@ function ProductCard({ product, index, whatsappBase }: {
             mouseX.set(0);
           }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => !show3D && setModalOpen(true)}
+          onClick={() => setModalOpen(true)}
         >
           {/* Shine overlay */}
           <motion.div
@@ -217,52 +213,34 @@ function ProductCard({ product, index, whatsappBase }: {
             }}
           />
 
-          {/* Product image / 3D viewer — FLIP source */}
+          {/* Product image — FLIP source */}
           <div
             className="relative bg-[#0A0A0A] overflow-hidden flex-shrink-0"
-            style={{ height: show3D ? "280px" : undefined, aspectRatio: show3D ? undefined : "4/3" }}
+            style={{ aspectRatio: "4/3" }}
           >
-            {show3D ? (
-              <Suspense fallback={<SkeletonCard className="h-full w-full border-0 rounded-none p-0" />}>
-                <ProductViewer3D
-                  type={["shishas", "mazas", "accesorios"].includes(product.categoria) ? "shisha" : "vaper"}
-                  className="w-full h-full"
+            <motion.div layoutId={`product-img-${product.id}`} className="w-full h-full">
+              {product.imagen ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={product.imagen}
+                  alt={product.nombre}
+                  draggable={false}
+                  className={`w-full h-full transition-transform duration-700 pointer-events-none ${
+                    product.imagen.endsWith(".svg")
+                      ? "object-contain p-8 group-hover:scale-105"
+                      : "object-cover group-hover:scale-110"
+                  }`}
+                  style={product.imagen.endsWith(".svg") ? { filter: "drop-shadow(0 0 14px rgba(245,192,26,0.25))" } : undefined}
                 />
-              </Suspense>
-            ) : (
-              /* FLIP source image */
-              <motion.div layoutId={`product-img-${product.id}`} className="w-full h-full">
-                {product.imagen ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={product.imagen}
-                    alt={product.nombre}
-                    draggable={false}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 pointer-events-none"
-                  />
-                ) : (
-                  <div
-                    className="w-full h-full flex items-center justify-center"
-                    style={{ background: "radial-gradient(circle at 50% 50%, rgba(245,192,26,0.08) 0%, transparent 70%)" }}
-                  >
-                    <Package size={64} className="text-[rgba(245,192,26,0.15)]" />
-                  </div>
-                )}
-              </motion.div>
-            )}
-
-            {/* Toggle 3D button */}
-            <button
-              onClick={(e) => { e.stopPropagation(); setShow3D((v) => !v); }}
-              className={`absolute top-3 right-3 z-20 px-2.5 py-1 text-[9px] tracking-widest uppercase transition-all ${
-                show3D
-                  ? "bg-[#F5C01A] text-[#0D0D0D] font-bold"
-                  : "bg-[rgba(13,13,13,0.75)] border border-[rgba(245,192,26,0.35)] text-[rgba(245,192,26,0.8)] hover:border-[rgba(245,192,26,0.7)]"
-              }`}
-              style={{ fontFamily: "var(--font-cinzel)", backdropFilter: "blur(4px)" }}
-            >
-              {show3D ? "← Foto" : "3D ↺"}
-            </button>
+              ) : (
+                <div
+                  className="w-full h-full flex items-center justify-center"
+                  style={{ background: "radial-gradient(circle at 50% 50%, rgba(245,192,26,0.08) 0%, transparent 70%)" }}
+                >
+                  <Package size={64} className="text-[rgba(245,192,26,0.15)]" />
+                </div>
+              )}
+            </motion.div>
 
             <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
