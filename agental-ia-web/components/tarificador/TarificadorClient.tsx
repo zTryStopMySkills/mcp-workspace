@@ -45,22 +45,22 @@ export interface TarificadorData {
 
 const PLANES: PlanItem[] = [
   {
-    id: "basico", nombre: "Básico", precio: 600, color: "#64748b",
+    id: "basico", nombre: "Básico", precio: 399, color: "#64748b",
     descripcion: "Presencia digital profesional para negocios que empiezan.",
     incluye: ["Landing page + sección contacto", "Diseño responsive (móvil/tablet)", "Formulario de contacto", "Integración WhatsApp", "SEO técnico básico", "Entrega en 7-10 días"]
   },
   {
-    id: "estandar", nombre: "Estándar", precio: 900, color: "#00D4AA", destacado: true,
+    id: "estandar", nombre: "Estándar", precio: 649, color: "#00D4AA", destacado: true,
     descripcion: "Web completa con galería, blog y posicionamiento local.",
     incluye: ["Todo el plan Básico", "Galería de fotos/vídeos", "Blog o novedades", "Hasta 5 secciones", "Google My Business", "SEO local optimizado", "Mapa y horarios"]
   },
   {
-    id: "premium", nombre: "Premium", precio: 1400, color: "#C9A84C",
+    id: "premium", nombre: "Premium", precio: 999, color: "#C9A84C",
     descripcion: "Web avanzada con reservas, pedidos y panel de administración.",
     incluye: ["Todo el plan Estándar", "Sistema de reservas o pedidos", "Panel de administración", "Animaciones premium", "Integración redes sociales", "Analítica avanzada", "Soporte 30 días"]
   },
   {
-    id: "saas", nombre: "SaaS / A medida", precio: 2500, precioLibre: true, color: "#8b5cf6",
+    id: "saas", nombre: "SaaS / A medida", precio: 1800, precioLibre: true, color: "#8b5cf6",
     descripcion: "Proyecto personalizado con funcionalidades únicas y a escala.",
     incluye: ["Todo el plan Premium", "Funciones a medida", "Integraciones API externas", "Backoffice personalizado", "Escalabilidad garantizada", "Consultoría estratégica", "Soporte 90 días"]
   },
@@ -68,17 +68,17 @@ const PLANES: PlanItem[] = [
 
 const EXTRAS: ExtraItem[] = [
   { id: "dominio", nombre: "Dominio .es / .com (1 año)", precio: 15, icono: "🌐" },
-  { id: "hosting", nombre: "Hosting 1 año", precio: 60, icono: "🖥️" },
-  { id: "pasarela", nombre: "Integración pasarela de pago", precio: 200, icono: "💳" },
-  { id: "reservas", nombre: "Sistema de reservas avanzado", precio: 300, icono: "📅" },
-  { id: "tienda", nombre: "Tienda online (catálogo + carrito)", precio: 400, icono: "🛒" },
+  { id: "hosting", nombre: "Hosting 1 año", precio: 100, icono: "🖥️" },
+  { id: "pasarela", nombre: "Integración pasarela de pago", precio: 150, icono: "💳" },
+  { id: "reservas", nombre: "Sistema de reservas avanzado", precio: 199, icono: "📅" },
+  { id: "tienda", nombre: "Tienda online (catálogo + carrito)", precio: 299, icono: "🛒" },
 ];
 
 const SERVICIOS: ServicioItem[] = [
-  { id: "mant", nombre: "Mantenimiento web", precio: 49, icono: "🔧", descripcion: "Actualizaciones, backups, seguridad y soporte técnico mensual" },
-  { id: "seo", nombre: "SEO + posicionamiento Google", precio: 149, icono: "📈", descripcion: "Contenido optimizado, auditorías y mejora de posiciones en Google" },
-  { id: "rrss", nombre: "Gestión redes sociales", precio: 199, icono: "📱", descripcion: "Publicaciones semanales, diseño gráfico y gestión de comunidad" },
-  { id: "pack", nombre: "Pack completo (mant + SEO + RRSS)", precio: 349, icono: "⭐", descripcion: "Los 3 servicios anteriores con tarifa especial" },
+  { id: "mant", nombre: "Mantenimiento web", precio: 39, icono: "🔧", descripcion: "Actualizaciones, backups, seguridad y soporte técnico mensual" },
+  { id: "seo", nombre: "SEO + posicionamiento Google", precio: 99, icono: "📈", descripcion: "Contenido optimizado, auditorías y mejora de posiciones en Google" },
+  { id: "rrss", nombre: "Gestión redes sociales", precio: 149, icono: "📱", descripcion: "Publicaciones semanales, diseño gráfico y gestión de comunidad" },
+  { id: "pack", nombre: "Pack completo (mant + SEO + RRSS)", precio: 249, icono: "⭐", descripcion: "Los 3 servicios anteriores con tarifa especial" },
 ];
 
 const SECTORES = ["Restauración", "Retail / Tienda", "Servicios profesionales", "Ocio y entretenimiento", "Salud y bienestar", "Educación", "Otro"];
@@ -120,7 +120,7 @@ export function TarificadorClient({ agentName }: TarificadorClientProps) {
     empresa: "", sector: SECTORES[0], tieneWeb: false, urlWeb: "", email: "", telefono: ""
   });
   const [planSeleccionado, setPlanSeleccionado] = useState<PlanItem>(PLANES[1]);
-  const [precioSaas, setPrecioSaas] = useState(2500);
+  const [precioSaas, setPrecioSaas] = useState(1800);
   const [extrasSeleccionados, setExtrasSeleccionados] = useState<Set<string>>(new Set());
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<Set<string>>(new Set());
   const [notaInterna, setNotaInterna] = useState("");
@@ -485,7 +485,7 @@ export function TarificadorClient({ agentName }: TarificadorClientProps) {
                   <label className="block text-xs font-medium text-slate-400 mb-1.5">Precio personalizado del proyecto (€)</label>
                   <input
                     type="number"
-                    min={2500}
+                    min={1800}
                     step={100}
                     value={precioSaas}
                     onChange={e => setPrecioSaas(Number(e.target.value))}
