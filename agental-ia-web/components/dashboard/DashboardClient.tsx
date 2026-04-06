@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FolderOpen, MessageCircle, ArrowRight, FileText, Calculator, TrendingUp, CheckCircle2 } from "lucide-react";
+import { FolderOpen, MessageCircle, ArrowRight, FileText, Calculator, TrendingUp, CheckCircle2, Target, Loader2 } from "lucide-react";
+import { useState } from "react";
 import type { DocumentWithStatus } from "@/types";
 import { formatDate, fileTypeIcon, isNewDoc } from "@/lib/utils";
 
@@ -16,13 +17,36 @@ interface QuoteStat {
 interface DashboardClientProps {
   agentName: string;
   agentNick: string;
+  agentId: string;
   docs: DocumentWithStatus[];
   unseenCount: number;
   recentMessages: number;
   quoteStat: QuoteStat;
+  monthlyTarget: number | null;
 }
 
-export function DashboardClient({ agentName, agentNick, docs, unseenCount, recentMessages, quoteStat }: DashboardClientProps) {
+export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCount, recentMessages, quoteStat, monthlyTarget: initialTarget }: DashboardClientProps) {
+  const [monthlyTarget, setMonthlyTarget] = useState<number | null>(initialTarget);
+  const [targetInput, setTargetInput] = useState("");
+  const [savingTarget, setSavingTarget] = useState(false);
+
+  async function saveTarget() {
+    const val = parseInt(targetInput);
+    if (!val || val <= 0) return;
+    setSavingTarget(true);
+    try {
+      const res = await fetch("/api/targets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ target_amount: val }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMonthlyTarget(data.target);
+        setTargetInput("");
+      }
+    } catch { /* ignore */ } finally { setSavingTarget(false); }
+  }
   const hour = new Date().getHours();
   const greeting = hour < 13 ? "Buenos días" : hour < 20 ? "Buenas tardes" : "Buenas noches";
 
@@ -109,6 +133,74 @@ export function DashboardClient({ agentName, agentNick, docs, unseenCount, recen
           </Link>
         </motion.div>
       )}
+
+      {/* Objetivo mensual */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.22 }}
+        className="mt-4"
+      >
+        {monthlyTarget !== null ? (
+          (() => {
+            const pct = Math.min(Math.round((quoteStat.pipeline / monthlyTarget) * 100), 100);
+            const barColor = pct >= 100 ? "bg-[#00D4AA]" : pct >= 60 ? "bg-amber-400" : "bg-red-400";
+            return (
+              <div className="p-5 bg-white/[0.03] border border-white/8 rounded-2xl">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Target size={16} className="text-[#00D4AA]" />
+                    <span className="text-sm font-semibold text-white">Objetivo mensual</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="text-slate-400">{quoteStat.pipeline.toLocaleString("es-ES")} €</span>
+                    <span className="text-slate-600">/</span>
+                    <span className="text-white font-semibold">{monthlyTarget.toLocaleString("es-ES")} €</span>
+                    <span className={`font-bold ml-1 ${pct >= 100 ? "text-[#00D4AA]" : pct >= 60 ? "text-amber-400" : "text-red-400"}`}>{pct}%</span>
+                  </div>
+                </div>
+                <div className="h-2.5 bg-white/8 rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full transition-all duration-700 ${barColor}`} style={{ width: `${pct}%` }} />
+                </div>
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={() => setMonthlyTarget(null)}
+                    className="text-[10px] text-slate-600 hover:text-slate-400 transition-colors"
+                  >
+                    Cambiar objetivo
+                  </button>
+                </div>
+              </div>
+            );
+          })()
+        ) : (
+          <div className="p-5 bg-white/[0.03] border border-white/8 border-dashed rounded-2xl">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Target size={16} className="text-slate-500 shrink-0" />
+              <span className="text-sm text-slate-400 flex-1">Establece tu objetivo de pipeline para este mes</span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  value={targetInput}
+                  onChange={e => setTargetInput(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && saveTarget()}
+                  placeholder="p.ej. 5000"
+                  min={1}
+                  className="w-28 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-slate-600 focus:outline-none focus:border-[#00D4AA]/50 transition-colors"
+                />
+                <span className="text-slate-500 text-sm">€</span>
+                <button
+                  onClick={saveTarget}
+                  disabled={savingTarget || !targetInput}
+                  className="px-3 py-1.5 bg-[#00D4AA] hover:bg-[#00D4AA]/80 disabled:opacity-40 text-black text-xs font-semibold rounded-lg transition-colors"
+                >
+                  {savingTarget ? <Loader2 size={12} className="animate-spin" /> : "Guardar"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </motion.div>
 
       {/* Recent docs */}
       <motion.div

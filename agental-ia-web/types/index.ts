@@ -119,6 +119,28 @@ export interface QuotationTemplate {
   created_at: string;
 }
 
+export interface RankingEntry {
+  agentId: string;
+  nick: string;
+  name: string;
+  total: number;
+  closed: number;
+  pipeline: number;
+  closeRate: number;
+  position: number;
+}
+
+export interface CRMClient {
+  clientName: string;
+  sector: string | null;
+  email: string | null;
+  phone: string | null;
+  proposals: Quotation[];
+  lastDate: string;
+  totalBilled: number;
+  agentNicks: string[];
+}
+
 export interface WorkspaceFolder {
   id: string;
   agent_id: string;

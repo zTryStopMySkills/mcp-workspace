@@ -259,3 +259,13 @@ CREATE INDEX IF NOT EXISTS idx_quotation_templates_agent_id ON quotation_templat
 -- =============================================================
 -- INSERT INTO agents (nick, name, password_hash, role)
 -- VALUES ('admin', 'Administrador', 'HASH_AQUI', 'admin');
+
+-- Objetivos mensuales por agente
+CREATE TABLE IF NOT EXISTS agent_monthly_targets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  agent_id UUID REFERENCES agents(id) ON DELETE CASCADE NOT NULL,
+  month TEXT NOT NULL,
+  target_amount INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(agent_id, month)
+);

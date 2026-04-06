@@ -12,11 +12,14 @@ export default async function DashboardPage() {
   const agentId = session.user.id;
   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
+  const currentMonth = new Date().toISOString().slice(0, 7);
+
   const [
     { data: allDocs },
     { data: assignments },
     { count: msgCount },
     { data: quotations },
+    { data: targetData },
   ] = await Promise.all([
     supabaseAdmin
       .from("documents")
@@ -37,6 +40,12 @@ export default async function DashboardPage() {
       .from("quotations")
       .select("id, status, total_once")
       .eq("agent_id", agentId),
+    supabaseAdmin
+      .from("agent_monthly_targets")
+      .select("target_amount")
+      .eq("agent_id", agentId)
+      .eq("month", currentMonth)
+      .single(),
   ]);
 
   const seenMap = new Map((assignments ?? []).map((a) => [a.document_id, a.seen_at]));
@@ -57,15 +66,19 @@ export default async function DashboardPage() {
     closeRate: qs.length ? Math.round((qs.filter(q => q.status === "closed").length / qs.length) * 100) : 0,
   };
 
+  const monthlyTarget = targetData?.target_amount ?? null;
+
   return (
     <DashboardLayout>
       <DashboardClient
         agentName={session.user.name}
         agentNick={session.user.nick}
+        agentId={agentId}
         docs={docs.slice(0, 5)}
         unseenCount={unseen}
         recentMessages={msgCount ?? 0}
         quoteStat={quoteStat}
+        monthlyTarget={monthlyTarget}
       />
     </DashboardLayout>
   );

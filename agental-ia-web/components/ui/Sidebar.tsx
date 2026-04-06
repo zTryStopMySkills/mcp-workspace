@@ -21,7 +21,9 @@ import {
   Shield,
   Calculator,
   Hash,
-  History
+  History,
+  Trophy,
+  Building2
 } from "lucide-react";
 import { initials } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
@@ -34,9 +36,11 @@ interface SidebarProps {
 const agentLinks = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/chat", label: "Chat Comunidad", icon: MessageCircle },
+  { href: "/ranking", label: "Ranking", icon: Trophy },
   { href: "/documentos", label: "Documentos", icon: FolderOpen },
   { href: "/workspace", label: "Mi Escritorio", icon: Monitor },
   { href: "/tarificador", label: "Tarificador", icon: Calculator },
+  { href: "/clientes", label: "Clientes", icon: Building2 },
   { href: "/curso", label: "Curso Comercial", icon: GraduationCap },
   { href: "/guia", label: "Guía de uso", icon: BookOpen }
 ];
