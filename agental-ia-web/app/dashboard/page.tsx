@@ -10,21 +10,34 @@ export default async function DashboardPage() {
   if (!session) return null;
 
   const agentId = session.user.id;
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-  // Documentos visibles para todos
-  const { data: allDocs } = await supabaseAdmin
-    .from("documents")
-    .select("*, creator:created_by(nick, name)")
-    .eq("visibility", "all")
-    .order("created_at", { ascending: false })
-    .limit(10);
-
-  // Asignaciones del agente
-  const { data: assignments } = await supabaseAdmin
-    .from("document_assignments")
-    .select("document_id, seen_at")
-    .eq("agent_id", agentId)
-    .limit(200);
+  const [
+    { data: allDocs },
+    { data: assignments },
+    { count: msgCount },
+    { data: quotations },
+  ] = await Promise.all([
+    supabaseAdmin
+      .from("documents")
+      .select("*, creator:created_by(nick, name)")
+      .eq("visibility", "all")
+      .order("created_at", { ascending: false })
+      .limit(10),
+    supabaseAdmin
+      .from("document_assignments")
+      .select("document_id, seen_at")
+      .eq("agent_id", agentId)
+      .limit(200),
+    supabaseAdmin
+      .from("messages")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", yesterday),
+    supabaseAdmin
+      .from("quotations")
+      .select("id, status, total_once")
+      .eq("agent_id", agentId),
+  ]);
 
   const seenMap = new Map((assignments ?? []).map((a) => [a.document_id, a.seen_at]));
 
@@ -36,12 +49,13 @@ export default async function DashboardPage() {
 
   const unseen = docs.filter((d) => d.is_new).length;
 
-  // Conteo de mensajes (últimas 24h)
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const { count: msgCount } = await supabaseAdmin
-    .from("messages")
-    .select("id", { count: "exact", head: true })
-    .gte("created_at", yesterday);
+  const qs = quotations ?? [];
+  const quoteStat = {
+    total: qs.length,
+    closed: qs.filter(q => q.status === "closed").length,
+    pipeline: qs.filter(q => !["closed", "lost"].includes(q.status)).reduce((s, q) => s + (q.total_once ?? 0), 0),
+    closeRate: qs.length ? Math.round((qs.filter(q => q.status === "closed").length / qs.length) * 100) : 0,
+  };
 
   return (
     <DashboardLayout>
@@ -51,6 +65,7 @@ export default async function DashboardPage() {
         docs={docs.slice(0, 5)}
         unseenCount={unseen}
         recentMessages={msgCount ?? 0}
+        quoteStat={quoteStat}
       />
     </DashboardLayout>
   );

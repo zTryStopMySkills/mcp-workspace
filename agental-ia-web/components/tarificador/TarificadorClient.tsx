@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Calculator, ChevronRight, ChevronLeft, Check, Globe, Wrench,
   TrendingUp, Share2, ShoppingCart, Loader2, FileDown, FileText,
-  User, Building2, Mail, Phone, ExternalLink, Save, History
+  User, Building2, Mail, Phone, ExternalLink, Save, History,
+  BookTemplate, Trash2, MessageSquare, ChevronDown
 } from "lucide-react";
 import Link from "next/link";
 
@@ -111,6 +112,9 @@ export function TarificadorClient({ agentName }: TarificadorClientProps) {
   const [generatingCont, setGeneratingCont] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
+  const [templates, setTemplates] = useState<{ id: string; name: string; plan_id: string; plan_name: string; plan_price: number; extras: ExtraItem[]; services: ServicioItem[] }[]>([]);
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [savingTemplate, setSavingTemplate] = useState(false);
 
   const [cliente, setCliente] = useState({
     empresa: "", sector: SECTORES[0], tieneWeb: false, urlWeb: "", email: "", telefono: ""
@@ -154,6 +158,75 @@ export function TarificadorClient({ agentName }: TarificadorClientProps) {
     } finally {
       setGeneratingProp(false);
     }
+  }
+
+  async function loadTemplates() {
+    try {
+      const res = await fetch("/api/quotation-templates");
+      if (res.ok) setTemplates(await res.json());
+    } catch { /* ignore */ }
+  }
+
+  async function handleSaveTemplate() {
+    const name = prompt("Nombre de la plantilla:");
+    if (!name?.trim()) return;
+    setSavingTemplate(true);
+    try {
+      await fetch("/api/quotation-templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          plan_id: planFinal.id,
+          plan_name: planFinal.nombre,
+          plan_price: planFinal.precio,
+          extras: extrasLista,
+          services: serviciosLista,
+        }),
+      });
+      await loadTemplates();
+    } catch { /* ignore */ } finally {
+      setSavingTemplate(false);
+    }
+  }
+
+  async function handleDeleteTemplate(id: string) {
+    await fetch("/api/quotation-templates", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    setTemplates(prev => prev.filter(t => t.id !== id));
+  }
+
+  function applyTemplate(t: typeof templates[0]) {
+    const plan = PLANES.find(p => p.id === t.plan_id);
+    if (plan) {
+      setPlanSeleccionado(plan);
+      if (plan.id === "saas") setPrecioSaas(t.plan_price);
+    }
+    setExtrasSeleccionados(new Set((t.extras ?? []).map((e: ExtraItem) => e.id)));
+    setServiciosSeleccionados(new Set((t.services ?? []).map((s: ServicioItem) => s.id)));
+    setShowTemplates(false);
+    setStep(3);
+  }
+
+  function handleWhatsApp() {
+    const lines = [
+      `*Propuesta Agental.IA para ${cliente.empresa}*`,
+      ``,
+      `📋 *Plan:* ${planFinal.nombre} — ${planFinal.precio.toLocaleString("es-ES")} €`,
+      extrasLista.length > 0 ? `➕ *Extras:* ${extrasLista.map(e => e.nombre).join(", ")}` : null,
+      serviciosLista.length > 0 ? `🔄 *Recurrente:* ${serviciosLista.map(s => s.nombre).join(", ")} (${totalMensual.toLocaleString("es-ES")} €/mes)` : null,
+      ``,
+      `💰 *Total pago único: ${totalUnico.toLocaleString("es-ES")} €*`,
+      totalMensual > 0 ? `📅 *Total mensual: ${totalMensual.toLocaleString("es-ES")} €/mes*` : null,
+      ``,
+      `¿Hablamos para confirmar los detalles?`,
+    ].filter(Boolean).join("\n");
+
+    const url = `https://wa.me/?text=${encodeURIComponent(lines)}`;
+    window.open(url, "_blank");
   }
 
   async function handleGuardar() {
@@ -218,7 +291,49 @@ export function TarificadorClient({ agentName }: TarificadorClientProps) {
           <h1 className="text-2xl font-bold text-white">Tarificador</h1>
         </div>
       </div>
-      <p className="text-slate-400 text-sm mb-8">Configura la propuesta para tu cliente y genera los documentos en segundos.</p>
+      <div className="flex items-center justify-between mb-8">
+        <p className="text-slate-400 text-sm">Configura la propuesta para tu cliente y genera los documentos en segundos.</p>
+        <div className="relative shrink-0 ml-4">
+          <button
+            onClick={() => { setShowTemplates(!showTemplates); if (!showTemplates) loadTemplates(); }}
+            className="flex items-center gap-1.5 px-3 py-2 text-xs text-slate-400 hover:text-white bg-white/5 border border-white/10 hover:border-white/20 rounded-xl transition-colors"
+          >
+            <BookTemplate size={13} />
+            Plantillas
+            <ChevronDown size={11} className={`transition-transform ${showTemplates ? "rotate-180" : ""}`} />
+          </button>
+          {showTemplates && (
+            <div className="absolute right-0 top-10 w-72 bg-[#0D1117] border border-white/12 rounded-xl shadow-2xl z-20 py-1 overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-white/8">
+                <span className="text-xs font-medium text-slate-400">Mis plantillas</span>
+                <button
+                  onClick={handleSaveTemplate}
+                  disabled={savingTemplate}
+                  className="flex items-center gap-1 text-xs text-[#00D4AA] hover:text-white transition-colors disabled:opacity-50"
+                >
+                  {savingTemplate ? <Loader2 size={10} className="animate-spin" /> : <Save size={10} />}
+                  Guardar actual
+                </button>
+              </div>
+              {templates.length === 0 ? (
+                <p className="text-xs text-slate-500 px-3 py-4 text-center">Sin plantillas aún</p>
+              ) : (
+                templates.map(t => (
+                  <div key={t.id} className="flex items-center gap-2 px-3 py-2 hover:bg-white/5 transition-colors">
+                    <button onClick={() => applyTemplate(t)} className="flex-1 text-left">
+                      <p className="text-sm text-white truncate">{t.name}</p>
+                      <p className="text-xs text-slate-500">Plan {t.plan_name} · {t.plan_price.toLocaleString("es-ES")} €</p>
+                    </button>
+                    <button onClick={() => handleDeleteTemplate(t.id)} className="text-slate-600 hover:text-red-400 transition-colors shrink-0">
+                      <Trash2 size={12} />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Steps */}
       <div className="flex items-center gap-2 mb-8">
@@ -532,6 +647,15 @@ export function TarificadorClient({ agentName }: TarificadorClientProps) {
                   <span className="hidden sm:inline">Ver propuestas anteriores</span>
                 </Link>
               </div>
+
+              {/* WhatsApp share */}
+              <button
+                onClick={handleWhatsApp}
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-green-600/15 border border-green-500/30 hover:bg-green-600/25 text-green-400 font-medium rounded-xl text-sm transition-colors"
+              >
+                <MessageSquare size={16} />
+                Compartir resumen por WhatsApp
+              </button>
 
               {/* Botones de descarga */}
               <div className="flex flex-col sm:flex-row gap-3 pt-2">

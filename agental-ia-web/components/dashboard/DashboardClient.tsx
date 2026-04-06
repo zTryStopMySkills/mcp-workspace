@@ -2,9 +2,16 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FolderOpen, MessageCircle, ArrowRight, FileText } from "lucide-react";
+import { FolderOpen, MessageCircle, ArrowRight, FileText, Calculator, TrendingUp, CheckCircle2 } from "lucide-react";
 import type { DocumentWithStatus } from "@/types";
 import { formatDate, fileTypeIcon, isNewDoc } from "@/lib/utils";
+
+interface QuoteStat {
+  total: number;
+  closed: number;
+  pipeline: number;
+  closeRate: number;
+}
 
 interface DashboardClientProps {
   agentName: string;
@@ -12,9 +19,10 @@ interface DashboardClientProps {
   docs: DocumentWithStatus[];
   unseenCount: number;
   recentMessages: number;
+  quoteStat: QuoteStat;
 }
 
-export function DashboardClient({ agentName, agentNick, docs, unseenCount, recentMessages }: DashboardClientProps) {
+export function DashboardClient({ agentName, agentNick, docs, unseenCount, recentMessages, quoteStat }: DashboardClientProps) {
   const hour = new Date().getHours();
   const greeting = hour < 13 ? "Buenos días" : hour < 20 ? "Buenas tardes" : "Buenas noches";
 
@@ -28,35 +36,79 @@ export function DashboardClient({ agentName, agentNick, docs, unseenCount, recen
         </h1>
       </motion.div>
 
-      {/* Stats */}
+      {/* Stats row */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8"
+        className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8"
       >
         <StatCard
-          icon={<FolderOpen size={20} className="text-indigo-400" />}
+          icon={<FolderOpen size={18} className="text-indigo-400" />}
           label="Docs sin leer"
           value={unseenCount}
           color="indigo"
           href="/documentos"
         />
         <StatCard
-          icon={<MessageCircle size={20} className="text-amber-400" />}
+          icon={<MessageCircle size={18} className="text-amber-400" />}
           label="Mensajes (24h)"
           value={recentMessages}
           color="amber"
           href="/chat"
         />
         <StatCard
-          icon={<FileText size={20} className="text-purple-400" />}
-          label="Total documentos"
-          value={docs.length}
-          color="purple"
-          href="/documentos"
+          icon={<Calculator size={18} className="text-[#00D4AA]" />}
+          label="Propuestas totales"
+          value={quoteStat.total}
+          color="teal"
+          href="/tarificador/historial"
+        />
+        <StatCard
+          icon={<CheckCircle2 size={18} className="text-[#C9A84C]" />}
+          label="Cerradas"
+          value={quoteStat.closed}
+          color="gold"
+          href="/tarificador/historial"
         />
       </motion.div>
+
+      {/* Pipeline + tasa cierre */}
+      {quoteStat.total > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.18 }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4"
+        >
+          <Link
+            href="/tarificador/historial"
+            className="flex items-center gap-4 p-5 bg-[#00D4AA]/8 border border-[#00D4AA]/20 rounded-2xl hover:bg-[#00D4AA]/12 transition-colors"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#00D4AA]/20 border border-[#00D4AA]/30 flex items-center justify-center shrink-0">
+              <TrendingUp size={18} className="text-[#00D4AA]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-[#00D4AA] mb-0.5">Pipeline activo</p>
+              <p className="text-2xl font-bold text-white">{quoteStat.pipeline.toLocaleString("es-ES")} €</p>
+            </div>
+            <ArrowRight size={16} className="text-slate-600 shrink-0" />
+          </Link>
+          <Link
+            href="/tarificador/historial"
+            className="flex items-center gap-4 p-5 bg-[#C9A84C]/8 border border-[#C9A84C]/20 rounded-2xl hover:bg-[#C9A84C]/12 transition-colors"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#C9A84C]/20 border border-[#C9A84C]/30 flex items-center justify-center shrink-0">
+              <CheckCircle2 size={18} className="text-[#C9A84C]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-[#C9A84C] mb-0.5">Tasa de cierre</p>
+              <p className="text-2xl font-bold text-white">{quoteStat.closeRate}%</p>
+            </div>
+            <ArrowRight size={16} className="text-slate-600 shrink-0" />
+          </Link>
+        </motion.div>
+      )}
 
       {/* Recent docs */}
       <motion.div
@@ -113,13 +165,13 @@ export function DashboardClient({ agentName, agentNick, docs, unseenCount, recen
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.3 }}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8"
       >
         <Link
           href="/chat"
           className="flex items-center gap-4 p-5 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl hover:bg-indigo-600/20 transition-colors group"
         >
-          <div className="w-10 h-10 rounded-xl bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center shrink-0">
             <MessageCircle size={20} className="text-indigo-400" />
           </div>
           <div>
@@ -133,7 +185,7 @@ export function DashboardClient({ agentName, agentNick, docs, unseenCount, recen
           href="/documentos"
           className="flex items-center gap-4 p-5 bg-amber-500/10 border border-amber-500/20 rounded-2xl hover:bg-amber-500/20 transition-colors group"
         >
-          <div className="w-10 h-10 rounded-xl bg-amber-500/30 border border-amber-500/40 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/30 border border-amber-500/40 flex items-center justify-center shrink-0">
             <FolderOpen size={20} className="text-amber-400" />
           </div>
           <div>
@@ -141,6 +193,20 @@ export function DashboardClient({ agentName, agentNick, docs, unseenCount, recen
             <p className="text-xs text-slate-400">Catálogos, contratos y más</p>
           </div>
           <ArrowRight size={16} className="ml-auto text-slate-600 group-hover:text-amber-400 transition-colors" />
+        </Link>
+
+        <Link
+          href="/tarificador"
+          className="flex items-center gap-4 p-5 bg-[#00D4AA]/8 border border-[#00D4AA]/20 rounded-2xl hover:bg-[#00D4AA]/15 transition-colors group"
+        >
+          <div className="w-10 h-10 rounded-xl bg-[#00D4AA]/20 border border-[#00D4AA]/30 flex items-center justify-center shrink-0">
+            <Calculator size={20} className="text-[#00D4AA]" />
+          </div>
+          <div>
+            <p className="font-semibold text-white text-sm">Nueva propuesta</p>
+            <p className="text-xs text-slate-400">Tarificador de servicios</p>
+          </div>
+          <ArrowRight size={16} className="ml-auto text-slate-600 group-hover:text-[#00D4AA] transition-colors" />
         </Link>
       </motion.div>
     </div>
@@ -151,22 +217,23 @@ function StatCard({ icon, label, value, color, href }: {
   icon: React.ReactNode;
   label: string;
   value: number;
-  color: "indigo" | "amber" | "purple";
+  color: "indigo" | "amber" | "teal" | "gold";
   href: string;
 }) {
   const colors = {
     indigo: "bg-indigo-600/10 border-indigo-500/20",
     amber: "bg-amber-500/10 border-amber-500/20",
-    purple: "bg-purple-500/10 border-purple-500/20"
+    teal: "bg-[#00D4AA]/10 border-[#00D4AA]/20",
+    gold: "bg-[#C9A84C]/10 border-[#C9A84C]/20",
   };
 
   return (
     <Link href={href} className={`p-5 ${colors[color]} border rounded-2xl hover:brightness-125 transition-all`}>
       <div className="flex items-center gap-2 mb-3">
         {icon}
-        <p className="text-xs text-slate-400">{label}</p>
+        <p className="text-xs text-slate-400 leading-tight">{label}</p>
       </div>
-      <p className="text-3xl font-bold text-white">{value}</p>
+      <p className="text-3xl font-bold text-white">{value.toLocaleString("es-ES")}</p>
     </Link>
   );
 }

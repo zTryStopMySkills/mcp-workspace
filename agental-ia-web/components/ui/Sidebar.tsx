@@ -19,7 +19,9 @@ import {
   GraduationCap,
   Monitor,
   Shield,
-  Calculator
+  Calculator,
+  Hash,
+  History
 } from "lucide-react";
 import { initials } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
@@ -43,6 +45,7 @@ const adminLinks = [
   { href: "/admin", label: "Panel Admin", icon: LayoutDashboard },
   { href: "/admin/agentes", label: "Agentes", icon: Users },
   { href: "/admin/documentos", label: "Subir Docs", icon: Upload },
+  { href: "/admin/canales", label: "Canales", icon: Hash },
   { href: "/admin/audit", label: "Auditoría", icon: Shield }
 ];
 
@@ -160,30 +163,45 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           const isChat = link.href === "/chat";
           const isDocs = link.href === "/documentos";
           return (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={onClose}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                active
-                  ? "bg-[#00D4AA]/15 text-[#00D4AA] border border-[#00D4AA]/25"
-                  : "text-[#8B95A9] hover:text-white hover:bg-white/5"
-              }`}
-            >
-              <Icon size={18} />
-              {link.label}
-              {isChat && unreadCount > 0 && !active && (
-                <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-indigo-500 text-white text-[10px] font-bold flex items-center justify-center">
-                  {unreadCount > 99 ? "99+" : unreadCount}
-                </span>
+            <div key={link.href}>
+              <Link
+                href={link.href}
+                onClick={onClose}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  active
+                    ? "bg-[#00D4AA]/15 text-[#00D4AA] border border-[#00D4AA]/25"
+                    : "text-[#8B95A9] hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <Icon size={18} />
+                {link.label}
+                {isChat && unreadCount > 0 && !active && (
+                  <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-indigo-500 text-white text-[10px] font-bold flex items-center justify-center">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                )}
+                {isDocs && unreadDocsCount > 0 && !active && (
+                  <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-[#C9A84C] text-black text-[10px] font-bold flex items-center justify-center">
+                    {unreadDocsCount > 99 ? "99+" : unreadDocsCount}
+                  </span>
+                )}
+                {active && <ChevronRight size={14} className="ml-auto text-[#00D4AA]/70" />}
+              </Link>
+              {link.href === "/tarificador" && (pathname === "/tarificador" || pathname.startsWith("/tarificador/")) && (
+                <Link
+                  href="/tarificador/historial"
+                  onClick={onClose}
+                  className={`flex items-center gap-2 pl-10 pr-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                    pathname === "/tarificador/historial"
+                      ? "bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20"
+                      : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+                  }`}
+                >
+                  <History size={13} />
+                  Historial de propuestas
+                </Link>
               )}
-              {isDocs && unreadDocsCount > 0 && !active && (
-                <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-[#C9A84C] text-black text-[10px] font-bold flex items-center justify-center">
-                  {unreadDocsCount > 99 ? "99+" : unreadDocsCount}
-                </span>
-              )}
-              {active && <ChevronRight size={14} className="ml-auto text-[#00D4AA]/70" />}
-            </Link>
+            </div>
           );
         })}
 

@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/ui/DashboardLayout";
 import { AdminDashboardClient } from "@/components/admin/AdminDashboardClient";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Users, FolderOpen, MessageCircle, Upload, TrendingUp, Eye, UserPlus, FileText } from "lucide-react";
+import { Users, FolderOpen, MessageCircle, Upload, TrendingUp, Eye, UserPlus, FileText, Hash } from "lucide-react";
 
 function dayLabel(d: Date) {
   return d.toLocaleDateString("es-ES", { weekday: "short" });
@@ -177,6 +177,15 @@ export default async function AdminPage() {
               <div>
                 <p className="text-sm font-semibold text-white">Subir documentos</p>
                 <p className="text-xs text-[#8B95A9]">Compartir archivos con los agentes</p>
+              </div>
+            </Link>
+            <Link href="/admin/canales" className="flex items-center gap-4 p-4 bg-white/[0.03] border border-white/8 rounded-xl hover:bg-white/[0.06] transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-[#00D4AA]/20 border border-[#00D4AA]/30 flex items-center justify-center shrink-0">
+                <Hash size={18} className="text-[#00D4AA]" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">Canales de chat</p>
+                <p className="text-xs text-[#8B95A9]">Crear y gestionar canales del equipo</p>
               </div>
             </Link>
           </div>
