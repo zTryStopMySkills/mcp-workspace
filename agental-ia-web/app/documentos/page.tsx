@@ -16,13 +16,15 @@ export default async function DocumentosPage() {
     .from("documents")
     .select("*, creator:created_by(nick, name)")
     .eq("visibility", "all")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(200);
 
   // Docs asignados específicamente
   const { data: assigned } = await supabaseAdmin
     .from("document_assignments")
     .select("seen_at, document:document_id(*, creator:created_by(nick, name))")
-    .eq("agent_id", agentId);
+    .eq("agent_id", agentId)
+    .limit(200);
 
   const seenMap = new Map((assigned ?? []).map((a) => {
     const doc = a.document as unknown as { id: string } | null;

@@ -14,7 +14,8 @@ export default async function AdminDocumentosPage() {
     supabaseAdmin
       .from("documents")
       .select("*, creator:created_by(nick, name)")
-      .order("created_at", { ascending: false }),
+      .order("created_at", { ascending: false })
+      .limit(500),
     supabaseAdmin
       .from("agents")
       .select("id, nick, name, role, is_active, created_at, avatar_url")

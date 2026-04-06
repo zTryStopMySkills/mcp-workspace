@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { X, FileText, Loader2, Eye, Code } from "lucide-react";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 import type { WorkspaceItem } from "@/types";
 
 type DocFormat = "txt" | "md" | "html";
@@ -36,8 +38,16 @@ export function NewDocModal({ folderId, onCreated, onClose }: NewDocModalProps) 
     fd.append("folder_id", folderId);
     fd.append("title", title.trim());
 
-    const res = await fetch("/api/workspace/upload", { method: "POST", body: fd });
-    const data = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let res: Response, data: any;
+    try {
+      res = await fetch("/api/workspace/upload", { method: "POST", body: fd });
+      data = await res.json();
+    } catch {
+      setSaving(false);
+      setError("Error de red. Inténtalo de nuevo.");
+      return;
+    }
     setSaving(false);
 
     if (!res.ok) { setError(data.error ?? "Error al guardar"); return; }
@@ -123,7 +133,7 @@ export function NewDocModal({ folderId, onCreated, onClose }: NewDocModalProps) 
           {preview && format === "md" ? (
             <div
               className="w-full h-64 px-4 py-3 bg-white/[0.03] border border-white/8 rounded-xl text-sm text-slate-300 overflow-y-auto prose prose-invert prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: content.replace(/^# (.+)$/gm, "<h1>$1</h1>").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br/>") }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(content) as string) }}
             />
           ) : (
             <textarea

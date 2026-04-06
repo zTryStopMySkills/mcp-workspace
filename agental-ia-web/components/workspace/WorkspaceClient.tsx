@@ -14,6 +14,8 @@ import { BoardView } from "./BoardView";
 import { QuickNotes } from "./QuickNotes";
 import { UploadModal } from "./UploadModal";
 import { NewDocModal } from "./NewDocModal";
+import { BulkActionBar } from "./BulkActionBar";
+import { MoveFolderModal } from "./MoveFolderModal";
 
 export type ViewMode = "grid" | "list" | "board";
 export type SortMode = "name-asc" | "name-desc" | "date-desc" | "date-asc";
@@ -31,27 +33,43 @@ export function WorkspaceClient() {
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [showNewDoc, setShowNewDoc] = useState(false);
+  const [selectedFolderIds, setSelectedFolderIds] = useState<Set<string>>(new Set());
+  const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
+  const [showMoveModal, setShowMoveModal] = useState(false);
+  const [toast, setToast] = useState("");
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prefsSaved = useRef(false);
+
+  function showToast(msg: string) {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast(msg);
+    toastTimer.current = setTimeout(() => setToast(""), 3000);
+  }
 
   // Load preferences
   useEffect(() => {
     fetch("/api/workspace/preferences")
       .then((r) => r.json())
       .then((p) => {
-        if (p.workspace_view) setViewMode(p.workspace_view as ViewMode);
-        if (p.workspace_sort) setSortMode(p.workspace_sort as SortMode);
+        const validViews: ViewMode[] = ["grid", "list", "board"];
+        const validSorts: SortMode[] = ["name-asc", "name-desc", "date-desc", "date-asc"];
+        if (validViews.includes(p.workspace_view)) setViewMode(p.workspace_view);
+        if (validSorts.includes(p.workspace_sort)) setSortMode(p.workspace_sort);
         prefsSaved.current = true;
       });
   }, []);
 
-  // Save preferences on change (after initial load)
+  // Save preferences on change (after initial load) — debounced 400ms
   useEffect(() => {
     if (!prefsSaved.current) return;
-    fetch("/api/workspace/preferences", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ workspace_view: viewMode, workspace_sort: sortMode })
-    });
+    const t = setTimeout(() => {
+      fetch("/api/workspace/preferences", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workspace_view: viewMode, workspace_sort: sortMode })
+      });
+    }, 400);
+    return () => clearTimeout(t);
   }, [viewMode, sortMode]);
 
   const loadFolders = useCallback(async () => {
@@ -63,6 +81,8 @@ export function WorkspaceClient() {
 
   const loadItems = useCallback(async (folderId: string) => {
     setLoadingItems(true);
+    setSelectedFolderIds(new Set());
+    setSelectedItemIds(new Set());
     const res = await fetch(`/api/workspace/folders/${folderId}/items`);
     if (res.ok) setItems(await res.json());
     setLoadingItems(false);
@@ -105,8 +125,12 @@ export function WorkspaceClient() {
 
   async function handleDeleteFolder(id: string) {
     if (!confirm("¿Eliminar esta carpeta y todo su contenido?")) return;
-    await fetch(`/api/workspace/folders/${id}`, { method: "DELETE" });
-    setFolders((prev) => prev.filter((f) => f.id !== id));
+    const res = await fetch(`/api/workspace/folders/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setFolders((prev) => prev.filter((f) => f.id !== id));
+    } else {
+      showToast("No se pudo eliminar la carpeta");
+    }
   }
 
   async function handleRenameFolder(id: string, newName: string) {
@@ -122,12 +146,16 @@ export function WorkspaceClient() {
   }
 
   async function handleDeleteItem(id: string) {
-    await fetch(`/api/workspace/items/${id}`, { method: "DELETE" });
-    setItems((prev) => prev.filter((i) => i.id !== id));
-    if (currentFolder) {
-      setFolders((prev) => prev.map((f) =>
-        f.id === currentFolder.id ? { ...f, item_count: Math.max(0, (f.item_count ?? 1) - 1) } : f
-      ));
+    const res = await fetch(`/api/workspace/items/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setItems((prev) => prev.filter((i) => i.id !== id));
+      if (currentFolder) {
+        setFolders((prev) => prev.map((f) =>
+          f.id === currentFolder.id ? { ...f, item_count: Math.max(0, (f.item_count ?? 1) - 1) } : f
+        ));
+      }
+    } else {
+      showToast("No se pudo eliminar el documento");
     }
   }
 
@@ -162,6 +190,122 @@ export function WorkspaceClient() {
     }
   }
 
+  // --- Selection helpers ---
+  function toggleFolderSelect(id: string) {
+    setSelectedFolderIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function toggleItemSelect(id: string) {
+    setSelectedItemIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function selectAll() {
+    setSelectedFolderIds(new Set(visibleFolders.map((f) => f.id)));
+    setSelectedItemIds(new Set(sortedItems.map((i) => i.id)));
+  }
+
+  function clearSelection() {
+    setSelectedFolderIds(new Set());
+    setSelectedItemIds(new Set());
+  }
+
+  // --- Bulk actions ---
+  async function handleBulkDelete() {
+    if (!confirm(`¿Eliminar ${totalSelected} elemento${totalSelected > 1 ? "s" : ""}? Esta acción no se puede deshacer.`)) return;
+
+    const deletedFolderIds = new Set(selectedFolderIds);
+    const deletedItemIds = new Set(selectedItemIds);
+
+    const folderDeletes = [...deletedFolderIds].map((id) =>
+      fetch(`/api/workspace/folders/${id}`, { method: "DELETE" }).then((r) => ({ id, ok: r.ok }))
+    );
+    const itemDeletes = [...deletedItemIds].map((id) =>
+      fetch(`/api/workspace/items/${id}`, { method: "DELETE" }).then((r) => ({ id, ok: r.ok }))
+    );
+
+    const results = await Promise.allSettled([...folderDeletes, ...itemDeletes]);
+    const failed = results.filter((r) => r.status === "rejected" || (r.status === "fulfilled" && !r.value.ok));
+
+    // Remove only successfully deleted items from UI
+    const failedIds = new Set(
+      results
+        .filter((r): r is PromiseFulfilledResult<{ id: string; ok: boolean }> => r.status === "fulfilled" && !r.value.ok)
+        .map((r) => r.value.id)
+    );
+    setFolders((prev) => prev.filter((f) => !deletedFolderIds.has(f.id) || failedIds.has(f.id)));
+    setItems((prev) => prev.filter((i) => !deletedItemIds.has(i.id) || failedIds.has(i.id)));
+    clearSelection();
+
+    if (failed.length > 0) {
+      showToast(`${failed.length} elemento${failed.length > 1 ? "s" : ""} no pudo eliminarse`);
+    } else {
+      const n = deletedFolderIds.size + deletedItemIds.size - failedIds.size;
+      showToast(`${n} elemento${n > 1 ? "s" : ""} eliminado${n > 1 ? "s" : ""}`);
+    }
+  }
+
+  async function handleBulkMove(targetFolderId: string) {
+    const ids = [...selectedItemIds];
+    const results = await Promise.allSettled(
+      ids.map((id) =>
+        fetch(`/api/workspace/items/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ folder_id: targetFolderId })
+        }).then((r) => ({ id, ok: r.ok }))
+      )
+    );
+    const movedIds = new Set(
+      results
+        .filter((r): r is PromiseFulfilledResult<{ id: string; ok: boolean }> => r.status === "fulfilled" && r.value.ok)
+        .map((r) => r.value.id)
+    );
+    const failed = ids.length - movedIds.size;
+    setItems((prev) => prev.filter((i) => !movedIds.has(i.id)));
+    setShowMoveModal(false);
+    clearSelection();
+    if (currentFolder) loadItems(currentFolder.id);
+    if (failed > 0) {
+      showToast(`${movedIds.size} movido${movedIds.size !== 1 ? "s" : ""}, ${failed} fallido${failed !== 1 ? "s" : ""}`);
+    } else {
+      showToast(`${movedIds.size} documento${movedIds.size !== 1 ? "s" : ""} movido${movedIds.size !== 1 ? "s" : ""}`);
+    }
+  }
+
+  async function handleBulkStatus(status: string) {
+    const ids = [...selectedItemIds];
+    const results = await Promise.allSettled(
+      ids.map((id) =>
+        fetch(`/api/workspace/items/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status })
+        }).then((r) => ({ id, ok: r.ok }))
+      )
+    );
+    const updatedIds = new Set(
+      results
+        .filter((r): r is PromiseFulfilledResult<{ id: string; ok: boolean }> => r.status === "fulfilled" && r.value.ok)
+        .map((r) => r.value.id)
+    );
+    const failed = ids.length - updatedIds.size;
+    setItems((prev) => prev.map((i) => updatedIds.has(i.id) ? { ...i, status: status as WorkspaceItem["status"] } : i));
+    clearSelection();
+    if (failed > 0) {
+      showToast(`${updatedIds.size} actualizado${updatedIds.size !== 1 ? "s" : ""}, ${failed} fallido${failed !== 1 ? "s" : ""}`);
+    } else {
+      showToast(`Estado actualizado en ${updatedIds.size} documento${updatedIds.size !== 1 ? "s" : ""}`);
+    }
+  }
+
   // Filter by search
   const q = search.toLowerCase();
   const visibleFolders = folders
@@ -185,6 +329,10 @@ export function WorkspaceClient() {
       if (sortMode === "date-desc") return b.created_at.localeCompare(a.created_at);
       return a.created_at.localeCompare(b.created_at);
     });
+
+  const selectionMode = selectedFolderIds.size > 0 || selectedItemIds.size > 0;
+  const totalSelected = selectedFolderIds.size + selectedItemIds.size;
+  const totalVisible = visibleFolders.length + sortedItems.length;
 
   const isHome = !currentFolder;
   const isEmpty = visibleFolders.length === 0 && (isHome || sortedItems.length === 0);
@@ -264,6 +412,9 @@ export function WorkspaceClient() {
             <BoardView
               items={sortedItems}
               loadingItems={loadingItems}
+              selectedIds={selectedItemIds}
+              selectionMode={selectionMode}
+              onSelect={toggleItemSelect}
               onUpdateItem={handleUpdateItem}
               onDeleteItem={handleDeleteItem}
               onMarkSeen={handleMarkSeen}
@@ -285,6 +436,9 @@ export function WorkspaceClient() {
                         <FolderCard
                           key={folder.id}
                           folder={folder}
+                          selected={selectedFolderIds.has(folder.id)}
+                          selectionMode={selectionMode}
+                          onSelect={() => toggleFolderSelect(folder.id)}
                           onOpen={() => openFolder(folder)}
                           onDelete={() => handleDeleteFolder(folder.id)}
                           onRename={(name) => handleRenameFolder(folder.id, name)}
@@ -311,6 +465,9 @@ export function WorkspaceClient() {
                   ) : viewMode === "list" ? (
                     <ListView
                       items={sortedItems}
+                      selectedIds={selectedItemIds}
+                      selectionMode={selectionMode}
+                      onSelect={toggleItemSelect}
                       onUpdateItem={handleUpdateItem}
                       onDeleteItem={handleDeleteItem}
                       onMarkSeen={handleMarkSeen}
@@ -322,6 +479,9 @@ export function WorkspaceClient() {
                           <ItemCard
                             key={item.id}
                             item={item}
+                            selected={selectedItemIds.has(item.id)}
+                            selectionMode={selectionMode}
+                            onSelect={() => toggleItemSelect(item.id)}
                             onDelete={() => handleDeleteItem(item.id)}
                             onOpen={() => handleMarkSeen(item)}
                             onPin={() => handleUpdateItem(item.id, { pinned: !item.pinned })}
@@ -377,6 +537,46 @@ export function WorkspaceClient() {
             onCreated={handleItemUploaded}
             onClose={() => setShowNewDoc(false)}
           />
+        )}
+        {showMoveModal && (
+          <MoveFolderModal
+            folders={folders}
+            currentFolderId={currentFolder?.id ?? null}
+            itemCount={selectedItemIds.size}
+            onMove={handleBulkMove}
+            onClose={() => setShowMoveModal(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Bulk Action Bar */}
+      <AnimatePresence>
+        {selectionMode && (
+          <BulkActionBar
+            selectedCount={totalSelected}
+            itemCount={selectedItemIds.size}
+            folderCount={selectedFolderIds.size}
+            allCount={totalVisible}
+            onSelectAll={selectAll}
+            onClearSelection={clearSelection}
+            onDeleteSelected={handleBulkDelete}
+            onMoveSelected={() => setShowMoveModal(true)}
+            onStatusSelected={handleBulkStatus}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Toast notifications */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 bg-[#0D1117]/95 backdrop-blur-md border border-[#00D4AA]/30 rounded-xl shadow-xl text-sm text-slate-200 whitespace-nowrap"
+          >
+            {toast}
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

@@ -43,14 +43,16 @@ export async function POST(req: Request) {
   const body = await req.json();
   const { name, parent_id, color } = body;
 
-  if (!name?.trim()) return NextResponse.json({ error: "Name required" }, { status: 400 });
+  const trimmedName = name?.trim();
+  if (!trimmedName || trimmedName.length > 100)
+    return NextResponse.json({ error: "Nombre inválido (máx. 100 caracteres)" }, { status: 400 });
 
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("workspace_folders")
     .insert({
       agent_id: session.user.id,
-      name: name.trim(),
+      name: trimmedName,
       parent_id: parent_id ?? null,
       color: color ?? "#00D4AA",
       sort_order: 0

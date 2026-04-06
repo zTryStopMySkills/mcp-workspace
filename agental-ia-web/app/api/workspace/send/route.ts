@@ -10,13 +10,25 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json();
-  const { agent_id, document_id, folder_name = "Recibidos" } = body;
+  const { agent_id, document_id } = body;
+  const folder_name = typeof body.folder_name === "string" && body.folder_name.trim()
+    ? body.folder_name.trim().slice(0, 100)
+    : "Recibidos";
 
   if (!agent_id || !document_id) {
     return NextResponse.json({ error: "agent_id and document_id required" }, { status: 400 });
   }
 
   const supabase = getSupabaseAdmin();
+
+  // Verify document exists
+  const { data: docExists } = await supabase
+    .from("documents")
+    .select("id")
+    .eq("id", document_id)
+    .single();
+  if (!docExists)
+    return NextResponse.json({ error: "Documento no encontrado" }, { status: 404 });
 
   // Find or create the target folder for this agent
   let folderId: string;

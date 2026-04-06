@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Loader2, Trash2, Pin, PinOff } from "lucide-react";
+import { Loader2, Trash2, Pin, PinOff, Check, MoveDown } from "lucide-react";
 import type { WorkspaceItem } from "@/types";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { fileTypeIcon, formatDate } from "@/lib/utils";
@@ -19,12 +19,15 @@ const COLUMNS = [
 interface BoardViewProps {
   items: WorkspaceItem[];
   loadingItems: boolean;
+  selectedIds?: Set<string>;
+  selectionMode?: boolean;
+  onSelect?: (id: string) => void;
   onUpdateItem: (id: string, updates: Partial<WorkspaceItem>) => void;
   onDeleteItem: (id: string) => void;
   onMarkSeen: (item: WorkspaceItem) => void;
 }
 
-export function BoardView({ items, loadingItems, onUpdateItem, onDeleteItem, onMarkSeen }: BoardViewProps) {
+export function BoardView({ items, loadingItems, selectedIds, selectionMode, onSelect, onUpdateItem, onDeleteItem, onMarkSeen }: BoardViewProps) {
   const dragItem = useRef<WorkspaceItem | null>(null);
 
   function handleDragStart(item: WorkspaceItem) {
@@ -89,10 +92,32 @@ export function BoardView({ items, loadingItems, onUpdateItem, onDeleteItem, onM
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      draggable
-                      onDragStart={() => handleDragStart(item)}
-                      className="group p-3 bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-xl cursor-grab active:cursor-grabbing transition-colors"
+                      draggable={!selectionMode}
+                      onDragStart={() => !selectionMode && handleDragStart(item)}
+                      onClick={() => { if (selectionMode && onSelect) onSelect(item.id); }}
+                      className={`group relative p-3 border rounded-xl transition-colors ${
+                        selectionMode ? "cursor-pointer" : "cursor-grab active:cursor-grabbing"
+                      } ${
+                        (selectedIds?.has(item.id))
+                          ? "bg-[#00D4AA]/10 border-[#00D4AA]/40"
+                          : "bg-white/[0.04] hover:bg-white/[0.07] border-white/8"
+                      }`}
                     >
+                      {/* Checkbox */}
+                      {onSelect && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onSelect(item.id); }}
+                          className={`absolute top-2 right-2 transition-all ${
+                            selectedIds?.has(item.id) || selectionMode ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`w-4 h-4 rounded-md border-2 flex items-center justify-center transition-colors ${
+                            selectedIds?.has(item.id) ? "bg-[#00D4AA] border-[#00D4AA]" : "border-white/30 bg-black/40 hover:border-[#00D4AA]/60"
+                          }`}>
+                            {selectedIds?.has(item.id) && <Check size={9} className="text-black" strokeWidth={3} />}
+                          </div>
+                        </button>
+                      )}
                       <div className="flex items-start gap-2 mb-2">
                         <span className="text-base shrink-0">{fileTypeIcon(doc.file_type)}</span>
                         <div className="flex-1 min-w-0">
@@ -132,10 +157,13 @@ export function BoardView({ items, loadingItems, onUpdateItem, onDeleteItem, onM
 
               {colItems.length === 0 && (
                 <div
-                  className="flex-1 border-2 border-dashed rounded-xl flex items-center justify-center py-8"
-                  style={{ borderColor: `${col.accent}20` }}
+                  className="flex-1 border-2 border-dashed rounded-xl flex flex-col items-center justify-center py-8 gap-2"
+                  style={{ borderColor: `${col.accent}40` }}
                 >
-                  <p className="text-xs" style={{ color: `${col.accent}50` }}>Arrastra aquí</p>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${col.accent}20` }}>
+                    <MoveDown size={16} style={{ color: col.accent }} />
+                  </div>
+                  <p className="text-xs font-semibold" style={{ color: col.accent }}>Arrastra aquí</p>
                 </div>
               )}
             </div>

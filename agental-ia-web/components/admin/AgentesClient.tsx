@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Users, ToggleLeft, ToggleRight, Loader2, Eye, EyeOff, ShieldCheck, UserCheck, UserX } from "lucide-react";
+import { Plus, Users, ToggleLeft, ToggleRight, Loader2, Eye, EyeOff, ShieldCheck, UserCheck, UserX, KeyRound, X } from "lucide-react";
 import type { Agent } from "@/types";
 import { formatDate, initials } from "@/lib/utils";
 
@@ -20,6 +20,9 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
   const [showPass, setShowPass] = useState(false);
 
   const [form, setForm] = useState({ nick: "", name: "", password: "", role: "agent" as "agent" | "admin" });
+  const [resetPasswordId, setResetPasswordId] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
 
   async function createAgent(e: React.FormEvent) {
     e.preventDefault();
@@ -74,6 +77,31 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
     setAgents((prev) => prev.map((a) => (a.id === agent.id ? { ...a, is_active: updated.is_active } : a)));
     setSuccess(`${agent.name} ${updated.is_active ? "activado" : "desactivado"} correctamente.`);
     setTimeout(() => setSuccess(""), 4000);
+  }
+
+  async function resetPassword(agentId: string) {
+    if (newPassword.length < 6) return;
+    setResetLoading(true);
+    try {
+      const res = await fetch(`/api/agents/${agentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: newPassword })
+      });
+      if (res.ok) {
+        setResetPasswordId(null);
+        setNewPassword("");
+        setSuccess("Contraseña actualizada correctamente.");
+        setTimeout(() => setSuccess(""), 4000);
+      } else {
+        const data = await res.json();
+        setError(data.error ?? "Error al cambiar la contraseña.");
+      }
+    } catch {
+      setError("Error de red. Inténtalo de nuevo.");
+    } finally {
+      setResetLoading(false);
+    }
   }
 
   const activeCount = agents.filter((a) => a.is_active).length;
@@ -209,7 +237,9 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
       ) : (
         <div className="space-y-2">
           {agents.map((agent) => (
-            <div key={agent.id} className={`flex items-center gap-4 p-4 border rounded-xl transition-colors ${
+            <div key={agent.id} className="space-y-0">
+            <div className={`flex items-center gap-4 p-4 border rounded-xl transition-colors ${
+              resetPasswordId === agent.id ? "rounded-b-none border-b-0 border-indigo-500/30" :
               agent.is_active ? "bg-white/[0.04] border-white/10" : "bg-white/[0.02] border-white/5 opacity-60"
             }`}>
               <div className={`w-9 h-9 rounded-full border flex items-center justify-center text-xs font-bold shrink-0 ${
@@ -242,6 +272,15 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
                 {agent.is_active ? "Activo" : "Inactivo"}
               </span>
 
+              {/* Reset password */}
+              <button
+                onClick={() => { setResetPasswordId(resetPasswordId === agent.id ? null : agent.id); setNewPassword(""); }}
+                className={`transition-colors shrink-0 ${resetPasswordId === agent.id ? "text-indigo-400" : "text-slate-500 hover:text-indigo-400"}`}
+                title="Cambiar contraseña"
+              >
+                <KeyRound size={16} />
+              </button>
+
               {/* Toggle */}
               <button
                 onClick={() => toggleActive(agent)}
@@ -256,6 +295,40 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
                     : <ToggleLeft size={22} className="text-slate-500" />
                 }
               </button>
+            </div>
+            {/* Inline password reset form */}
+            <AnimatePresence>
+              {resetPasswordId === agent.id && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex items-center gap-3 px-4 py-3 bg-indigo-500/5 border border-indigo-500/30 border-t-0 rounded-b-xl">
+                    <KeyRound size={14} className="text-indigo-400 shrink-0" />
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Nueva contraseña (mín. 6 caracteres)"
+                      minLength={6}
+                      className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                    />
+                    <button
+                      onClick={() => resetPassword(agent.id)}
+                      disabled={resetLoading || newPassword.length < 6}
+                      className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold rounded-lg text-xs transition-colors shrink-0"
+                    >
+                      {resetLoading ? <Loader2 size={13} className="animate-spin" /> : "Guardar"}
+                    </button>
+                    <button onClick={() => { setResetPasswordId(null); setNewPassword(""); }} className="text-slate-500 hover:text-white transition-colors shrink-0">
+                      <X size={14} />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
             </div>
           ))}
         </div>

@@ -22,11 +22,11 @@ export function getSupabaseAdmin(): SupabaseClient {
 }
 
 // Exportar como supabaseAdmin para compatibilidad con imports existentes
-export const supabaseAdmin = {
-  from: (...args: Parameters<SupabaseClient["from"]>) => getSupabaseAdmin().from(...args),
-  storage: {
-    get from() {
-      return getSupabaseAdmin().storage.from.bind(getSupabaseAdmin().storage);
-    }
+// Proxy completo — delega todas las llamadas al cliente real
+export const supabaseAdmin = new Proxy({} as SupabaseClient, {
+  get(_target, prop) {
+    const client = getSupabaseAdmin();
+    const value = (client as unknown as Record<string, unknown>)[prop as string];
+    return typeof value === "function" ? value.bind(client) : value;
   }
-} as unknown as SupabaseClient;
+});

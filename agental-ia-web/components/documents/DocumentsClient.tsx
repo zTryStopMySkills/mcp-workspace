@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FolderOpen, Search, Filter } from "lucide-react";
+import { FolderOpen, Search, Filter, Calendar } from "lucide-react";
 import type { DocumentWithStatus, FileType } from "@/types";
 import { formatDate, fileTypeIcon, fileTypeBadgeColor, formatFileSize } from "@/lib/utils";
 
@@ -21,20 +21,98 @@ const fileTypes: { label: string; value: FileType | "all" }[] = [
   { label: "Otros", value: "other" }
 ];
 
+type DateRange = "all" | "today" | "week" | "month";
+const dateRanges: { label: string; value: DateRange }[] = [
+  { label: "Siempre", value: "all" },
+  { label: "Hoy", value: "today" },
+  { label: "Esta semana", value: "week" },
+  { label: "Este mes", value: "month" }
+];
+
+function isInRange(dateStr: string, range: DateRange): boolean {
+  if (range === "all") return true;
+  const date = new Date(dateStr);
+  const now = new Date();
+  if (range === "today") {
+    return date.toDateString() === now.toDateString();
+  }
+  if (range === "week") {
+    const weekAgo = new Date(now);
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    return date >= weekAgo;
+  }
+  if (range === "month") {
+    return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+  }
+  return true;
+}
+
+// Memoized card component (#16)
+const DocumentCard = memo(function DocumentCard({ doc, index }: { doc: DocumentWithStatus; index: number }) {
+  return (
+    <motion.div
+      key={doc.id}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: Math.min(index * 0.04, 0.3) }}
+    >
+      <Link
+        href={`/documentos/${doc.id}`}
+        className="flex flex-col p-5 bg-white/[0.04] border border-white/10 rounded-2xl hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all group h-full"
+      >
+        <div className="flex items-start justify-between mb-3">
+          <span className="text-3xl">{fileTypeIcon(doc.file_type)}</span>
+          <div className="flex gap-2 flex-wrap justify-end">
+            {doc.seen_at === null && (
+              <span className="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">
+                NUEVO
+              </span>
+            )}
+            <span className={`text-xs border px-2 py-0.5 rounded-full ${fileTypeBadgeColor(doc.file_type)}`}>
+              {doc.file_type.toUpperCase()}
+            </span>
+          </div>
+        </div>
+        <h3 className="font-semibold text-white text-sm mb-1 line-clamp-2 group-hover:text-indigo-300 transition-colors">
+          {doc.title}
+        </h3>
+        {doc.description && (
+          <p className="text-xs text-slate-500 line-clamp-2 mb-3">{doc.description}</p>
+        )}
+        <div className="mt-auto pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-500">
+          <span>{formatDate(doc.created_at)}</span>
+          {doc.file_size && <span>{formatFileSize(doc.file_size)}</span>}
+        </div>
+      </Link>
+    </motion.div>
+  );
+});
+
 export function DocumentsClient({ initialDocs }: DocumentsClientProps) {
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FileType | "all">("all");
+  const [dateRange, setDateRange] = useState<DateRange>("all");
+
+  // Debounce search — 300ms
+  useEffect(() => {
+    const t = setTimeout(() => setSearch(searchInput), 300);
+    return () => clearTimeout(t);
+  }, [searchInput]);
 
   const filtered = initialDocs.filter((doc) => {
+    const q = search.toLowerCase();
     const matchSearch =
-      search === "" ||
-      doc.title.toLowerCase().includes(search.toLowerCase()) ||
-      (doc.description ?? "").toLowerCase().includes(search.toLowerCase());
+      q === "" ||
+      doc.title.toLowerCase().includes(q) ||
+      (doc.description ?? "").toLowerCase().includes(q);
     const matchFilter = filter === "all" || doc.file_type === filter;
-    return matchSearch && matchFilter;
+    const matchDate = isInRange(doc.created_at, dateRange);
+    return matchSearch && matchFilter && matchDate;
   });
 
   const unseenCount = initialDocs.filter((d) => d.seen_at === null).length;
+  const showingDateFilter = dateRange !== "all";
 
   return (
     <div className="p-6 md:p-8 max-w-5xl">
@@ -51,23 +129,27 @@ export function DocumentsClient({ initialDocs }: DocumentsClientProps) {
         <p className="text-slate-400 text-sm">Materiales compartidos por el administrador</p>
       </motion.div>
 
-      {/* Search + filter */}
+      {/* Search + filters */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="flex flex-col sm:flex-row gap-3 mt-6 mb-8"
+        className="flex flex-col gap-3 mt-6 mb-8"
       >
-        <div className="relative flex-1">
+        {/* Search */}
+        <div className="relative">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Buscar documentos..."
+            aria-label="Buscar documentos"
             className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
           />
         </div>
+
+        {/* Type filter */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
           <Filter size={14} className="text-slate-500 shrink-0" />
           {fileTypes.map((ft) => (
@@ -84,52 +166,47 @@ export function DocumentsClient({ initialDocs }: DocumentsClientProps) {
             </button>
           ))}
         </div>
+
+        {/* Date range filter */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <Calendar size={14} className="text-slate-500 shrink-0" />
+          {dateRanges.map((dr) => (
+            <button
+              key={dr.value}
+              onClick={() => setDateRange(dr.value)}
+              className={`shrink-0 text-xs px-3 py-1.5 rounded-lg transition-colors ${
+                dateRange === dr.value
+                  ? "bg-[#00D4AA]/20 text-[#00D4AA] border border-[#00D4AA]/30"
+                  : "bg-white/5 text-slate-400 hover:bg-white/10"
+              }`}
+            >
+              {dr.label}
+            </button>
+          ))}
+        </div>
       </motion.div>
+
+      {/* Results count */}
+      {(search || filter !== "all" || showingDateFilter) && (
+        <p className="text-xs text-slate-500 mb-4">
+          {filtered.length} resultado{filtered.length !== 1 ? "s" : ""}
+          {search && ` para "${search}"`}
+        </p>
+      )}
 
       {/* Grid */}
       {filtered.length === 0 ? (
         <div className="text-center py-20 text-slate-500">
           <FolderOpen size={40} className="mx-auto mb-3 opacity-30" />
-          <p>{search || filter !== "all" ? "No se encontraron documentos con ese filtro." : "Aún no hay documentos."}</p>
+          <p>{search || filter !== "all" || showingDateFilter
+            ? "No se encontraron documentos con ese filtro."
+            : "Aún no hay documentos."}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((doc, i) => (
-            <motion.div
-              key={doc.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.04 }}
-            >
-              <Link
-                href={`/documentos/${doc.id}`}
-                className="flex flex-col p-5 bg-white/[0.04] border border-white/10 rounded-2xl hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all group h-full"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <span className="text-3xl">{fileTypeIcon(doc.file_type)}</span>
-                  <div className="flex gap-2">
-                    {doc.seen_at === null && (
-                      <span className="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">
-                        NUEVO
-                      </span>
-                    )}
-                    <span className={`text-xs border px-2 py-0.5 rounded-full ${fileTypeBadgeColor(doc.file_type)}`}>
-                      {doc.file_type.toUpperCase()}
-                    </span>
-                  </div>
-                </div>
-                <h3 className="font-semibold text-white text-sm mb-1 line-clamp-2 group-hover:text-indigo-300 transition-colors">
-                  {doc.title}
-                </h3>
-                {doc.description && (
-                  <p className="text-xs text-slate-500 line-clamp-2 mb-3">{doc.description}</p>
-                )}
-                <div className="mt-auto pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-500">
-                  <span>{formatDate(doc.created_at)}</span>
-                  {doc.file_size && <span>{formatFileSize(doc.file_size)}</span>}
-                </div>
-              </Link>
-            </motion.div>
+            <DocumentCard key={doc.id} doc={doc} index={i} />
           ))}
         </div>
       )}

@@ -114,3 +114,60 @@ supabase.channel('workspace-{agentId}')
 - `workspace_items.pinned BOOLEAN`
 - Docs pinados flotan arriba en las tres vistas
 - Toggle con un click → `PATCH /api/workspace/items/[id]` con `{ pinned: true/false }`
+
+---
+
+## Bulk multi-select (añadido 2026-04-04)
+
+### Comportamiento
+- Checkbox aparece en **hover** sobre cualquier carpeta o documento (todos los views)
+- Al marcar el primero, aparece el `BulkActionBar` flotante (fixed bottom center)
+- En `selectionMode` activo, click directo en tarjeta = seleccionar (no abrir)
+- Drag & drop del Board se deshabilita en `selectionMode`
+
+### Acciones disponibles desde BulkActionBar
+| Acción | Aplica a |
+|--------|----------|
+| Seleccionar todos | Carpetas + docs visibles |
+| Mover | Solo docs (abre MoveFolderModal) |
+| Cambiar estado | Solo docs (dropdown inline) |
+| Eliminar | Carpetas + docs |
+
+### Componentes nuevos
+| Componente | Propósito |
+|-----------|-----------|
+| `BulkActionBar.tsx` | Barra flotante fixed bottom-center con acciones bulk |
+| `MoveFolderModal.tsx` | Browser de carpetas para seleccionar destino al mover |
+
+### Cambios en componentes existentes
+| Componente | Cambio |
+|-----------|--------|
+| `FolderCard.tsx` | Props `selected`, `selectionMode`, `onSelect` + checkbox top-left |
+| `ItemCard.tsx` | Props `selected`, `selectionMode`, `onSelect` + checkbox top-right |
+| `ListView.tsx` | Columna checkbox extra, fila highlight teal al seleccionar |
+| `BoardView.tsx` | Checkbox top-right en cada card, drag deshabilitado en selectionMode |
+| `WorkspaceClient.tsx` | Estado `selectedFolderIds: Set<string>` + `selectedItemIds: Set<string>`, handlers bulk |
+
+### Estado en WorkspaceClient
+```tsx
+const [selectedFolderIds, setSelectedFolderIds] = useState<Set<string>>(new Set());
+const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
+const [showMoveModal, setShowMoveModal] = useState(false);
+
+const selectionMode = selectedFolderIds.size > 0 || selectedItemIds.size > 0;
+const totalSelected = selectedFolderIds.size + selectedItemIds.size;
+const totalVisible = visibleFolders.length + sortedItems.length;
+```
+
+### API — mover items
+`PATCH /api/workspace/items/[id]` acepta `folder_id` para mover entre carpetas.
+
+---
+
+## SQL adicional para workspace_items (ejecutar si no está)
+
+```sql
+-- Habilitar Realtime para workspace tables
+ALTER PUBLICATION supabase_realtime ADD TABLE workspace_folders;
+ALTER PUBLICATION supabase_realtime ADD TABLE workspace_items;
+```

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, FolderOpen, Loader2, X, FileText, Users, Send, Monitor } from "lucide-react";
+import { Upload, FolderOpen, Loader2, X, FileText, Users, Send, Monitor, Search, CheckSquare, Square, Layers, Trash2 } from "lucide-react";
 import type { Document, Agent } from "@/types";
 import { formatDate, fileTypeIcon, formatFileSize, getFileType, fileTypeBadgeColor } from "@/lib/utils";
 
@@ -24,6 +24,11 @@ export function AdminDocumentosClient({ initialDocs, agents }: AdminDocumentosCl
   const [dragOver, setDragOver] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const [searchDocs, setSearchDocs] = useState("");
+  const [selectedDocIds, setSelectedDocIds] = useState<Set<string>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [deletingDocIds, setDeletingDocIds] = useState<Set<string>>(new Set());
 
   const [form, setForm] = useState({
     title: "",
@@ -52,6 +57,59 @@ export function AdminDocumentosClient({ initialDocs, agents }: AdminDocumentosCl
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
+  function toggleDocSelect(id: string) {
+    setSelectedDocIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  const filteredDocs = docs.filter((d) =>
+    !searchDocs || d.title.toLowerCase().includes(searchDocs.toLowerCase())
+  );
+  const allFilteredSelected = filteredDocs.length > 0 && filteredDocs.every((d) => selectedDocIds.has(d.id));
+
+  function toggleSelectAll() {
+    if (allFilteredSelected) {
+      setSelectedDocIds(new Set());
+    } else {
+      setSelectedDocIds(new Set(filteredDocs.map((d) => d.id)));
+    }
+  }
+
+  async function handleBulkVisibility(visibility: "all" | "specific") {
+    if (selectedDocIds.size === 0) return;
+    setBulkLoading(true);
+    const ids = [...selectedDocIds];
+    const results = await Promise.allSettled(
+      ids.map((id) =>
+        fetch(`/api/documents/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ visibility })
+        }).then((r) => ({ id, ok: r.ok }))
+      )
+    );
+    const updatedIds = new Set(
+      results
+        .filter((r): r is PromiseFulfilledResult<{ id: string; ok: boolean }> => r.status === "fulfilled" && r.value.ok)
+        .map((r) => r.value.id)
+    );
+    const failed = ids.length - updatedIds.size;
+    setDocs((prev) =>
+      prev.map((d) => updatedIds.has(d.id) ? { ...d, visibility } : d)
+    );
+    setSelectedDocIds(new Set());
+    setBulkLoading(false);
+    if (failed > 0) {
+      setSuccess(`${updatedIds.size} actualizado${updatedIds.size !== 1 ? "s" : ""}, ${failed} fallido${failed !== 1 ? "s" : ""}.`);
+    } else {
+      setSuccess(`Visibilidad cambiada en ${updatedIds.size} documento${updatedIds.size !== 1 ? "s" : ""}.`);
+    }
+    setTimeout(() => setSuccess(""), 4000);
+  }
+
   function toggleAgent(id: string) {
     setForm((prev) => ({
       ...prev,
@@ -74,6 +132,45 @@ export function AdminDocumentosClient({ initialDocs, agents }: AdminDocumentosCl
     else setSendMsg(data.error ?? "Error al enviar");
   }
 
+  async function handleDeleteDoc(id: string) {
+    if (!confirm("¿Eliminar este documento? Esta acción no se puede deshacer.")) return;
+    setDeletingDocIds((prev) => new Set(prev).add(id));
+    const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
+    setDeletingDocIds((prev) => { const s = new Set(prev); s.delete(id); return s; });
+    if (res.ok) {
+      setDocs((prev) => prev.filter((d) => d.id !== id));
+      setSelectedDocIds((prev) => { const s = new Set(prev); s.delete(id); return s; });
+    } else {
+      const data = await res.json();
+      setError(data.error ?? "Error al eliminar");
+    }
+  }
+
+  async function handleBulkDelete() {
+    if (selectedDocIds.size === 0) return;
+    if (!confirm(`¿Eliminar ${selectedDocIds.size} documento${selectedDocIds.size !== 1 ? "s" : ""}? Esta acción no se puede deshacer.`)) return;
+    setBulkLoading(true);
+    const ids = [...selectedDocIds];
+    const results = await Promise.allSettled(
+      ids.map((id) => fetch(`/api/documents/${id}`, { method: "DELETE" }).then((r) => ({ id, ok: r.ok })))
+    );
+    const deletedIds = new Set(
+      results
+        .filter((r): r is PromiseFulfilledResult<{ id: string; ok: boolean }> => r.status === "fulfilled" && r.value.ok)
+        .map((r) => r.value.id)
+    );
+    setDocs((prev) => prev.filter((d) => !deletedIds.has(d.id)));
+    setSelectedDocIds(new Set());
+    setBulkLoading(false);
+    const failed = ids.length - deletedIds.size;
+    if (failed > 0) {
+      setError(`${deletedIds.size} eliminado${deletedIds.size !== 1 ? "s" : ""}, ${failed} fallido${failed !== 1 ? "s" : ""}.`);
+    } else {
+      setSuccess(`${deletedIds.size} documento${deletedIds.size !== 1 ? "s" : ""} eliminado${deletedIds.size !== 1 ? "s" : ""}.`);
+      setTimeout(() => setSuccess(""), 4000);
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (selectedFiles.length === 0) { setError("Selecciona al menos un archivo."); return; }
@@ -83,66 +180,71 @@ export function AdminDocumentosClient({ initialDocs, agents }: AdminDocumentosCl
 
     const newDocs: Document[] = [];
 
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
-      setUploadProgress({ current: i + 1, total: selectedFiles.length });
+    try {
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        setUploadProgress({ current: i + 1, total: selectedFiles.length });
 
-      // 1. Subir archivo
-      const fd = new FormData();
-      fd.append("file", file);
-      const uploadRes = await fetch("/api/upload", { method: "POST", body: fd });
-      const uploaded = await uploadRes.json();
-      if (!uploadRes.ok) {
-        setError(`Error al subir "${file.name}": ${uploaded.error ?? "Error desconocido"}`);
-        setUploading(false);
-        return;
-      }
+        // 1. Subir archivo
+        const fd = new FormData();
+        fd.append("file", file);
+        const uploadRes = await fetch("/api/upload", { method: "POST", body: fd });
+        const uploaded = await uploadRes.json();
+        if (!uploadRes.ok) {
+          setError(`Error al subir "${file.name}": ${uploaded.error ?? "Error desconocido"}`);
+          return;
+        }
 
-      // 2. Crear documento
-      const docRes = await fetch("/api/documents", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: form.title && selectedFiles.length === 1 ? form.title : file.name,
-          description: form.description || null,
-          file_url: uploaded.url,
-          file_name: file.name,
-          file_type: getFileType(file.name, file.type),
-          file_size: file.size,
-          visibility: form.visibility,
-          agent_ids: form.visibility === "specific" ? form.agentIds : []
-        })
-      });
-      const doc = await docRes.json();
-      if (!docRes.ok) {
-        setError(`Error al guardar "${file.name}": ${doc.error ?? "Error desconocido"}`);
-        setUploading(false);
-        return;
-      }
-      // 3. Send to workspace if requested
-      if (form.sendToWorkspace && form.workspaceAgentId) {
-        await fetch("/api/workspace/send", {
+        // 2. Crear documento
+        const docRes = await fetch("/api/documents", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            agent_id: form.workspaceAgentId,
-            document_id: doc.id,
-            folder_name: form.workspaceFolderName || "Recibidos"
+            title: form.title && selectedFiles.length === 1 ? form.title : file.name,
+            description: form.description || null,
+            file_url: uploaded.url,
+            file_name: file.name,
+            file_type: getFileType(file.name, file.type),
+            file_size: file.size,
+            visibility: form.visibility,
+            agent_ids: form.visibility === "specific" ? form.agentIds : []
           })
         });
+        const doc = await docRes.json();
+        if (!docRes.ok) {
+          setError(`Error al guardar "${file.name}": ${doc.error ?? "Error desconocido"}`);
+          return;
+        }
+        // 3. Send to workspace if requested
+        if (form.sendToWorkspace && form.workspaceAgentId) {
+          await fetch("/api/workspace/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              agent_id: form.workspaceAgentId,
+              document_id: doc.id,
+              folder_name: form.workspaceFolderName || "Recibidos"
+            })
+          });
+        }
+
+        newDocs.push(doc);
       }
 
-      newDocs.push(doc);
+      if (newDocs.length > 0) {
+        setDocs((prev) => [...newDocs.reverse(), ...prev]);
+        setSelectedFiles([]);
+        setForm({ title: "", description: "", visibility: "all", agentIds: [], sendToWorkspace: false, workspaceAgentId: "", workspaceFolderName: "Recibidos" });
+        setShowForm(false);
+        const n = newDocs.length;
+        setSuccess(`${n} documento${n > 1 ? "s" : ""} compartido${n > 1 ? "s" : ""} correctamente.`);
+        setTimeout(() => setSuccess(""), 5000);
+      }
+    } catch {
+      setError("Error inesperado al subir. Inténtalo de nuevo.");
+    } finally {
+      setUploading(false);
     }
-
-    setUploading(false);
-    setDocs((prev) => [...newDocs.reverse(), ...prev]);
-    setSelectedFiles([]);
-    setForm({ title: "", description: "", visibility: "all", agentIds: [], sendToWorkspace: false, workspaceAgentId: "", workspaceFolderName: "Recibidos" });
-    setShowForm(false);
-    const n = newDocs.length;
-    setSuccess(`${n} documento${n > 1 ? "s" : ""} compartido${n > 1 ? "s" : ""} correctamente.`);
-    setTimeout(() => setSuccess(""), 5000);
   }
 
   return (
@@ -391,17 +493,94 @@ export function AdminDocumentosClient({ initialDocs, agents }: AdminDocumentosCl
         )}
       </AnimatePresence>
 
+      {/* Search + bulk action bar */}
+      {docs.length > 0 && (
+        <div className="flex flex-col gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                value={searchDocs}
+                onChange={(e) => setSearchDocs(e.target.value)}
+                placeholder="Buscar documentos..."
+                className="w-full pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
+              />
+            </div>
+            <button
+              onClick={toggleSelectAll}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs text-slate-400 hover:text-white bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors shrink-0"
+            >
+              {allFilteredSelected ? <CheckSquare size={14} /> : <Square size={14} />}
+              {allFilteredSelected ? "Deseleccionar" : "Seleccionar todo"}
+            </button>
+          </div>
+          <AnimatePresence>
+            {selectedDocIds.size > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="flex items-center gap-3 px-4 py-3 bg-amber-500/10 border border-amber-500/25 rounded-xl"
+              >
+                <Layers size={14} className="text-amber-400 shrink-0" />
+                <span className="text-xs text-amber-300 flex-1">
+                  {selectedDocIds.size} documento{selectedDocIds.size !== 1 ? "s" : ""} seleccionado{selectedDocIds.size !== 1 ? "s" : ""}
+                </span>
+                <button
+                  onClick={() => handleBulkVisibility("all")}
+                  disabled={bulkLoading}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 hover:bg-indigo-600/50 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <Users size={12} />
+                  Todos los agentes
+                </button>
+                <button
+                  onClick={() => handleBulkVisibility("specific")}
+                  disabled={bulkLoading}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:bg-amber-500/30 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <FileText size={12} />
+                  Específico
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  disabled={bulkLoading}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <Trash2 size={12} />
+                  Eliminar
+                </button>
+                {bulkLoading && <Loader2 size={14} className="animate-spin text-amber-400 shrink-0" />}
+                <button
+                  onClick={() => setSelectedDocIds(new Set())}
+                  className="text-slate-500 hover:text-white transition-colors shrink-0"
+                >
+                  <X size={14} />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
       {/* Docs list */}
-      {docs.length === 0 ? (
+      {filteredDocs.length === 0 ? (
         <div className="text-center py-16 text-slate-500">
           <FolderOpen size={36} className="mx-auto mb-3 opacity-30" />
-          <p>Aún no has subido documentos.</p>
+          <p>{docs.length === 0 ? "Aún no has subido documentos." : "No se encontraron documentos."}</p>
         </div>
       ) : (
         <div className="space-y-2">
-          {docs.map((doc) => (
+          {filteredDocs.map((doc) => (
             <div key={doc.id} className="space-y-2">
-              <div className="flex items-center gap-4 p-4 bg-white/[0.04] border border-white/10 rounded-xl">
+              <div className={`flex items-center gap-4 p-4 bg-white/[0.04] border rounded-xl transition-colors ${selectedDocIds.has(doc.id) ? "border-amber-500/40 bg-amber-500/5" : "border-white/10"}`}>
+                <button
+                  onClick={() => toggleDocSelect(doc.id)}
+                  className="shrink-0 text-slate-500 hover:text-amber-400 transition-colors"
+                >
+                  {selectedDocIds.has(doc.id) ? <CheckSquare size={16} className="text-amber-400" /> : <Square size={16} />}
+                </button>
                 <span className="text-2xl shrink-0">{fileTypeIcon(doc.file_type)}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate">{doc.title}</p>
@@ -426,6 +605,14 @@ export function AdminDocumentosClient({ initialDocs, agents }: AdminDocumentosCl
                   className="shrink-0 p-2 rounded-xl bg-white/5 hover:bg-amber-500/15 border border-white/10 hover:border-amber-500/30 text-slate-400 hover:text-amber-300 transition-colors"
                 >
                   <Send size={14} />
+                </button>
+                <button
+                  onClick={() => handleDeleteDoc(doc.id)}
+                  disabled={deletingDocIds.has(doc.id)}
+                  title="Eliminar documento"
+                  className="shrink-0 p-2 rounded-xl bg-white/5 hover:bg-red-500/15 border border-white/10 hover:border-red-500/30 text-slate-400 hover:text-red-400 transition-colors disabled:opacity-40"
+                >
+                  {deletingDocIds.has(doc.id) ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                 </button>
               </div>
               {/* Inline send panel */}

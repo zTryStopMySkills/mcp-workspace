@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
+import { rateLimitAsync } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -9,33 +10,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
+  // Rate limit: 10 uploads per minute per user
+  const rl = await rateLimitAsync({ key: `upload:${session.user.id}`, limit: 10, windowSec: 60 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Demasiadas subidas. Espera un momento." }, { status: 429 });
+  }
+
   const formData = await req.formData();
   const file = formData.get("file") as File | null;
   if (!file) return NextResponse.json({ error: "No se recibió ningún archivo" }, { status: 400 });
 
-  const ext = file.name.split(".").pop();
+  // Block dangerous extensions (admin can upload any safe document type)
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  const blockedExts = ["exe", "bat", "sh", "cmd", "msi", "ps1", "php", "rb", "jar", "com", "scr", "vbs", "pif"];
+  if (blockedExts.includes(ext)) {
+    return NextResponse.json({ error: "Extensión de archivo no permitida" }, { status: 400 });
+  }
+
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  // Asegurar que el bucket existe — crearlo si no existe
-  const { data: buckets } = await supabaseAdmin.storage.listBuckets();
-  const bucketExists = (buckets ?? []).some((b) => b.name === "documents");
-  if (!bucketExists) {
-    const { error: bucketErr } = await supabaseAdmin.storage.createBucket("documents", {
-      public: true,
-      fileSizeLimit: null
-    });
-    if (bucketErr) {
-      return NextResponse.json(
-        { error: "No se pudo crear el almacenamiento. Crea el bucket 'documents' en Supabase Storage." },
-        { status: 500 }
-      );
-    }
-  }
+  // Determine content type — fallback for unknown types
+  const mimeType = file.type || "application/octet-stream";
 
   const { data, error } = await supabaseAdmin.storage
     .from("documents")
-    .upload(fileName, buffer, { contentType: file.type, upsert: false });
+    .upload(fileName, buffer, { contentType: mimeType, upsert: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 

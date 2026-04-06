@@ -18,7 +18,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     `)
     .eq("folder_id", id)
     .eq("agent_id", session.user.id)
-    .order("created_at", { ascending: false });
+    .order("pinned", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(500);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data ?? []);

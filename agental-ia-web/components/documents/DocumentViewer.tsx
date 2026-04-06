@@ -3,14 +3,114 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Download, ExternalLink, Loader2, AlertCircle,
   Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw,
-  FileText, Play, Pause, Volume2, VolumeX
+  FileText, Play, Pause, Volume2, VolumeX, RefreshCw, FileDown,
+  MessageSquare, Send, Trash2
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import type { Document } from "@/types";
-import { formatDate, formatFileSize, fileTypeBadgeColor } from "@/lib/utils";
+import { formatDate, formatFileSize, fileTypeBadgeColor, formatTime, initials } from "@/lib/utils";
+
+async function exportToDocx(doc: Document) {
+  const { Document: DocxDoc, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, TableRow, TableCell, Table, WidthType } = await import("docx");
+
+  const rows = [
+    ["Título", doc.title],
+    ["Tipo", doc.file_type.toUpperCase()],
+    ["Archivo", doc.file_name],
+    doc.file_size ? ["Tamaño", formatFileSize(doc.file_size)] : null,
+    ["Subido", formatDate(doc.created_at)],
+    doc.creator ? ["Por", `@${doc.creator.nick} · ${doc.creator.name}`] : null,
+    ["URL", doc.file_url],
+  ].filter(Boolean) as [string, string][];
+
+  const metaTable = new Table({
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    borders: {
+      top: { style: BorderStyle.NONE, size: 0 },
+      bottom: { style: BorderStyle.NONE, size: 0 },
+      left: { style: BorderStyle.NONE, size: 0 },
+      right: { style: BorderStyle.NONE, size: 0 },
+      insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "e2e8f0" },
+      insideVertical: { style: BorderStyle.NONE, size: 0 },
+    },
+    rows: rows.map(([label, value]) =>
+      new TableRow({
+        children: [
+          new TableCell({
+            width: { size: 25, type: WidthType.PERCENTAGE },
+            children: [new Paragraph({ children: [new TextRun({ text: label, bold: true, color: "64748b", size: 20 })] })],
+          }),
+          new TableCell({
+            width: { size: 75, type: WidthType.PERCENTAGE },
+            children: [new Paragraph({ children: [new TextRun({ text: value, size: 20 })] })],
+          }),
+        ],
+      })
+    ),
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const contentParas: any[] = [];
+
+  // Para archivos de texto, intentar cargar el contenido
+  const textExts = ["txt", "md", "csv", "json", "xml", "html", "htm", "js", "ts", "py", "css", "log"];
+  const ext = doc.file_name.split(".").pop()?.toLowerCase() ?? "";
+  if (textExts.includes(ext)) {
+    try {
+      const text = await fetch(doc.file_url).then(r => r.text());
+      contentParas.push(
+        new Paragraph({ text: "", spacing: { before: 400 } }),
+        new Paragraph({ children: [new TextRun({ text: "Contenido", bold: true, size: 28 })], heading: HeadingLevel.HEADING_2 }),
+        new Paragraph({ text: "", spacing: { before: 100 } }),
+        ...text.split("\n").slice(0, 500).map(line =>
+          new Paragraph({ children: [new TextRun({ text: line, size: 20, font: "Courier New" })], spacing: { after: 0 } })
+        )
+      );
+    } catch {
+      // silently skip if fetch fails
+    }
+  }
+
+  const docx = new DocxDoc({
+    sections: [{
+      children: [
+        new Paragraph({
+          children: [new TextRun({ text: doc.title, bold: true, size: 48, color: "0f172a" })],
+          heading: HeadingLevel.HEADING_1,
+          spacing: { after: 200 },
+          alignment: AlignmentType.LEFT,
+        }),
+        ...(doc.description ? [
+          new Paragraph({
+            children: [new TextRun({ text: doc.description, size: 24, color: "475569" })],
+            spacing: { after: 400 },
+          }),
+        ] : []),
+        new Paragraph({ children: [new TextRun({ text: "Información del documento", bold: true, size: 28, color: "334155" })], heading: HeadingLevel.HEADING_2, spacing: { after: 160 } }),
+        metaTable,
+        ...contentParas,
+        new Paragraph({ text: "", spacing: { before: 600 } }),
+        new Paragraph({
+          children: [new TextRun({ text: "Exportado desde Agental.IA · " + new Date().toLocaleDateString("es-ES"), size: 16, color: "94a3b8", italics: true })],
+          alignment: AlignmentType.CENTER,
+        }),
+      ],
+    }],
+  });
+
+  const blob = await Packer.toBlob(docx);
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement("a"), { href: url, download: `${doc.title.replace(/[^a-z0-9áéíóúüñ ]/gi, "_")}.docx` });
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 interface DocumentViewerProps { doc: Document; }
 
@@ -37,6 +137,7 @@ function ImageViewer({ doc }: { doc: Document }) {
   const [zoom, setZoom] = useState(1);
   const [fullscreen, setFullscreen] = useState(false);
   const [rotation, setRotation] = useState(0);
+  const [imgError, setImgError] = useState(false);
 
   return (
     <div className={`relative bg-[#060A10] ${fullscreen ? "fixed inset-0 z-50 flex flex-col" : ""}`}>
@@ -57,20 +158,25 @@ function ImageViewer({ doc }: { doc: Document }) {
       </div>
       {/* Image */}
       <div className={`flex items-center justify-center overflow-auto ${fullscreen ? "flex-1" : "min-h-[400px] max-h-[70vh]"} p-6`}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={doc.file_url}
-          alt={doc.title}
-          style={{
-            transform: `scale(${zoom}) rotate(${rotation}deg)`,
-            transition: "transform 0.2s ease",
-            maxWidth: "100%",
-            maxHeight: "100%",
-            objectFit: "contain",
-            borderRadius: "12px",
-            boxShadow: "0 0 60px rgba(0,212,170,0.1)"
-          }}
-        />
+        {imgError ? (
+          <FallbackViewer />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={doc.file_url}
+            alt={doc.title}
+            onError={() => setImgError(true)}
+            style={{
+              transform: `scale(${zoom}) rotate(${rotation}deg)`,
+              transition: "transform 0.2s ease",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+              borderRadius: "12px",
+              boxShadow: "0 0 60px rgba(0,212,170,0.1)"
+            }}
+          />
+        )}
       </div>
     </div>
   );
@@ -81,6 +187,7 @@ function VideoViewer({ doc }: { doc: Document }) {
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   function togglePlay() {
     if (!videoRef.current) return;
@@ -105,15 +212,20 @@ function VideoViewer({ doc }: { doc: Document }) {
         </div>
       </div>
       <div className={`${fullscreen ? "flex-1 flex items-center justify-center" : ""}`}>
-        <video
-          ref={videoRef}
-          src={doc.file_url}
-          controls
-          className={`w-full ${fullscreen ? "max-h-full" : "max-h-[65vh]"}`}
-          preload="metadata"
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-        />
+        {videoError ? (
+          <FallbackViewer />
+        ) : (
+          <video
+            ref={videoRef}
+            src={doc.file_url}
+            controls
+            className={`w-full ${fullscreen ? "max-h-full" : "max-h-[65vh]"}`}
+            preload="metadata"
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
+            onError={() => setVideoError(true)}
+          />
+        )}
       </div>
     </div>
   );
@@ -206,6 +318,152 @@ function TextViewer({ doc }: { doc: Document }) {
   );
 }
 
+type OfficeApp = "word" | "excel" | "powerpoint" | "pdf";
+
+function getOfficeApp(ext: string): OfficeApp {
+  if (["doc", "docx", "odt"].includes(ext)) return "word";
+  if (["xls", "xlsx", "ods", "csv"].includes(ext)) return "excel";
+  if (["ppt", "pptx", "odp"].includes(ext)) return "powerpoint";
+  return "pdf";
+}
+
+const OFFICE_ICONS: Record<OfficeApp, { icon: string; color: string; name: string }> = {
+  word:        { icon: "📘", color: "#2B579A", name: "Word" },
+  excel:       { icon: "📗", color: "#217346", name: "Excel" },
+  powerpoint:  { icon: "📙", color: "#D24726", name: "PowerPoint" },
+  pdf:         { icon: "📄", color: "#E44B4B", name: "PDF" },
+};
+
+function OfficeViewer({ doc }: { doc: Document }) {
+  const ext = getExt(doc.file_name);
+  const app = getOfficeApp(ext);
+  const info = OFFICE_ICONS[app];
+  const encodedUrl = encodeURIComponent(doc.file_url);
+  const embedUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}`;
+  const openUrl  = `https://view.officeapps.live.com/op/view.aspx?src=${encodedUrl}`;
+  const googleUrl = `https://docs.google.com/viewer?url=${encodedUrl}&embedded=true`;
+
+  const [mode, setMode] = useState<"office" | "google">("office");
+  const [loaded, setLoaded] = useState(false);
+  const [iframeError, setIframeError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
+
+  const currentUrl = mode === "office" ? embedUrl : googleUrl;
+  const currentLabel = mode === "office" ? `Microsoft Office Online · ${ext.toUpperCase()}` : `Google Docs Viewer · ${ext.toUpperCase()}`;
+
+  return (
+    <div>
+      {/* Toolbar */}
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-white/8 bg-[#060A10] flex-wrap">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <span className="text-xl">{info.icon}</span>
+          <div>
+            <p className="text-xs font-semibold text-white leading-none">{ext.toUpperCase()} — {info.name}</p>
+            <p className="text-[10px] text-[#8B95A9] mt-0.5 truncate">{currentLabel}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+          {/* Toggle viewer */}
+          <button
+            onClick={() => { setMode(m => m === "office" ? "google" : "office"); setLoaded(false); setIframeError(false); }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-lg bg-white/5 border border-white/10 text-[#8B95A9] hover:text-white transition-colors"
+            title="Cambiar visor"
+          >
+            <RefreshCw size={11} />
+            {mode === "office" ? "Usar Google Docs" : "Usar Office Online"}
+          </button>
+          {/* Open in new tab */}
+          <a
+            href={openUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg font-semibold text-white transition-colors"
+            style={{ background: info.color }}
+          >
+            <ExternalLink size={11} />
+            Abrir en {info.name}
+          </a>
+        </div>
+      </div>
+
+      {/* Iframe */}
+      <div className="relative">
+        <AnimatePresence>
+          {!loaded && !iframeError && (
+            <motion.div
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 flex flex-col items-center justify-center bg-[#0D1117]/95 z-10 gap-5 py-20"
+            >
+              <div className="relative w-16 h-16">
+                <div className="absolute inset-0 rounded-full border-2 border-[#00D4AA]/20" />
+                <div className="absolute inset-0 rounded-full border-t-2 border-[#00D4AA] animate-spin" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-white font-medium">Cargando documento…</p>
+                <p className="text-xs text-[#8B95A9] mt-1">
+                  {mode === "office" ? "Microsoft Office Online" : "Google Docs Viewer"}
+                </p>
+              </div>
+              <button
+                onClick={() => { setMode("google"); setLoaded(false); setIframeError(false); retryKey; }}
+                className="text-xs text-[#00D4AA] hover:underline"
+              >
+                ¿Tarda mucho? Prueba con Google Docs
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {iframeError ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-5 px-6 text-center">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-4xl" style={{ background: `${info.color}20` }}>
+              {info.icon}
+            </div>
+            <div>
+              <p className="text-white font-semibold mb-1">Vista previa no disponible</p>
+              <p className="text-[#8B95A9] text-sm max-w-sm">
+                El visor en línea no pudo cargar el documento. Ábrelo directamente en {info.name} o descárgalo.
+              </p>
+            </div>
+            <div className="flex gap-3 flex-wrap justify-center">
+              <a href={openUrl} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white"
+                style={{ background: info.color }}>
+                <ExternalLink size={14} />
+                Abrir en {info.name}
+              </a>
+              <a href={doc.file_url} download={doc.file_name}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-black bg-[#00D4AA]">
+                <Download size={14} />
+                Descargar
+              </a>
+              {mode === "office" && (
+                <button
+                  onClick={() => { setMode("google"); setLoaded(false); setIframeError(false); setRetryKey(k => k + 1); }}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-[#8B95A9] bg-white/5 border border-white/10 hover:text-white transition-colors">
+                  <RefreshCw size={14} />
+                  Probar con Google Docs
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <iframe
+            key={`${mode}-${retryKey}`}
+            src={currentUrl}
+            className="w-full h-[72vh]"
+            title={currentLabel}
+            onLoad={() => setLoaded(true)}
+            onError={() => setIframeError(true)}
+            allow="autoplay"
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function IframeViewer({ url, label, color }: { url: string; label: string; color: string }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -292,8 +550,159 @@ function TypeBadge({ ext, fileType }: { ext: string; fileType: string }) {
   );
 }
 
+/* ─── Comments Section ─── */
+
+interface CommentData {
+  id: string;
+  content: string;
+  created_at: string;
+  agent: { id: string; nick: string; name: string; avatar_url: string | null } | null;
+}
+
+function CommentsSection({ docId }: { docId: string }) {
+  const { data: session } = useSession();
+  const [comments, setComments] = useState<CommentData[]>([]);
+  const [input, setInput] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch(`/api/documents/${docId}/comments`)
+      .then(r => r.json())
+      .then(data => setComments(Array.isArray(data) ? data : []))
+      .catch(() => {});
+
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    try {
+      channel = supabase
+        .channel(`doc-comments-${docId}`)
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "document_comments", filter: `document_id=eq.${docId}` }, async (payload) => {
+          try {
+            const row = payload.new as { id: string; content: string; created_at: string; agent_id: string };
+            const { data: agent } = await supabase.from("agents").select("id, nick, name, avatar_url").eq("id", row.agent_id).single();
+            setComments(prev => {
+              if (prev.some(c => c.id === row.id)) return prev;
+              return [...prev, { id: row.id, content: row.content, created_at: row.created_at, agent: agent ?? null }];
+            });
+          } catch { /* ignore realtime payload errors */ }
+        })
+        .on("postgres_changes", { event: "DELETE", schema: "public", table: "document_comments" }, (payload) => {
+          try {
+            const deleted = payload.old as { id: string };
+            setComments(prev => prev.filter(c => c.id !== deleted.id));
+          } catch { /* ignore */ }
+        })
+        .subscribe();
+    } catch { /* table may not exist yet — comments will still load via API */ }
+
+    return () => { if (channel) supabase.removeChannel(channel).catch(() => {}); };
+  }, [docId]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [comments]);
+
+  async function postComment() {
+    const text = input.trim();
+    if (!text || sending) return;
+    setSending(true);
+    setInput("");
+    const res = await fetch(`/api/documents/${docId}/comments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: text })
+    });
+    setSending(false);
+    if (!res.ok) setInput(text);
+  }
+
+  async function deleteComment(commentId: string) {
+    await fetch(`/api/documents/${docId}/comments`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ commentId })
+    });
+  }
+
+  return (
+    <div className="mt-6 rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center gap-2 px-5 py-3.5 border-b border-white/8">
+        <MessageSquare size={15} className="text-[#00D4AA]" />
+        <span className="text-sm font-semibold text-white">Comentarios</span>
+        {comments.length > 0 && (
+          <span className="ml-auto text-xs text-[#8B95A9]">{comments.length}</span>
+        )}
+      </div>
+
+      {/* List */}
+      <div className="max-h-80 overflow-y-auto px-5 py-4 space-y-4">
+        {comments.length === 0 ? (
+          <p className="text-center text-sm text-[#8B95A9]/60 py-6">Sin comentarios aún. ¡Sé el primero!</p>
+        ) : (
+          comments.map(comment => {
+            const isOwn = comment.agent?.id === session?.user.id;
+            const isAdmin = session?.user.role === "admin";
+            return (
+              <div key={comment.id} className="flex items-start gap-3 group">
+                <div className="w-7 h-7 rounded-full bg-[#00D4AA]/15 border border-[#00D4AA]/20 flex items-center justify-center text-[10px] font-bold text-[#00D4AA] shrink-0 mt-0.5">
+                  {comment.agent ? initials(comment.agent.name) : "?"}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 mb-0.5">
+                    <span className="text-xs font-semibold text-white">{comment.agent?.name ?? "?"}</span>
+                    <span className="text-[10px] text-[#8B95A9]">@{comment.agent?.nick ?? "?"}</span>
+                    <span className="text-[10px] text-[#8B95A9]/40 ml-auto">{formatTime(comment.created_at)}</span>
+                  </div>
+                  <p className="text-sm text-[#CBD5E1] leading-relaxed break-words">{comment.content}</p>
+                </div>
+                {(isOwn || isAdmin) && (
+                  <button
+                    onClick={() => deleteComment(comment.id)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity text-[#8B95A9] hover:text-red-400 shrink-0 mt-0.5"
+                    title="Eliminar"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                )}
+              </div>
+            );
+          })
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div className="px-5 py-3 border-t border-white/8 flex items-end gap-3">
+        <textarea
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); postComment(); } }}
+          placeholder="Añadir comentario…"
+          maxLength={1000}
+          rows={1}
+          className="flex-1 bg-white/[0.04] border border-white/8 rounded-xl px-3 py-2 text-sm text-white placeholder-[#8B95A9]/60 focus:outline-none focus:border-[#00D4AA]/40 resize-none max-h-24 leading-relaxed"
+          onInput={e => {
+            const t = e.currentTarget;
+            t.style.height = "auto";
+            t.style.height = Math.min(t.scrollHeight, 96) + "px";
+          }}
+        />
+        <button
+          onClick={postComment}
+          disabled={!input.trim() || sending}
+          className="w-8 h-8 rounded-xl bg-[#00D4AA] text-black flex items-center justify-center shrink-0 hover:bg-[#00b894] transition-colors disabled:opacity-40"
+        >
+          {sending ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ─── MAIN ─── */
 export function DocumentViewer({ doc }: DocumentViewerProps) {
+  const [exportingDocx, setExportingDocx] = useState(false);
   const viewMode = detectViewMode(doc);
   const encodedUrl = encodeURIComponent(doc.file_url);
   const googleUrl = `https://docs.google.com/viewer?url=${encodedUrl}&embedded=true`;
@@ -310,14 +719,20 @@ export function DocumentViewer({ doc }: DocumentViewerProps) {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl">
-      {/* Back */}
-      <Link
-        href="/documentos"
-        className="inline-flex items-center gap-2 text-sm text-[#8B95A9] hover:text-white transition-colors mb-6 group"
-      >
-        <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform" />
-        Volver a documentos
-      </Link>
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm mb-6 flex-wrap">
+        <Link
+          href="/documentos"
+          className="inline-flex items-center gap-1.5 text-[#8B95A9] hover:text-white transition-colors group"
+        >
+          <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform" />
+          Documentos
+        </Link>
+        <span className="text-[#8B95A9]/30">/</span>
+        <span className="text-white font-medium truncate max-w-xs md:max-w-none" title={doc.title}>
+          {doc.title}
+        </span>
+      </nav>
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
 
@@ -371,6 +786,25 @@ export function DocumentViewer({ doc }: DocumentViewerProps) {
               <Download size={14} />
               <span>Descargar</span>
             </a>
+            <button
+              onClick={async () => {
+                setExportingDocx(true);
+                try {
+                  await exportToDocx(doc);
+                } catch (err) {
+                  console.error("Export error:", err);
+                  alert("No se pudo exportar el documento. Inténtalo de nuevo.");
+                } finally {
+                  setExportingDocx(false);
+                }
+              }}
+              disabled={exportingDocx}
+              className="flex items-center gap-2 px-4 py-2 text-sm rounded-xl transition-colors flex-1 sm:flex-none justify-center border border-[#C9A84C]/30 text-[#C9A84C] bg-[#C9A84C]/10 hover:bg-[#C9A84C]/20 disabled:opacity-50"
+              title="Exportar como documento Word"
+            >
+              {exportingDocx ? <Loader2 size={14} className="animate-spin" /> : <FileDown size={14} />}
+              <span>Exportar .docx</span>
+            </button>
           </div>
         </div>
 
@@ -396,7 +830,7 @@ export function DocumentViewer({ doc }: DocumentViewerProps) {
           {viewMode === "audio"      && <AudioViewer doc={doc} />}
           {viewMode === "text"       && <TextViewer doc={doc} />}
           {viewMode === "pdf-google" && <IframeViewer url={googleUrl} label={`PDF — ${doc.file_name}`} color="bg-red-400" />}
-          {viewMode === "office"     && <IframeViewer url={officeUrl} label={`Office — ${doc.file_name}`} color="bg-blue-400" />}
+          {viewMode === "office"     && <OfficeViewer doc={doc} />}
           {viewMode === "fallback"   && <FallbackViewer />}
         </div>
 
@@ -407,6 +841,9 @@ export function DocumentViewer({ doc }: DocumentViewerProps) {
             {" · "}Si no carga, usa Descargar.
           </p>
         )}
+
+        {/* Comments */}
+        <CommentsSection docId={doc.id} />
       </motion.div>
     </div>
   );

@@ -1,5 +1,14 @@
 export type AgentRole = "admin" | "agent";
 
+export interface SearchResult {
+  type: "document" | "message" | "workspace_item";
+  id: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  created_at: string;
+}
+
 export interface Agent {
   id: string;
   nick: string;
@@ -52,6 +61,62 @@ export interface DocumentAssignment {
 export interface DocumentWithStatus extends Document {
   seen_at?: string | null;
   is_new?: boolean;
+}
+
+export type QuotationStatus = "draft" | "sent" | "negotiating" | "closed" | "lost";
+
+export interface Quotation {
+  id: string;
+  agent_id: string;
+  client_name: string;
+  client_email: string | null;
+  client_phone: string | null;
+  client_sector: string | null;
+  has_web: boolean;
+  client_web_url: string | null;
+  plan_id: string;
+  plan_name: string;
+  plan_price: number;
+  extras: { id: string; nombre: string; precio: number }[];
+  services: { id: string; nombre: string; precio: number }[];
+  total_once: number;
+  total_monthly: number;
+  status: QuotationStatus;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  agent?: { nick: string; name: string };
+}
+
+export interface Channel {
+  id: string;
+  name: string;
+  description: string | null;
+  color: string;
+  is_default: boolean;
+  created_at: string;
+}
+
+export interface Notification {
+  id: string;
+  agent_id: string;
+  type: "doc_assigned" | "message" | "quotation" | "system";
+  title: string;
+  body: string | null;
+  href: string | null;
+  read_at: string | null;
+  created_at: string;
+}
+
+export interface QuotationTemplate {
+  id: string;
+  agent_id: string;
+  name: string;
+  plan_id: string;
+  plan_price: number;
+  extras: { id: string; nombre: string; precio: number }[];
+  services: { id: string; nombre: string; precio: number }[];
+  created_at: string;
 }
 
 export interface WorkspaceFolder {

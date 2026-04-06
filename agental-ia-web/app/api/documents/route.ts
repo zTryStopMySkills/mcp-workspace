@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
+import { audit } from "@/lib/audit";
+import { notifyMany } from "@/lib/notify";
 
 // GET /api/documents — documentos para el agente actual
 export async function GET() {
@@ -15,7 +17,8 @@ export async function GET() {
     .from("documents")
     .select("*, creator:created_by(nick, name)")
     .eq("visibility", "all")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(200);
 
   if (e1) return NextResponse.json({ error: e1.message }, { status: 500 });
 
@@ -23,7 +26,8 @@ export async function GET() {
   const { data: assigned, error: e2 } = await supabaseAdmin
     .from("document_assignments")
     .select("seen_at, document:document_id(*, creator:created_by(nick, name))")
-    .eq("agent_id", agentId);
+    .eq("agent_id", agentId)
+    .limit(200);
 
   if (e2) return NextResponse.json({ error: e2.message }, { status: 500 });
 
@@ -58,6 +62,10 @@ export async function POST(req: NextRequest) {
   if (!title || !file_url || !file_name || !file_type) {
     return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 });
   }
+  if (typeof title !== "string" || title.length > 200)
+    return NextResponse.json({ error: "Título demasiado largo (máx. 200 caracteres)" }, { status: 400 });
+  if (Array.isArray(agent_ids) && agent_ids.length > 100)
+    return NextResponse.json({ error: "Máximo 100 agentes por documento" }, { status: 400 });
 
   const { data: doc, error } = await supabaseAdmin
     .from("documents")
@@ -76,14 +84,28 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Si es específico, crear asignaciones
+  // Si es específico, crear asignaciones y notificar
   if (visibility === "specific" && Array.isArray(agent_ids) && agent_ids.length > 0) {
     const assignments = agent_ids.map((aid: string) => ({
       document_id: doc.id,
       agent_id: aid
     }));
     await supabaseAdmin.from("document_assignments").insert(assignments);
+    notifyMany(agent_ids, {
+      type: "doc_assigned",
+      title: "Nuevo documento asignado",
+      body: title,
+      href: `/documentos/${doc.id}`,
+    });
   }
+
+  audit({
+    actorId: session.user.id,
+    action: "document_uploaded",
+    targetType: "document",
+    targetId: doc.id,
+    details: { title, file_name, file_type, visibility, agent_count: agent_ids?.length ?? 0 }
+  });
 
   return NextResponse.json(doc, { status: 201 });
 }

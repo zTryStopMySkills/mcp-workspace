@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trash2, ExternalLink, Pin, PinOff } from "lucide-react";
+import { Trash2, ExternalLink, Pin, PinOff, Check } from "lucide-react";
 import Link from "next/link";
 import type { WorkspaceItem } from "@/types";
 import { fileTypeIcon, fileTypeBadgeColor, formatDate, formatFileSize } from "@/lib/utils";
@@ -15,13 +15,16 @@ export const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 
 interface ItemCardProps {
   item: WorkspaceItem;
+  selected?: boolean;
+  selectionMode?: boolean;
+  onSelect?: () => void;
   onDelete: () => void;
   onOpen: () => void;
   onPin: () => void;
   onStatusChange: (s: string) => void;
 }
 
-export function ItemCard({ item, onDelete, onOpen, onPin, onStatusChange }: ItemCardProps) {
+export function ItemCard({ item, selected, selectionMode, onSelect, onDelete, onOpen, onPin, onStatusChange }: ItemCardProps) {
   const doc = item.document;
   if (!doc) return null;
 
@@ -34,8 +37,30 @@ export function ItemCard({ item, onDelete, onOpen, onPin, onStatusChange }: Item
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
-      className="group relative flex flex-col gap-3 p-4 bg-white/[0.03] hover:bg-white/[0.06] border border-white/8 hover:border-white/15 rounded-xl transition-all"
+      onClick={() => { if (selectionMode && onSelect) onSelect(); }}
+      className={`group relative flex flex-col gap-3 p-4 border rounded-xl transition-all ${
+        selectionMode ? "cursor-pointer" : ""
+      } ${
+        selected
+          ? "bg-[#00D4AA]/10 border-[#00D4AA]/40 ring-1 ring-[#00D4AA]/30"
+          : "bg-white/[0.03] hover:bg-white/[0.06] border-white/8 hover:border-white/15"
+      }`}
     >
+      {/* Checkbox */}
+      {onSelect && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onSelect(); }}
+          className={`absolute top-2 right-2 transition-all z-10 ${
+            selected || selectionMode ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`}
+        >
+          <div className={`w-4 h-4 rounded-md border-2 flex items-center justify-center transition-colors ${
+            selected ? "bg-[#00D4AA] border-[#00D4AA]" : "border-white/30 bg-black/40 hover:border-[#00D4AA]/60"
+          }`}>
+            {selected && <Check size={9} className="text-black" strokeWidth={3} />}
+          </div>
+        </button>
+      )}
       {/* Pin indicator */}
       {item.pinned && (
         <div className="absolute top-2 left-2">

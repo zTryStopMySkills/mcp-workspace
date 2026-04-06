@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   MessageCircle,
@@ -16,9 +17,12 @@ import {
   ChevronRight,
   BookOpen,
   GraduationCap,
-  Monitor
+  Monitor,
+  Shield,
+  Calculator
 } from "lucide-react";
 import { initials } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 interface SidebarProps {
   open: boolean;
@@ -30,6 +34,7 @@ const agentLinks = [
   { href: "/chat", label: "Chat Comunidad", icon: MessageCircle },
   { href: "/documentos", label: "Documentos", icon: FolderOpen },
   { href: "/workspace", label: "Mi Escritorio", icon: Monitor },
+  { href: "/tarificador", label: "Tarificador", icon: Calculator },
   { href: "/curso", label: "Curso Comercial", icon: GraduationCap },
   { href: "/guia", label: "Guía de uso", icon: BookOpen }
 ];
@@ -37,13 +42,83 @@ const agentLinks = [
 const adminLinks = [
   { href: "/admin", label: "Panel Admin", icon: LayoutDashboard },
   { href: "/admin/agentes", label: "Agentes", icon: Users },
-  { href: "/admin/documentos", label: "Subir Docs", icon: Upload }
+  { href: "/admin/documentos", label: "Subir Docs", icon: Upload },
+  { href: "/admin/audit", label: "Auditoría", icon: Shield }
 ];
+
+const CHAT_SEEN_KEY = "agental_chat_last_seen";
 
 export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const isAdmin = session?.user.role === "admin";
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadDocsCount, setUnreadDocsCount] = useState(0);
+
+  // Track unread messages: compare latest message timestamp vs last visit
+  useEffect(() => {
+    const lastSeen = localStorage.getItem(CHAT_SEEN_KEY) ?? new Date(0).toISOString();
+
+    // Initial count from API
+    supabase
+      .from("messages")
+      .select("id", { count: "exact", head: true })
+      .gt("created_at", lastSeen)
+      .then(({ count }) => setUnreadCount(count ?? 0));
+
+    // Realtime: increment badge on new message if not on chat page
+    const channel = supabase
+      .channel("sidebar-messages")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, () => {
+        const currentPath = window.location.pathname;
+        if (currentPath !== "/chat") {
+          setUnreadCount((n) => n + 1);
+        }
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  // Reset badge when entering chat
+  useEffect(() => {
+    if (pathname === "/chat") {
+      localStorage.setItem(CHAT_SEEN_KEY, new Date().toISOString());
+      setUnreadCount(0);
+    }
+  }, [pathname]);
+
+  // Track unread documents
+  const fetchUnreadDocs = () => {
+    fetch("/api/documents/unread-count")
+      .then((r) => r.json())
+      .then((data) => setUnreadDocsCount(data.count ?? 0))
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    fetchUnreadDocs();
+
+    // Realtime: refetch cuando llega un doc nuevo o una asignación nueva
+    const channel = supabase
+      .channel("sidebar-docs")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "documents" }, () => {
+        if (window.location.pathname !== "/documentos") fetchUnreadDocs();
+      })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "document_assignments" }, () => {
+        if (window.location.pathname !== "/documentos") fetchUnreadDocs();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  // Reset badge cuando entra a documentos
+  useEffect(() => {
+    if (pathname === "/documentos") {
+      setUnreadDocsCount(0);
+    }
+  }, [pathname]);
 
   const content = (
     <div className="flex flex-col h-full">
@@ -82,6 +157,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         {agentLinks.map((link) => {
           const Icon = link.icon;
           const active = pathname === link.href || pathname.startsWith(link.href + "/");
+          const isChat = link.href === "/chat";
+          const isDocs = link.href === "/documentos";
           return (
             <Link
               key={link.href}
@@ -95,6 +172,16 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             >
               <Icon size={18} />
               {link.label}
+              {isChat && unreadCount > 0 && !active && (
+                <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-indigo-500 text-white text-[10px] font-bold flex items-center justify-center">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+              {isDocs && unreadDocsCount > 0 && !active && (
+                <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-[#C9A84C] text-black text-[10px] font-bold flex items-center justify-center">
+                  {unreadDocsCount > 99 ? "99+" : unreadDocsCount}
+                </span>
+              )}
               {active && <ChevronRight size={14} className="ml-auto text-[#00D4AA]/70" />}
             </Link>
           );
@@ -132,13 +219,15 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       {/* User section */}
       <div className="px-3 py-4 border-t border-white/8">
         <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/[0.04] border border-white/8">
-          <div className="w-9 h-9 rounded-full bg-[#00D4AA]/20 border border-[#00D4AA]/30 flex items-center justify-center text-xs font-bold text-[#00D4AA] shrink-0">
-            {session?.user.name ? initials(session.user.name) : "?"}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">{session?.user.name}</p>
-            <p className="text-xs text-[#8B95A9]">@{session?.user.nick}</p>
-          </div>
+          <Link href="/perfil" onClick={onClose} className="flex items-center gap-3 flex-1 min-w-0 group">
+            <div className="w-9 h-9 rounded-full bg-[#00D4AA]/20 border border-[#00D4AA]/30 flex items-center justify-center text-xs font-bold text-[#00D4AA] shrink-0 group-hover:border-[#00D4AA]/60 transition-colors">
+              {session?.user.name ? initials(session.user.name) : "?"}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-white truncate group-hover:text-[#00D4AA] transition-colors">{session?.user.name}</p>
+              <p className="text-xs text-[#8B95A9]">@{session?.user.nick}</p>
+            </div>
+          </Link>
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
             className="text-[#8B95A9] hover:text-red-400 transition-colors shrink-0"

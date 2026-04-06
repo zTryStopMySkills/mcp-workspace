@@ -4,6 +4,10 @@ import bcrypt from "bcryptjs";
 import { supabaseAdmin } from "./supabase";
 import type { AgentRole } from "@/types";
 
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error("NEXTAUTH_SECRET no está configurado. Añádelo al archivo .env.local");
+}
+
 // Extend NextAuth session types
 declare module "next-auth" {
   interface Session {

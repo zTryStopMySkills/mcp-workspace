@@ -24,10 +24,15 @@ export function formatFileSize(bytes: number | null): string {
 
 export function getFileType(fileName: string, mimeType?: string): FileType {
   const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
-  if (["pdf"].includes(ext)) return "pdf";
+  if (ext === "pdf") return "pdf";
   if (["jpg", "jpeg", "png", "gif", "webp", "svg", "avif"].includes(ext)) return "image";
   if (["mp4", "webm", "mov", "avi", "mkv"].includes(ext)) return "video";
-  if (["txt", "md", "csv", "doc", "docx", "xls", "xlsx", "ppt", "pptx"].includes(ext)) return "text";
+  if (["txt", "md", "csv", "json", "xml", "html", "htm", "js", "ts", "py", "css", "log"].includes(ext)) return "text";
+  if (["doc", "docx", "xls", "xlsx", "ppt", "pptx", "odt", "ods", "odp"].includes(ext)) return "other";
+  if (mimeType?.startsWith("image/")) return "image";
+  if (mimeType?.startsWith("video/")) return "video";
+  if (mimeType?.startsWith("text/")) return "text";
+  if (mimeType === "application/pdf") return "pdf";
   return "other";
 }
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
+import { audit } from "@/lib/audit";
 
 // PATCH /api/agents/[id] — activar/desactivar o cambiar contraseña (solo admin)
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -30,5 +31,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Audit
+  const action = typeof body.is_active === "boolean"
+    ? (body.is_active ? "agent_activated" : "agent_deactivated")
+    : body.password ? "agent_password_changed" : "agent_updated";
+  audit({ actorId: session.user.id, action, targetType: "agent", targetId: id, details: { nick: data?.nick } });
+
   return NextResponse.json(data);
 }

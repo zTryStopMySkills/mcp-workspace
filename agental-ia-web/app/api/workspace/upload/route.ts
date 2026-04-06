@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { rateLimit } from "@/lib/rateLimit";
 
 function getFileType(name: string, mime: string): string {
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
@@ -26,10 +27,37 @@ export async function POST(req: NextRequest) {
 
   if (!file) return NextResponse.json({ error: "No se recibió ningún archivo" }, { status: 400 });
 
+  // Rate limit: 20 uploads per minute per user
+  const rl = rateLimit({ key: `ws-upload:${session.user.id}`, limit: 20, windowSec: 60 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Demasiadas subidas. Espera un momento." }, { status: 429 });
+  }
+
+  // Validate MIME type — block executables and risky types
+  const blockedMimes = [
+    "application/x-msdownload", "application/x-executable", "application/x-sh",
+    "application/x-bat", "application/x-msdos-program", "application/java-archive",
+    "text/x-script.python", "application/x-httpd-php"
+  ];
+  if (blockedMimes.includes(file.type)) {
+    return NextResponse.json({ error: "Tipo de archivo no permitido" }, { status: 400 });
+  }
+  // Also block by extension
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  const blockedExts = ["exe", "bat", "sh", "cmd", "msi", "ps1", "php", "py", "rb", "jar", "com", "scr"];
+  if (blockedExts.includes(ext)) {
+    return NextResponse.json({ error: "Extensión de archivo no permitida" }, { status: 400 });
+  }
+
+  const MAX_SIZE = 50 * 1024 * 1024; // 50 MB
+  if (file.size > MAX_SIZE) {
+    return NextResponse.json({ error: `El archivo supera el límite de 50 MB (${(file.size / 1024 / 1024).toFixed(1)} MB)` }, { status: 400 });
+  }
+
   const supabase = getSupabaseAdmin();
 
   // Sanitize filename
-  const ext = file.name.split(".").pop() ?? "bin";
+  const fileExt = file.name.split(".").pop() ?? "bin";
   const safeName = file.name
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-zA-Z0-9._-]/g, "_");

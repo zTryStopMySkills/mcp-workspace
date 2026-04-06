@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, LayoutDashboard, MessageCircle, FolderOpen, Users, Upload, LogIn, LogOut, Bell, Download, Eye, Shield } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, MessageCircle, FolderOpen, Users, Upload, LogIn, LogOut, Download, Eye, Shield, Monitor, FolderPlus, CheckSquare } from "lucide-react";
 
 const sections = [
   {
@@ -84,6 +84,104 @@ const sections = [
   }
 ];
 
+const workspaceSections = [
+  {
+    id: "escritorio-intro",
+    icon: Monitor,
+    color: "teal",
+    title: "Mi Escritorio — qué es y cómo funciona",
+    steps: [
+      { emoji: "🗂️", text: "**Mi Escritorio** es tu espacio personal para organizar documentos en carpetas" },
+      { emoji: "📁", text: "Puedes crear **carpetas** y **subcarpetas** sin límite de profundidad" },
+      { emoji: "📨", text: "El administrador puede enviarte documentos directamente — llegarán a tu carpeta **Recibidos**" },
+      { emoji: "🟢", text: "Los documentos nuevos sin abrir muestran el badge **NUEVO**" },
+      { emoji: "📌", text: "Puedes **anclar** documentos importantes para que aparezcan siempre arriba" },
+      { emoji: "🔍", text: "Usa la **barra de búsqueda** para encontrar carpetas o documentos por nombre al instante" }
+    ]
+  },
+  {
+    id: "escritorio-vistas",
+    icon: Eye,
+    color: "teal",
+    title: "Las tres vistas del Escritorio",
+    steps: [
+      { emoji: "⊞", text: "**Vista Cuadrícula** — tarjetas grandes con icono de carpeta o tipo de documento. Ideal para navegar" },
+      { emoji: "☰", text: "**Vista Lista** — tabla compacta con nombre, estado, fecha y tamaño. Ideal para gestionar muchos docs" },
+      { emoji: "📋", text: "**Vista Tablero** (Kanban) — columnas por estado: Nuevo / Revisado / Pendiente / Completado" },
+      { emoji: "🖱️", text: "En el Tablero puedes **arrastrar tarjetas** entre columnas para cambiar el estado" },
+      { emoji: "💾", text: "El portal **recuerda tu última vista** — cada vez que entres estará como la dejaste" }
+    ]
+  },
+  {
+    id: "escritorio-carpetas",
+    icon: FolderPlus,
+    color: "teal",
+    title: "Crear y gestionar carpetas",
+    steps: [
+      { emoji: "1️⃣", text: "Haz clic en **\"Nueva carpeta\"** (botón arriba a la derecha)" },
+      { emoji: "2️⃣", text: "Escribe el nombre de la carpeta y elige un **color** para identificarla" },
+      { emoji: "3️⃣", text: "Haz clic en **\"Crear\"** — aparece al instante en tu escritorio" },
+      { emoji: "✏️", text: "Para **renombrar**: pasa el ratón por encima → menú de 3 puntos (⋮) → Renombrar" },
+      { emoji: "🗑️", text: "Para **eliminar**: menú de 3 puntos → Eliminar (borra también todo su contenido)" },
+      { emoji: "📂", text: "Haz doble clic (o clic) en una carpeta para **entrar** en ella y ver su contenido" },
+      { emoji: "🔼", text: "Usa el **breadcrumb** (Inicio > Carpeta > Subcarpeta) para navegar hacia atrás" }
+    ]
+  },
+  {
+    id: "escritorio-subir",
+    icon: Upload,
+    color: "teal",
+    title: "Subir archivos y crear documentos",
+    steps: [
+      { emoji: "📤", text: "**Subir archivo**: entra en una carpeta → botón **\"Subir\"** → arrastra o selecciona tus archivos" },
+      { emoji: "📝", text: "**Nuevo documento**: botón **\"Nuevo doc\"** → elige formato (TXT, Markdown o HTML) y escribe el contenido" },
+      { emoji: "👁️", text: "En modo Markdown puedes alternar entre **Editor** y **Vista previa**" },
+      { emoji: "✅", text: "Los archivos que tú subes son **privados** — solo tú los ves, el admin no tiene acceso" },
+      { emoji: "⚠️", text: "Para subir archivos debes estar dentro de una carpeta. No se puede subir desde el inicio" }
+    ]
+  },
+  {
+    id: "escritorio-estado",
+    icon: CheckSquare,
+    color: "teal",
+    title: "Estados de documentos",
+    steps: [
+      { emoji: "🟢", text: "**Nuevo** — documento que aún no has abierto" },
+      { emoji: "⚪", text: "**Visto** — se marca automáticamente la primera vez que abres el documento" },
+      { emoji: "🟡", text: "**Pendiente** — marcado por ti, significa que tienes algo pendiente con ese doc" },
+      { emoji: "✅", text: "**Completado** — marcado por ti, tarea o revisión completada" },
+      { emoji: "🔄", text: "Cambia el estado desde el **desplegable** en la tarjeta, en la lista, o arrastrando en el Tablero" }
+    ]
+  },
+  {
+    id: "escritorio-bulk",
+    icon: CheckSquare,
+    color: "teal",
+    title: "Selección múltiple (bulk)",
+    steps: [
+      { emoji: "☑️", text: "Pasa el ratón por encima de cualquier carpeta o documento — aparece un **checkbox**" },
+      { emoji: "🖱️", text: "Haz clic en el checkbox para seleccionar. Selecciona tantos como quieras a la vez" },
+      { emoji: "⬇️", text: "Aparece la **barra de acciones** en la parte inferior de la pantalla" },
+      { emoji: "📁", text: "**Mover** — mueve los documentos seleccionados a otra carpeta (no aplica a carpetas)" },
+      { emoji: "🔄", text: "**Estado** — cambia el estado de todos los documentos seleccionados de una vez" },
+      { emoji: "🗑️", text: "**Eliminar** — borra todos los elementos seleccionados (carpetas y documentos)" },
+      { emoji: "✓", text: "Haz clic en el contador de la barra para **seleccionar todo** lo visible, o en ✕ para cancelar" }
+    ]
+  },
+  {
+    id: "escritorio-notas",
+    icon: MessageCircle,
+    color: "teal",
+    title: "Notas rápidas",
+    steps: [
+      { emoji: "📝", text: "En la **página de inicio** del Escritorio (sin entrar en ninguna carpeta) hay un bloc de notas" },
+      { emoji: "💾", text: "Las notas se **guardan automáticamente** mientras escribes — no hay botón de guardar" },
+      { emoji: "☁️", text: "Tus notas se sincronizan — están disponibles desde cualquier dispositivo" },
+      { emoji: "🔒", text: "Las notas son **privadas** — solo tú las ves" }
+    ]
+  }
+];
+
 const adminSections = [
   {
     id: "crear-agente",
@@ -125,6 +223,21 @@ const adminSections = [
       { emoji: "🟢", text: "Para **restaurar el acceso**, haz clic de nuevo en el toggle" },
       { emoji: "📊", text: "El **Panel Admin** muestra cuántos agentes activos, documentos y mensajes hay en total" }
     ]
+  },
+  {
+    id: "enviar-escritorio",
+    icon: Monitor,
+    color: "amber",
+    title: "Enviar documentos al Escritorio de un agente",
+    steps: [
+      { emoji: "1️⃣", text: "Ve a **Admin → Documentos** en el menú lateral" },
+      { emoji: "2️⃣", text: "Localiza el documento que quieres enviar en la tabla" },
+      { emoji: "3️⃣", text: "Haz clic en el botón **\"📤 Escritorio\"** de esa fila" },
+      { emoji: "4️⃣", text: "Selecciona el **agente** al que quieres enviarlo en el desplegable" },
+      { emoji: "5️⃣", text: "Haz clic en **\"Enviar\"** — el documento llegará a la carpeta **Recibidos** del agente" },
+      { emoji: "🟢", text: "El agente verá el badge **NUEVO** en su escritorio hasta que lo abra" },
+      { emoji: "📤", text: "También puedes enviar al escritorio **al subir** un documento nuevo — usa la opción al final del formulario de subida" }
+    ]
   }
 ];
 
@@ -133,7 +246,8 @@ const colorMap: Record<string, { bg: string; border: string; text: string; icon:
   purple: { bg: "bg-purple-600/10", border: "border-purple-500/20", text: "text-purple-300", icon: "text-purple-400" },
   amber:  { bg: "bg-amber-500/10",  border: "border-amber-500/20",  text: "text-amber-300",  icon: "text-amber-400"  },
   green:  { bg: "bg-green-600/10",  border: "border-green-500/20",  text: "text-green-300",  icon: "text-green-400"  },
-  rose:   { bg: "bg-rose-600/10",   border: "border-rose-500/20",   text: "text-rose-300",   icon: "text-rose-400"   }
+  rose:   { bg: "bg-rose-600/10",   border: "border-rose-500/20",   text: "text-rose-300",   icon: "text-rose-400"   },
+  teal:   { bg: "bg-[#00D4AA]/10",  border: "border-[#00D4AA]/20",  text: "text-[#00D4AA]",  icon: "text-[#00D4AA]"  }
 };
 
 function parseText(text: string) {
@@ -208,6 +322,18 @@ export default function GuiaPage() {
           </div>
         </div>
 
+        {/* Mi Escritorio */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-xl">🖥️</span>
+            <h2 className="text-xl font-bold text-white">Mi Escritorio</h2>
+          </div>
+          <p className="text-slate-500 text-sm mb-6">Gestiona tus documentos en carpetas, usa las tres vistas y organiza tu trabajo diario.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {workspaceSections.map((s, i) => <GuideSection key={s.id} section={s} index={i} />)}
+          </div>
+        </div>
+
         {/* Solo admin */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-2">
@@ -239,7 +365,7 @@ export default function GuiaPage() {
         </motion.div>
 
         <p className="text-center text-slate-700 text-xs mt-8">
-          © {new Date().getFullYear()} Agental.IA — Guía de uso v1.0
+          © {new Date().getFullYear()} Agental.IA — Guía de uso v2.0
         </p>
       </div>
     </div>

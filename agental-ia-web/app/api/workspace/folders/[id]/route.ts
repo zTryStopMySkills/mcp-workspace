@@ -11,12 +11,34 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const body = await req.json();
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
 
-  if (body.name !== undefined) updates.name = body.name.trim();
-  if (body.color !== undefined) updates.color = body.color;
+  if (body.name !== undefined) {
+    const name = String(body.name).trim();
+    if (!name || name.length > 100)
+      return NextResponse.json({ error: "Nombre inválido (máx. 100 caracteres)" }, { status: 400 });
+    updates.name = name;
+  }
+  if (body.color !== undefined) {
+    if (!/^#[0-9A-Fa-f]{6}$/.test(body.color))
+      return NextResponse.json({ error: "Color inválido (formato #RRGGBB)" }, { status: 400 });
+    updates.color = body.color;
+  }
   if (body.sort_order !== undefined) updates.sort_order = body.sort_order;
   if (body.parent_id !== undefined) updates.parent_id = body.parent_id;
 
   const supabase = getSupabaseAdmin();
+
+  // Validate that parent_id belongs to this agent (prevent moving into foreign folders)
+  if (body.parent_id) {
+    const { data: parentFolder } = await supabase
+      .from("workspace_folders")
+      .select("id")
+      .eq("id", body.parent_id)
+      .eq("agent_id", session.user.id)
+      .single();
+    if (!parentFolder) {
+      return NextResponse.json({ error: "Carpeta destino no válida" }, { status: 400 });
+    }
+  }
   const { data, error } = await supabase
     .from("workspace_folders")
     .update(updates)

@@ -28,10 +28,26 @@ export async function PATCH(req: Request) {
   const body = await req.json();
   const supabase = getSupabaseAdmin();
 
+  const VALID_VIEWS = ["grid", "list", "board"];
+  const VALID_SORTS = ["date-desc", "date-asc", "name-asc", "name-desc"];
+  const MAX_NOTES = 50_000;
+
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
-  if (body.workspace_view !== undefined) updates.workspace_view = body.workspace_view;
-  if (body.workspace_sort !== undefined) updates.workspace_sort = body.workspace_sort;
-  if (body.quick_notes !== undefined) updates.quick_notes = body.quick_notes;
+  if (body.workspace_view !== undefined) {
+    if (!VALID_VIEWS.includes(body.workspace_view))
+      return NextResponse.json({ error: "Vista no válida" }, { status: 400 });
+    updates.workspace_view = body.workspace_view;
+  }
+  if (body.workspace_sort !== undefined) {
+    if (!VALID_SORTS.includes(body.workspace_sort))
+      return NextResponse.json({ error: "Orden no válido" }, { status: 400 });
+    updates.workspace_sort = body.workspace_sort;
+  }
+  if (body.quick_notes !== undefined) {
+    if (typeof body.quick_notes !== "string" || body.quick_notes.length > MAX_NOTES)
+      return NextResponse.json({ error: `Las notas no pueden superar ${MAX_NOTES} caracteres` }, { status: 400 });
+    updates.quick_notes = body.quick_notes;
+  }
 
   const { data, error } = await supabase
     .from("agent_preferences")

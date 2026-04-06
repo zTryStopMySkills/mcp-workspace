@@ -32,35 +32,44 @@ export function UploadModal({ folderId, onUploaded, onClose }: UploadModalProps)
     setUploading(true);
     setProgress({ current: 0, total: files.length });
 
-    for (let i = 0; i < files.length; i++) {
-      setProgress({ current: i + 1, total: files.length });
-      const fd = new FormData();
-      fd.append("file", files[i]);
-      fd.append("folder_id", folderId);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        setProgress({ current: i + 1, total: files.length });
+        const fd = new FormData();
+        fd.append("file", files[i]);
+        fd.append("folder_id", folderId);
 
-      const res = await fetch("/api/workspace/upload", { method: "POST", body: fd });
-      const data = await res.json();
+        const res = await fetch("/api/workspace/upload", { method: "POST", body: fd });
+        const data = await res.json();
 
-      if (!res.ok) {
-        setError(`Error en "${files[i].name}": ${data.error ?? "Error desconocido"}`);
-        setUploading(false);
-        return;
+        if (!res.ok) {
+          setError(`Error en "${files[i].name}": ${data.error ?? "Error desconocido"}`);
+          return;
+        }
+
+        // Build a minimal WorkspaceItem to update UI
+        if (data.id) {
+          onUploaded({ id: `tmp-${Date.now()}`, folder_id: folderId, agent_id: "", document_id: data.id, sent_by: null, seen_at: new Date().toISOString(), status: "reviewed", pinned: false, created_at: new Date().toISOString(), document: data } as WorkspaceItem);
+        }
       }
-
-      // Build a minimal WorkspaceItem to update UI
-      if (data.id) {
-        onUploaded({ id: `tmp-${Date.now()}`, folder_id: folderId, agent_id: "", document_id: data.id, sent_by: null, seen_at: new Date().toISOString(), status: "reviewed", pinned: false, created_at: new Date().toISOString(), document: data } as WorkspaceItem);
-      }
+      onClose();
+    } catch {
+      setError("Error inesperado al subir. Inténtalo de nuevo.");
+    } finally {
+      setUploading(false);
     }
+  }
 
-    setUploading(false);
+  function handleClose() {
+    setError("");
+    setFiles([]);
     onClose();
   }
 
   return (
     <>
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        onClick={onClose} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
+        onClick={handleClose} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
       <motion.div
         initial={{ opacity: 0, scale: 0.92, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -73,7 +82,7 @@ export function UploadModal({ folderId, onUploaded, onClose }: UploadModalProps)
               <Upload size={16} className="text-[#00D4AA]" />
               <h2 className="font-semibold text-white">Subir archivos</h2>
             </div>
-            <button onClick={onClose} className="text-slate-400 hover:text-white"><X size={18} /></button>
+            <button onClick={handleClose} className="text-slate-400 hover:text-white"><X size={18} /></button>
           </div>
 
           {!folderId && (
@@ -114,7 +123,7 @@ export function UploadModal({ folderId, onUploaded, onClose }: UploadModalProps)
           {error && <p className="text-xs text-red-400 mb-3">{error}</p>}
 
           <div className="flex gap-2">
-            <button onClick={onClose} className="flex-1 py-2.5 text-sm text-slate-400 bg-white/5 border border-white/10 rounded-xl hover:text-white transition-colors">
+            <button onClick={handleClose} className="flex-1 py-2.5 text-sm text-slate-400 bg-white/5 border border-white/10 rounded-xl hover:text-white transition-colors">
               Cancelar
             </button>
             <button

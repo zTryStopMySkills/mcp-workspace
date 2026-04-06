@@ -23,7 +23,8 @@ export default async function DashboardPage() {
   const { data: assignments } = await supabaseAdmin
     .from("document_assignments")
     .select("document_id, seen_at")
-    .eq("agent_id", agentId);
+    .eq("agent_id", agentId)
+    .limit(200);
 
   const seenMap = new Map((assignments ?? []).map((a) => [a.document_id, a.seen_at]));
 
