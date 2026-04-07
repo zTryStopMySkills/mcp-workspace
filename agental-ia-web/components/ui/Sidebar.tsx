@@ -26,7 +26,8 @@ import {
   Building2,
   Globe,
   Star,
-  BadgeDollarSign
+  BadgeDollarSign,
+  Sparkles
 } from "lucide-react";
 import { initials } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
@@ -43,6 +44,7 @@ const agentLinks = [
   { href: "/documentos", label: "Documentos", icon: FolderOpen },
   { href: "/workspace", label: "Mi Escritorio", icon: Monitor },
   { href: "/tarificador", label: "Tarificador", icon: Calculator },
+  { href: "/ia", label: "IA Comercial", icon: Sparkles },
   { href: "/clientes", label: "Clientes", icon: Building2 },
   { href: "/comisiones", label: "Mis Comisiones", icon: BadgeDollarSign },
   { href: "/curso", label: "Curso Comercial", icon: GraduationCap },
@@ -68,6 +70,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   const isAdmin = session?.user.role === "admin";
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadDocsCount, setUnreadDocsCount] = useState(0);
+  const [overdueCount, setOverdueCount] = useState(0);
 
   // Track unread messages: compare latest message timestamp vs last visit
   useEffect(() => {
@@ -101,6 +104,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       setUnreadCount(0);
     }
   }, [pathname]);
+
+  // Fetch overdue follow-ups count for IA badge
+  useEffect(() => {
+    fetch("/api/ia/context")
+      .then((r) => r.json())
+      .then((d) => setOverdueCount(d.overdueCount ?? 0))
+      .catch(() => {});
+  }, []);
 
   // Track unread documents
   const fetchUnreadDocs = () => {
@@ -173,6 +184,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           const active = pathname === link.href || pathname.startsWith(link.href + "/");
           const isChat = link.href === "/chat";
           const isDocs = link.href === "/documentos";
+          const isIA = link.href === "/ia";
           return (
             <div key={link.href}>
               <Link
@@ -194,6 +206,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 {isDocs && unreadDocsCount > 0 && !active && (
                   <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-[#C9A84C] text-black text-[10px] font-bold flex items-center justify-center">
                     {unreadDocsCount > 99 ? "99+" : unreadDocsCount}
+                  </span>
+                )}
+                {isIA && overdueCount > 0 && !active && (
+                  <span className="ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                    {overdueCount > 9 ? "9+" : overdueCount}
                   </span>
                 )}
                 {active && <ChevronRight size={14} className="ml-auto text-[#00D4AA]/70" />}

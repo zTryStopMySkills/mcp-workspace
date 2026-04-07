@@ -93,8 +93,10 @@ export default async function AdminPage() {
 
   // Agent billing this month
   const agentBillingMap = new Map<string, { nick: string; name: string; amount: number; count: number }>();
-  (agentBillingData ?? []).forEach((q: { agent_id: string; total_once: number; agent: { nick: string; name: string } | null }) => {
-    const prev = agentBillingMap.get(q.agent_id) ?? { nick: q.agent?.nick ?? "?", name: q.agent?.name ?? "?", amount: 0, count: 0 };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (agentBillingData ?? []).forEach((q: any) => {
+    const agent = Array.isArray(q.agent) ? q.agent[0] : q.agent;
+    const prev = agentBillingMap.get(q.agent_id) ?? { nick: agent?.nick ?? "?", name: agent?.name ?? "?", amount: 0, count: 0 };
     agentBillingMap.set(q.agent_id, { ...prev, amount: prev.amount + (q.total_once ?? 0), count: prev.count + 1 });
   });
   const agentBilling = [...agentBillingMap.values()]
@@ -117,10 +119,11 @@ export default async function AdminPage() {
   const landingSlots = landingSlotsData ? parseInt((landingSlotsData as { value: string }).value, 10) : 3;
 
   // All quotations for CSV export
-  const allQuotationsForExport = (agentBillingData ?? []).map((q: { agent_id: string; total_once: number; agent: { nick: string; name: string } | null }) => ({
-    client_name: "", client_sector: null, plan_name: "", total_once: q.total_once ?? 0, status: "closed",
-    created_at: new Date().toISOString(), agent_nick: q.agent?.nick ?? "?",
-  }));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const allQuotationsForExport = (agentBillingData ?? []).map((q: any) => {
+    const agent = Array.isArray(q.agent) ? q.agent[0] : q.agent;
+    return { client_name: "", client_sector: null, plan_name: "", total_once: q.total_once ?? 0, status: "closed", created_at: new Date().toISOString(), agent_nick: agent?.nick ?? "?" };
+  });
 
   // Top 5 agents by message count (last 7 days)
   const agentMsgMap = new Map<string, number>();

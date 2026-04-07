@@ -6,6 +6,7 @@ import { Sidebar } from "./Sidebar";
 import { GlobalSearch } from "./GlobalSearch";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { DocToast } from "./DocToast";
+import { IAWidget } from "@/components/ia/IAWidget";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -33,6 +34,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
       <DocToast />
+      <IAWidget />
     </div>
   );
 }
