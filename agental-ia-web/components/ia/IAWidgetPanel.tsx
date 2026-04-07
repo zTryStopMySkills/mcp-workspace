@@ -102,7 +102,7 @@ function MiniCoachTab({
       const res = await fetch("/api/ia/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: q, agentStats, teamStats, overdueCount: overdueCount ?? 0 }),
+        body: JSON.stringify({ question: q }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error");

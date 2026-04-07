@@ -2,68 +2,81 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { rateLimitAsync } from "@/lib/rateLimit";
-import type { AgentStats, TeamStats } from "@/types/ia";
+import { assembleAgentContext } from "@/lib/ia/assembleContext";
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json({ error: "IA no configurada" }, { status: 503 });
-  }
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json({ error: "IA no configurada" }, { status: 503 });
+    }
 
-  const rl = await rateLimitAsync({ key: `ia:coach:${session.user.id}`, limit: 5, windowSec: 60 });
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "Demasiadas consultas. Espera un momento." }, { status: 429 });
-  }
+    const rl = await rateLimitAsync({ key: `ia:coach:${session.user.id}`, limit: 5, windowSec: 60 });
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Demasiadas consultas. Espera un momento." }, { status: 429 });
+    }
 
-  const body = await req.json() as { question?: string; agentStats: AgentStats; teamStats: TeamStats; overdueCount: number };
-  const { question, agentStats, teamStats, overdueCount } = body;
+    const body = await req.json().catch(() => ({})) as { question?: string };
+    const question = body.question ?? undefined;
 
-  const { Anthropic } = await import("@anthropic-ai/sdk");
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    // Fetch data server-side — never rely on client-sent stats
+    const context = await assembleAgentContext(
+      session.user.id,
+      session.user.name,
+      session.user.nick
+    );
+    const { agentStats, teamStats, overdueFollowUps } = context;
+    const overdueCount = overdueFollowUps.length;
 
-  const statsContext = `
+    const fmt = (n: number) => n.toLocaleString("es-ES");
+
+    const statsContext = `
 DATOS DEL AGENTE (${agentStats.agentName}, @${agentStats.agentNick}):
 - Propuestas totales: ${agentStats.total}
 - Propuestas cerradas: ${agentStats.closed}
 - Tasa de cierre: ${agentStats.closeRate}%
-- Pipeline activo (valor): ${agentStats.pipeline.toLocaleString("es-ES")}€
-- Mes anterior: ${agentStats.prevClosed} cerradas, ${agentStats.prevPipeline.toLocaleString("es-ES")}€ pipeline
-- Objetivo mensual: ${agentStats.monthlyTarget ? agentStats.monthlyTarget.toLocaleString("es-ES") + "€" : "No definido"}
-- Facturado este mes: ${agentStats.monthClosedAmount.toLocaleString("es-ES")}€
-- Tasa de comisión: ${agentStats.commissionRate !== null ? agentStats.commissionRate + "%" : "No configurada"}
-- Posición en el ranking del equipo: #${agentStats.rankingPosition} de ${teamStats.totalAgents}
+- Pipeline activo: ${fmt(agentStats.pipeline)}€
+- Mes anterior: ${agentStats.prevClosed} cerradas, ${fmt(agentStats.prevPipeline)}€ pipeline
+- Objetivo mensual: ${agentStats.monthlyTarget ? fmt(agentStats.monthlyTarget) + "€" : "No definido"}
+- Facturado este mes: ${fmt(agentStats.monthClosedAmount)}€
+- Comisión: ${agentStats.commissionRate !== null ? agentStats.commissionRate + "%" : "No configurada"}
+- Posición ranking: #${agentStats.rankingPosition} de ${teamStats.totalAgents}
 - Seguimientos vencidos: ${overdueCount}
 
 MEDIA DEL EQUIPO:
 - Tasa de cierre media: ${teamStats.avgCloseRate}%
-- Pipeline medio por agente: ${teamStats.avgPipeline.toLocaleString("es-ES")}€
+- Pipeline medio: ${fmt(teamStats.avgPipeline)}€
 `.trim();
 
-  const systemPrompt = `Eres "Coach IA", un coach especialista en rendimiento comercial para agentes que venden servicios web y digitales.
+    const systemPrompt = `Eres "Coach IA", especialista en rendimiento comercial para agentes que venden servicios web.
+Hablas en español, tono motivador y directo.
+Analiza los datos y da 3-5 consejos específicos y accionables comparando al agente con la media del equipo.
+Si hay pregunta, respóndela en contexto de los datos.
+Usa markdown con secciones (## título, listas con -). Máximo 400 palabras.`;
 
-Hablas en español, en primera persona, con tono motivador y directo.
-Tienes acceso a los datos reales del agente para este periodo.
+    const userMessage = question
+      ? `${statsContext}\n\nPregunta: ${question}`
+      : `${statsContext}\n\nDame un análisis de mi rendimiento y consejos para mejorar.`;
 
-Tu misión: analizar los datos y dar entre 3 y 5 consejos específicos y accionables, comparando el rendimiento del agente con la media del equipo.
-- Si hay pregunta explícita, respóndela en el contexto de los datos.
-- Si no hay pregunta, da un análisis proactivo: puntos fuertes, áreas de mejora y próximas acciones concretas.
-- Usa markdown con secciones claras (## título, listas con -).
-- Sé honesto pero constructivo. Máximo 400 palabras salvo que se pida más.
-- No inventes datos que no estén en el contexto proporcionado.`;
+    const { Anthropic } = await import("@anthropic-ai/sdk");
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-  const userMessage = question
-    ? `${statsContext}\n\nPregunta del agente: ${question}`
-    : `${statsContext}\n\nDame un análisis completo de mi rendimiento y consejos para mejorar.`;
+    const response = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userMessage }],
+    });
 
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 1024,
-    system: systemPrompt,
-    messages: [{ role: "user", content: userMessage }],
-  });
-
-  const text = response.content.find((c) => c.type === "text")?.text ?? "";
-  return NextResponse.json({ text });
+    const text = response.content.find((c) => c.type === "text")?.text ?? "";
+    return NextResponse.json({ text });
+  } catch (err) {
+    console.error("[ia/coach] error:", err);
+    return NextResponse.json(
+      { error: "Error interno. Inténtalo de nuevo." },
+      { status: 500 }
+    );
+  }
 }

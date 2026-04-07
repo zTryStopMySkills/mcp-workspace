@@ -29,7 +29,7 @@ export function CoachTab({ agentStats, teamStats, overdueCount }: CoachTabProps)
       const res = await fetch("/api/ia/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: q, agentStats, teamStats, overdueCount }),
+        body: JSON.stringify({ question: q }),
       });
 
       const data = await res.json();
