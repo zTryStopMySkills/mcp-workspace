@@ -83,7 +83,7 @@ export default function Footer() {
               ¿Prefieres hablar directamente? Escríbenos por WhatsApp y te respondemos en minutos.
             </p>
             <a
-              href="https://wa.me/34600000000?text=Hola,%20me%20interesa%20una%20web%20para%20mi%20negocio"
+              href="https://wa.me/34747493618?text=Hola,%20me%20interesa%20una%20web%20para%20mi%20negocio"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#25D366] text-white font-semibold px-5 py-3 rounded-xl text-sm hover:bg-[#25D366]/85 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#25D366]/20"

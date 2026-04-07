@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const WA_URL = "https://wa.me/34600000000?text=Hola%2C%20me%20interesa%20una%20web%20para%20mi%20negocio.%20%C2%BFPod%C3%A9is%20darme%20m%C3%A1s%20info%3F";
+const WA_URL = "https://wa.me/34747493618?text=Hola%2C%20me%20interesa%20una%20web%20para%20mi%20negocio.%20%C2%BFPod%C3%A9is%20darme%20m%C3%A1s%20info%3F";
 
 export default function FloatingWhatsApp() {
   const [visible, setVisible] = useState(false);
