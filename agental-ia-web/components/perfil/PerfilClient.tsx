@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import { Camera, Save, Lock, User, CheckCircle, XCircle, Loader2, TrendingUp, Phone } from "lucide-react";
+import { Camera, Save, Lock, User, Mail, CheckCircle, XCircle, Loader2, TrendingUp, Phone } from "lucide-react";
 import { initials } from "@/lib/utils";
 
 interface PerfilData {
@@ -12,6 +12,7 @@ interface PerfilData {
   role: string;
   avatar_url: string | null;
   created_at: string;
+  email?: string | null;
 }
 
 interface Props {
@@ -27,6 +28,7 @@ export function PerfilClient({ perfil, agentStats, waTemplate: initialWaTemplate
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState(perfil.name);
+  const [email, setEmail] = useState(perfil.email ?? "");
   const [avatarUrl, setAvatarUrl] = useState(perfil.avatar_url);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
@@ -88,7 +90,7 @@ export function PerfilClient({ perfil, agentStats, waTemplate: initialWaTemplate
     const res = await fetch("/api/agents/me", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: name.trim() })
+      body: JSON.stringify({ name: name.trim(), email: email.trim() || null })
     });
     const data = await res.json();
     setSavingProfile(false);
@@ -213,6 +215,22 @@ export function PerfilClient({ perfil, agentStats, waTemplate: initialWaTemplate
             />
           </div>
 
+          <div>
+            <label className="block text-sm font-medium text-[#8B95A9] mb-1.5">
+              <Mail size={13} className="inline mr-1.5" />
+              Email de notificaciones
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              maxLength={200}
+              className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#00D4AA]/50 focus:bg-white/[0.07] transition-all"
+              placeholder="tu@gmail.com"
+            />
+            <p className="text-xs text-slate-500 mt-1.5">Recibirás un email cuando llegue un nuevo lead desde la landing</p>
+          </div>
+
           {profileMsg && (
             <div className={`flex items-center gap-2 text-sm ${profileMsg.ok ? "text-emerald-400" : "text-red-400"}`}>
               {profileMsg.ok ? <CheckCircle size={15} /> : <XCircle size={15} />}
@@ -222,7 +240,7 @@ export function PerfilClient({ perfil, agentStats, waTemplate: initialWaTemplate
 
           <button
             onClick={handleSaveProfile}
-            disabled={savingProfile || !name.trim() || name === perfil.name}
+            disabled={savingProfile || !name.trim() || (name === perfil.name && email.trim() === (perfil.email ?? ""))}
             className="flex items-center gap-2 px-5 py-2.5 bg-[#00D4AA] text-black font-semibold text-sm rounded-xl hover:bg-[#00b894] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {savingProfile ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}

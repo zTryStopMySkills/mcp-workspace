@@ -11,7 +11,7 @@ export async function GET() {
 
   const { data, error } = await supabaseAdmin
     .from("agents")
-    .select("id, nick, name, role, avatar_url, created_at")
+    .select("id, nick, name, role, avatar_url, created_at, email")
     .eq("id", session.user.id)
     .single();
 
@@ -25,15 +25,19 @@ export async function PATCH(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await req.json();
-  const { name, current_password, new_password } = body;
+  const { name, email, current_password, new_password } = body;
 
-  const updates: Record<string, string> = {};
+  const updates: Record<string, string | null> = {};
 
   if (name !== undefined) {
     if (typeof name !== "string" || name.trim().length < 1 || name.trim().length > 100) {
       return NextResponse.json({ error: "El nombre debe tener entre 1 y 100 caracteres" }, { status: 400 });
     }
     updates.name = name.trim();
+  }
+
+  if (email !== undefined) {
+    updates.email = email?.trim() || null;
   }
 
   if (new_password !== undefined) {

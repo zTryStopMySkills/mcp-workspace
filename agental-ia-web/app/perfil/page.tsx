@@ -11,7 +11,7 @@ export default async function PerfilPage() {
 
   const { data: perfil } = await supabaseAdmin
     .from("agents")
-    .select("nick, name, role, avatar_url, created_at")
+    .select("nick, name, role, avatar_url, created_at, email")
     .eq("id", session.user.id)
     .single();
 
