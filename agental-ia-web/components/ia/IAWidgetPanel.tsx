@@ -104,18 +104,9 @@ function MiniCoachTab({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: q, agentStats, teamStats, overdueCount: overdueCount ?? 0 }),
       });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error ?? "Error");
-      }
-      const reader = res.body?.getReader();
-      const decoder = new TextDecoder();
-      if (!reader) throw new Error("Sin respuesta");
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        setText((prev) => prev + decoder.decode(value, { stream: true }));
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Error");
+      setText(data.text ?? "");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error desconocido");
     } finally {

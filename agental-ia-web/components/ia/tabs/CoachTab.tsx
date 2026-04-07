@@ -32,20 +32,9 @@ export function CoachTab({ agentStats, teamStats, overdueCount }: CoachTabProps)
         body: JSON.stringify({ question: q, agentStats, teamStats, overdueCount }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error ?? "Error al conectar con la IA");
-      }
-
-      const reader = res.body?.getReader();
-      const decoder = new TextDecoder();
-      if (!reader) throw new Error("Sin respuesta");
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        setStreamedText((prev) => prev + decoder.decode(value, { stream: true }));
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Error al conectar con la IA");
+      setStreamedText(data.text ?? "");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error desconocido");
     } finally {
@@ -117,10 +106,8 @@ export function CoachTab({ agentStats, teamStats, overdueCount }: CoachTabProps)
         </h3>
 
         {error && <IAErrorAlert message={error} onRetry={() => fetchCoach()} />}
-        {isLoading && !streamedText && <IALoadingDots />}
-        {(streamedText || (isLoading && streamedText)) && (
-          <IAResponseBlock text={streamedText} isStreaming={isLoading} />
-        )}
+        {isLoading && <IALoadingDots />}
+        {streamedText && <IAResponseBlock text={streamedText} />}
       </div>
 
       {/* Free question */}
