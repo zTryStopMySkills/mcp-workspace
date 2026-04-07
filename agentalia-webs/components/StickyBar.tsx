@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, X } from "lucide-react";
 
-export default function StickyBar() {
+const MONTH_NAMES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+export default function StickyBar({ slots = 3 }: { slots?: number }) {
+  const currentMonth = MONTH_NAMES[new Date().getMonth()];
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -41,7 +44,10 @@ export default function StickyBar() {
               {/* Text */}
               <div className="flex-1 min-w-0">
                 <p className="text-white text-sm font-semibold leading-tight">
-                  Plazas limitadas para mayo
+                  {slots > 0
+                    ? `${slots === 1 ? "¡Última plaza" : `Solo ${slots} plazas`} para ${currentMonth}`
+                    : "Lista de espera para el próximo mes"
+                  }
                 </p>
                 <p className="text-[#8B95A9] text-xs mt-0.5 hidden sm:block">
                   Tu web lista en 7 días. Presupuesto gratis y sin compromiso.

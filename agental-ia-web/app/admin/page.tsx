@@ -40,6 +40,7 @@ export default async function AdminPage() {
     { data: billingData },
     { data: agentBillingData },
     { data: funnelData },
+    { data: landingSlotsData },
   ] = await Promise.all([
     supabaseAdmin.from("agents").select("id", { count: "exact", head: true }).eq("is_active", true),
     supabaseAdmin.from("documents").select("id", { count: "exact", head: true }),
@@ -56,6 +57,8 @@ export default async function AdminPage() {
     supabaseAdmin.from("quotations").select("agent_id, total_once, agent:agent_id(nick, name)").eq("status", "closed").gte("updated_at", currentMonth + "-01"),
     // Funnel: all quotations counts by status
     supabaseAdmin.from("quotations").select("status"),
+    // Landing slots
+    supabaseAdmin.from("landing_config").select("value").eq("key", "slots_available").single(),
   ]);
 
   // Build daily message counts for last 7 days
@@ -110,6 +113,8 @@ export default async function AdminPage() {
   const funnel = statusOrder
     .filter(s => s !== "lost")
     .map(s => ({ status: s, label: statusLabels[s], count: statusCounts.get(s) ?? 0, color: statusColors[s] }));
+
+  const landingSlots = landingSlotsData ? parseInt((landingSlotsData as { value: string }).value, 10) : 3;
 
   // All quotations for CSV export
   const allQuotationsForExport = (agentBillingData ?? []).map((q: { agent_id: string; total_once: number; agent: { nick: string; name: string } | null }) => ({
@@ -202,6 +207,7 @@ export default async function AdminPage() {
           agentBilling={agentBilling}
           funnel={funnel}
           allQuotations={allQuotationsForExport}
+          landingSlots={isNaN(landingSlots) ? 3 : landingSlots}
         />
 
         {/* Últimos docs + Quick links */}

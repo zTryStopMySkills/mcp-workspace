@@ -53,7 +53,10 @@ function MagneticButton({ children, onClick, className }: { children: React.Reac
   );
 }
 
-export default function Hero() {
+const MONTH_NAMES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+export default function Hero({ slots = 3 }: { slots?: number }) {
+  const currentMonth = MONTH_NAMES[new Date().getMonth()];
   const { scrollY } = useScroll();
 
   const bgY        = useTransform(scrollY, [0, 600], [0, 120]);
@@ -131,10 +134,20 @@ export default function Hero() {
             <Sparkles size={14} className="text-[#00D4AA]" />
             <span className="text-[#00D4AA] text-sm font-semibold">Agencia web para negocios locales</span>
           </span>
-          <span className="inline-flex items-center gap-1.5 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-full px-4 py-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse" />
-            <span className="text-[#C9A84C] text-xs font-bold">Plazas limitadas para mayo</span>
-          </span>
+          {slots > 0 && (
+            <span className="inline-flex items-center gap-1.5 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-full px-4 py-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse" />
+              <span className="text-[#C9A84C] text-xs font-bold">
+                {slots === 1 ? "¡Última plaza" : `Solo ${slots} plazas`} para {currentMonth}
+              </span>
+            </span>
+          )}
+          {slots === 0 && (
+            <span className="inline-flex items-center gap-1.5 bg-slate-500/10 border border-slate-500/30 rounded-full px-4 py-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+              <span className="text-slate-400 text-xs font-bold">Lista de espera abierta</span>
+            </span>
+          )}
         </motion.div>
 
         {/* Headline word by word */}

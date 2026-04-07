@@ -15,8 +15,9 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import StickyBar from "@/components/StickyBar";
+import Garantia from "@/components/Garantia";
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 async function getApprovedReviews() {
   try {
@@ -32,19 +33,37 @@ async function getApprovedReviews() {
   }
 }
 
+async function getSlotsAvailable(): Promise<number> {
+  try {
+    const { data } = await supabaseAdmin
+      .from("landing_config")
+      .select("value")
+      .eq("key", "slots_available")
+      .single();
+    const n = data ? parseInt(data.value, 10) : 3;
+    return isNaN(n) ? 3 : n;
+  } catch {
+    return 3;
+  }
+}
+
 export default async function HomePage() {
-  const reviews = await getApprovedReviews();
+  const [reviews, slots] = await Promise.all([
+    getApprovedReviews(),
+    getSlotsAvailable(),
+  ]);
 
   return (
     <main>
       <Navbar />
-      <Hero />
+      <Hero slots={slots} />
       <StatsBar />
       <ScrollHighlightText />
       <BentoStack />
       <HowItWorks />
       <Portafolio />
       <DeviceShowcase />
+      <Garantia />
       <QuoteFormWrapper />
       <ServiciosMensuales />
       <Extras />
@@ -52,7 +71,7 @@ export default async function HomePage() {
       <FAQ />
       <Footer />
       <FloatingWhatsApp />
-      <StickyBar />
+      <StickyBar slots={slots} />
     </main>
   );
 }

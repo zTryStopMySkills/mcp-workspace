@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState } from "react";
 import Link from "next/link";
-import { TrendingUp, CheckCircle2, Send, MessageCircle, Clock, XCircle, Download } from "lucide-react";
+import { TrendingUp, CheckCircle2, Send, MessageCircle, Clock, XCircle, Download, Globe, Loader2, Check } from "lucide-react";
 
 interface DayCount { label: string; count: number; }
 interface MonthBilling { label: string; amount: number; }
@@ -22,9 +23,71 @@ interface Props {
   agentBilling?: AgentBilling[];
   funnel?: FunnelStep[];
   allQuotations?: { client_name: string; client_sector: string | null; plan_name: string; total_once: number; status: string; created_at: string; agent_nick: string }[];
+  landingSlots?: number;
 }
 
-export function AdminDashboardClient({ dailyMessages, topAgents, monthlyBilling = [], agentBilling = [], funnel = [], allQuotations = [] }: Props) {
+function LandingSlotsWidget({ initialSlots }: { initialSlots: number }) {
+  const [slots, setSlots] = useState(initialSlots);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaved(false);
+    try {
+      const res = await fetch("/api/admin/landing-slots", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slots }),
+      });
+      if (res.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2500);
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.35 }}
+      className="bg-white/[0.03] border border-white/8 rounded-2xl p-5"
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <Globe size={15} className="text-[#00D4AA]" />
+        <span className="text-sm font-semibold text-white">Plazas disponibles (landing)</span>
+      </div>
+      <p className="text-xs text-[#8B95A9] mb-4 leading-relaxed">
+        Controla cuántas plazas se muestran en la landing pública.
+        <br />
+        <span className="text-slate-500">-1 = ocultar badge · 0 = lista de espera · 1-99 = plazas reales</span>
+      </p>
+      <div className="flex items-center gap-3">
+        <input
+          type="number"
+          min={-1}
+          max={99}
+          value={slots}
+          onChange={e => setSlots(parseInt(e.target.value) || 0)}
+          className="w-24 bg-white/[0.05] border border-white/10 rounded-xl px-3 py-2 text-white text-sm text-center focus:outline-none focus:border-[#00D4AA]/50 transition-all"
+        />
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="flex items-center gap-2 px-4 py-2 bg-[#00D4AA] text-black font-semibold text-sm rounded-xl hover:bg-[#00b894] transition-colors disabled:opacity-50"
+        >
+          {saving ? <Loader2 size={13} className="animate-spin" /> : saved ? <Check size={13} /> : <Globe size={13} />}
+          {saved ? "Guardado" : "Actualizar"}
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+export function AdminDashboardClient({ dailyMessages, topAgents, monthlyBilling = [], agentBilling = [], funnel = [], allQuotations = [], landingSlots = 3 }: Props) {
   const maxMsg = Math.max(...dailyMessages.map(d => d.count), 1);
   const maxAgent = Math.max(...topAgents.map(a => a.count), 1);
   const maxBilling = Math.max(...monthlyBilling.map(m => m.amount), 1);
@@ -250,6 +313,9 @@ export function AdminDashboardClient({ dailyMessages, topAgents, monthlyBilling 
           </div>
         </motion.div>
       )}
+
+      {/* Landing slots widget */}
+      <LandingSlotsWidget initialSlots={landingSlots} />
     </div>
   );
 }
