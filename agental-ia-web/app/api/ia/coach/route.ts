@@ -73,9 +73,10 @@ Usa markdown con secciones (## título, listas con -). Máximo 400 palabras.`;
     const text = response.content.find((c) => c.type === "text")?.text ?? "";
     return NextResponse.json({ text });
   } catch (err) {
-    console.error("[ia/coach] error:", err);
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[ia/coach] error:", msg);
     return NextResponse.json(
-      { error: "Error interno. Inténtalo de nuevo." },
+      { error: `Error: ${msg}` },
       { status: 500 }
     );
   }
