@@ -5,7 +5,7 @@ import { DashboardLayout } from "@/components/ui/DashboardLayout";
 import { AdminDashboardClient } from "@/components/admin/AdminDashboardClient";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Users, FolderOpen, MessageCircle, Upload, TrendingUp, Eye, UserPlus, FileText, Hash } from "lucide-react";
+import { Users, FolderOpen, MessageCircle, Upload, TrendingUp, Eye, UserPlus, FileText, Hash, Globe, Star } from "lucide-react";
 
 function dayLabel(d: Date) {
   return d.toLocaleDateString("es-ES", { weekday: "short" });
@@ -20,6 +20,13 @@ export default async function AdminPage() {
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
 
+  const currentMonth = now.toISOString().slice(0, 7);
+
+  // Last 6 months for billing chart
+  const sixMonthsAgo = new Date(now);
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+  sixMonthsAgo.setDate(1);
+
   const [
     { count: activeAgents },
     { count: totalDocs },
@@ -29,7 +36,10 @@ export default async function AdminPage() {
     { count: messages24h },
     { data: recentMsgs },
     { data: recentDocs },
-    { data: docsSeenWeek }
+    { data: docsSeenWeek },
+    { data: billingData },
+    { data: agentBillingData },
+    { data: funnelData },
   ] = await Promise.all([
     supabaseAdmin.from("agents").select("id", { count: "exact", head: true }).eq("is_active", true),
     supabaseAdmin.from("documents").select("id", { count: "exact", head: true }),
@@ -39,7 +49,13 @@ export default async function AdminPage() {
     supabaseAdmin.from("messages").select("id", { count: "exact", head: true }).gte("created_at", yesterday),
     supabaseAdmin.from("messages").select("created_at, agent_id").gte("created_at", sevenDaysAgo).order("created_at"),
     supabaseAdmin.from("documents").select("id, title, file_type, created_at").order("created_at", { ascending: false }).limit(5),
-    supabaseAdmin.from("document_assignments").select("id", { count: "exact", head: true }).gte("seen_at", sevenDaysAgo).not("seen_at", "is", null)
+    supabaseAdmin.from("document_assignments").select("id", { count: "exact", head: true }).gte("seen_at", sevenDaysAgo).not("seen_at", "is", null),
+    // Closed quotations last 6 months for billing chart
+    supabaseAdmin.from("quotations").select("total_once, updated_at").eq("status", "closed").gte("updated_at", sixMonthsAgo.toISOString()),
+    // Agent billing this month
+    supabaseAdmin.from("quotations").select("agent_id, total_once, agent:agent_id(nick, name)").eq("status", "closed").gte("updated_at", currentMonth + "-01"),
+    // Funnel: all quotations counts by status
+    supabaseAdmin.from("quotations").select("status"),
   ]);
 
   // Build daily message counts for last 7 days
@@ -53,6 +69,53 @@ export default async function AdminPage() {
     const slot = days.find(x => x.date === d);
     if (slot) slot.count++;
   });
+
+  // Monthly billing chart (last 6 months)
+  const monthlyBillingMap = new Map<string, number>();
+  for (let i = 0; i < 6; i++) {
+    const d = new Date(now);
+    d.setMonth(d.getMonth() - (5 - i));
+    monthlyBillingMap.set(d.toISOString().slice(0, 7), 0);
+  }
+  (billingData ?? []).forEach(q => {
+    const m = q.updated_at.slice(0, 7);
+    if (monthlyBillingMap.has(m)) {
+      monthlyBillingMap.set(m, (monthlyBillingMap.get(m) ?? 0) + (q.total_once ?? 0));
+    }
+  });
+  const monthlyBilling = [...monthlyBillingMap.entries()].map(([month, amount]) => ({
+    label: new Date(month + "-01").toLocaleDateString("es-ES", { month: "short" }),
+    amount,
+  }));
+
+  // Agent billing this month
+  const agentBillingMap = new Map<string, { nick: string; name: string; amount: number; count: number }>();
+  (agentBillingData ?? []).forEach((q: { agent_id: string; total_once: number; agent: { nick: string; name: string } | null }) => {
+    const prev = agentBillingMap.get(q.agent_id) ?? { nick: q.agent?.nick ?? "?", name: q.agent?.name ?? "?", amount: 0, count: 0 };
+    agentBillingMap.set(q.agent_id, { ...prev, amount: prev.amount + (q.total_once ?? 0), count: prev.count + 1 });
+  });
+  const agentBilling = [...agentBillingMap.values()]
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 8)
+    .map(a => ({ nick: a.nick, name: a.name, closedAmount: a.amount, closedCount: a.count }));
+
+  // Funnel
+  const statusOrder = ["draft", "sent", "negotiating", "closed", "lost"];
+  const statusLabels: Record<string, string> = { draft: "Borrador", sent: "Enviada", negotiating: "Negociando", closed: "Cerrada", lost: "Perdida" };
+  const statusColors: Record<string, string> = { draft: "#64748b", sent: "#60a5fa", negotiating: "#fbbf24", closed: "#00D4AA", lost: "#f87171" };
+  const statusCounts = new Map<string, number>();
+  (funnelData ?? []).forEach((q: { status: string }) => {
+    statusCounts.set(q.status, (statusCounts.get(q.status) ?? 0) + 1);
+  });
+  const funnel = statusOrder
+    .filter(s => s !== "lost")
+    .map(s => ({ status: s, label: statusLabels[s], count: statusCounts.get(s) ?? 0, color: statusColors[s] }));
+
+  // All quotations for CSV export
+  const allQuotationsForExport = (agentBillingData ?? []).map((q: { agent_id: string; total_once: number; agent: { nick: string; name: string } | null }) => ({
+    client_name: "", client_sector: null, plan_name: "", total_once: q.total_once ?? 0, status: "closed",
+    created_at: new Date().toISOString(), agent_nick: q.agent?.nick ?? "?",
+  }));
 
   // Top 5 agents by message count (last 7 days)
   const agentMsgMap = new Map<string, number>();
@@ -132,7 +195,14 @@ export default async function AdminPage() {
         </div>
 
         {/* Charts */}
-        <AdminDashboardClient dailyMessages={days} topAgents={topAgents} />
+        <AdminDashboardClient
+          dailyMessages={days}
+          topAgents={topAgents}
+          monthlyBilling={monthlyBilling}
+          agentBilling={agentBilling}
+          funnel={funnel}
+          allQuotations={allQuotationsForExport}
+        />
 
         {/* Últimos docs + Quick links */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -186,6 +256,24 @@ export default async function AdminPage() {
               <div>
                 <p className="text-sm font-semibold text-white">Canales de chat</p>
                 <p className="text-xs text-[#8B95A9]">Crear y gestionar canales del equipo</p>
+              </div>
+            </Link>
+            <Link href="/admin/leads" className="flex items-center gap-4 p-4 bg-white/[0.03] border border-white/8 rounded-xl hover:bg-white/[0.06] transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center shrink-0">
+                <Globe size={18} className="text-blue-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">Leads web</p>
+                <p className="text-xs text-[#8B95A9]">Solicitudes desde la landing Agentalia-webs</p>
+              </div>
+            </Link>
+            <Link href="/admin/resenas" className="flex items-center gap-4 p-4 bg-white/[0.03] border border-white/8 rounded-xl hover:bg-white/[0.06] transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-[#C9A84C]/20 border border-[#C9A84C]/30 flex items-center justify-center shrink-0">
+                <Star size={18} className="text-[#C9A84C]" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">Reseñas</p>
+                <p className="text-xs text-[#8B95A9]">Aprobar o rechazar reseñas de clientes</p>
               </div>
             </Link>
           </div>

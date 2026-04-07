@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, MessageCircle, Loader2, ImageIcon, WifiOff, ChevronUp, Sparkles, Hash } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { Message, Channel } from "@/types";
-import { MessageBubble } from "./MessageBubble";
+import { MessageBubble, type ReactionGroup } from "./MessageBubble";
 
 interface ChatWindowProps {
   initialMessages: Message[];
@@ -14,6 +14,7 @@ interface ChatWindowProps {
   currentAgentId: string;
   currentAgentNick: string;
   currentAgentName: string;
+  agents: { id: string; nick: string; name: string }[];
 }
 
 export function ChatWindow({
@@ -23,6 +24,7 @@ export function ChatWindow({
   currentAgentId,
   currentAgentNick,
   currentAgentName,
+  agents,
 }: ChatWindowProps) {
   const [activeChannelId, setActiveChannelId] = useState<string | null>(initialChannelId);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
@@ -35,6 +37,12 @@ export function ChatWindow({
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(initialMessages.length >= 40);
   const [switchingChannel, setSwitchingChannel] = useState(false);
+  // Reactions: map of message_id -> ReactionGroup[]
+  const [reactions, setReactions] = useState<Record<string, ReactionGroup[]>>({});
+  // Mention autocomplete
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [mentionStart, setMentionStart] = useState(0);
+  const [mentionIdx, setMentionIdx] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -46,6 +54,63 @@ export function ChatWindow({
   }, []);
 
   useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
+
+  // Load reactions for current messages
+  useEffect(() => {
+    if (messages.length === 0) return;
+    const ids = messages.map(m => m.id).join(",");
+    fetch(`/api/reactions?message_ids=${ids}`)
+      .then(r => r.json())
+      .then((data: Record<string, ReactionGroup[]>) => setReactions(data))
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeChannelId]);
+
+  // Realtime reactions
+  useEffect(() => {
+    const channel = supabase
+      .channel("public:message_reactions")
+      .on("postgres_changes", { event: "*", schema: "public", table: "message_reactions" }, () => {
+        // Refresh reactions for visible messages
+        if (messages.length === 0) return;
+        const ids = messages.map(m => m.id).join(",");
+        fetch(`/api/reactions?message_ids=${ids}`)
+          .then(r => r.json())
+          .then((data: Record<string, ReactionGroup[]>) => setReactions(data))
+          .catch(() => {});
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
+
+  async function handleReact(messageId: string, emoji: string) {
+    // Optimistic update
+    setReactions(prev => {
+      const msgReactions = [...(prev[messageId] ?? [])];
+      const existing = msgReactions.find(r => r.emoji === emoji);
+      if (existing) {
+        if (existing.hasMe) {
+          // Remove my reaction
+          const updated = { ...existing, count: existing.count - 1, hasMe: false, agents: existing.agents.filter(id => id !== currentAgentId) };
+          const filtered = updated.count === 0 ? msgReactions.filter(r => r.emoji !== emoji) : msgReactions.map(r => r.emoji === emoji ? updated : r);
+          return { ...prev, [messageId]: filtered };
+        } else {
+          // Add my reaction
+          const updated = { ...existing, count: existing.count + 1, hasMe: true, agents: [...existing.agents, currentAgentId] };
+          return { ...prev, [messageId]: msgReactions.map(r => r.emoji === emoji ? updated : r) };
+        }
+      } else {
+        return { ...prev, [messageId]: [...msgReactions, { emoji, count: 1, hasMe: true, agents: [currentAgentId] }] };
+      }
+    });
+
+    await fetch(`/api/messages/${messageId}/reactions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ emoji }),
+    });
+  }
 
   // Suscripción Supabase Realtime — filtra por canal activo
   useEffect(() => {
@@ -224,6 +289,12 @@ export function ChatWindow({
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (mentionSuggestions.length > 0) {
+      if (e.key === "ArrowDown") { e.preventDefault(); setMentionIdx(i => Math.min(i + 1, mentionSuggestions.length - 1)); return; }
+      if (e.key === "ArrowUp") { e.preventDefault(); setMentionIdx(i => Math.max(i - 1, 0)); return; }
+      if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); insertMention(mentionSuggestions[mentionIdx].nick); return; }
+      if (e.key === "Escape") { setMentionQuery(null); return; }
+    }
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
@@ -241,6 +312,43 @@ export function ChatWindow({
   }, []);
 
   const isBusy = sending || uploadingImage || askingAI;
+
+  // ── Mention autocomplete ──────────────────────────────────────────────
+
+  const mentionSuggestions = mentionQuery !== null
+    ? agents
+        .filter(a => a.nick.toLowerCase().startsWith(mentionQuery.toLowerCase()) && a.id !== currentAgentId)
+        .slice(0, 6)
+    : [];
+
+  function detectMention(text: string, cursorPos: number) {
+    const before = text.slice(0, cursorPos);
+    const match = before.match(/(?:^|[\s\n])@(\w*)$/);
+    if (match) {
+      const start = before.lastIndexOf("@");
+      setMentionStart(start);
+      setMentionQuery(match[1]);
+      setMentionIdx(0);
+    } else {
+      setMentionQuery(null);
+    }
+  }
+
+  function insertMention(nick: string) {
+    const after = input.slice(mentionStart + 1 + (mentionQuery?.length ?? 0));
+    const before = input.slice(0, mentionStart);
+    const newVal = before + "@" + nick + " " + after;
+    setInput(newVal);
+    setMentionQuery(null);
+    setTimeout(() => {
+      const el = inputRef.current;
+      if (el) {
+        const pos = mentionStart + nick.length + 2;
+        el.setSelectionRange(pos, pos);
+        el.focus();
+      }
+    }, 0);
+  }
 
   return (
     <div className="flex h-[calc(100vh-0px)] lg:h-screen">
@@ -387,6 +495,9 @@ export function ChatWindow({
                       showAvatar={mi === 0}
                       currentAgentName={currentAgentName}
                       currentAgentNick={currentAgentNick}
+                      currentAgentId={currentAgentId}
+                      reactions={reactions[msg.id] ?? []}
+                      onReact={handleReact}
                     />
                   ))}
                 </div>
@@ -442,11 +553,28 @@ export function ChatWindow({
 
         {/* Input */}
         <div className="px-4 py-4 border-t border-white/10 bg-[#0A0F1E]/80 backdrop-blur shrink-0">
+          {/* Mention autocomplete dropdown */}
+          {mentionSuggestions.length > 0 && (
+            <div className="mb-2 bg-[#0D1117] border border-white/12 rounded-xl shadow-xl overflow-hidden">
+              {mentionSuggestions.map((a, i) => (
+                <button
+                  key={a.id}
+                  onMouseDown={e => { e.preventDefault(); insertMention(a.nick); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors ${
+                    i === mentionIdx ? "bg-indigo-500/20 text-white" : "text-slate-300 hover:bg-white/5"
+                  }`}
+                >
+                  <span className="text-indigo-400 font-mono text-xs">@{a.nick}</span>
+                  <span className="text-slate-500 text-xs">{a.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
           <div className="flex items-end gap-3 bg-white/5 border border-white/10 rounded-2xl p-3 focus-within:border-indigo-500/50 transition-colors">
             <textarea
               ref={inputRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => { setInput(e.target.value); detectMention(e.target.value, e.target.selectionStart); }}
               onKeyDown={handleKeyDown}
               onPaste={handlePaste}
               placeholder="Escribe un mensaje… · /ia [pregunta] para consultar la IA · Ctrl+V para pegar imágenes"

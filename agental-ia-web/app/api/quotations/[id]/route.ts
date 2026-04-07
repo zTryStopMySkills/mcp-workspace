@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const { id } = await params;
   const body = await req.json();
-  const allowed = ["status", "notes", "client_email", "client_phone"];
+  const allowed = ["status", "notes", "client_email", "client_phone", "follow_up_date"];
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
 
   for (const key of allowed) {

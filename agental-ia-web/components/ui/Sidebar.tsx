@@ -23,7 +23,10 @@ import {
   Hash,
   History,
   Trophy,
-  Building2
+  Building2,
+  Globe,
+  Star,
+  BadgeDollarSign
 } from "lucide-react";
 import { initials } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
@@ -41,6 +44,7 @@ const agentLinks = [
   { href: "/workspace", label: "Mi Escritorio", icon: Monitor },
   { href: "/tarificador", label: "Tarificador", icon: Calculator },
   { href: "/clientes", label: "Clientes", icon: Building2 },
+  { href: "/comisiones", label: "Mis Comisiones", icon: BadgeDollarSign },
   { href: "/curso", label: "Curso Comercial", icon: GraduationCap },
   { href: "/guia", label: "Guía de uso", icon: BookOpen }
 ];
@@ -48,8 +52,11 @@ const agentLinks = [
 const adminLinks = [
   { href: "/admin", label: "Panel Admin", icon: LayoutDashboard },
   { href: "/admin/agentes", label: "Agentes", icon: Users },
+  { href: "/admin/comisiones", label: "Comisiones", icon: BadgeDollarSign },
   { href: "/admin/documentos", label: "Subir Docs", icon: Upload },
   { href: "/admin/canales", label: "Canales", icon: Hash },
+  { href: "/admin/leads", label: "Leads web", icon: Globe },
+  { href: "/admin/resenas", label: "Reseñas", icon: Star },
   { href: "/admin/audit", label: "Auditoría", icon: Shield }
 ];
 
@@ -192,18 +199,32 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 {active && <ChevronRight size={14} className="ml-auto text-[#00D4AA]/70" />}
               </Link>
               {link.href === "/tarificador" && (pathname === "/tarificador" || pathname.startsWith("/tarificador/")) && (
-                <Link
-                  href="/tarificador/historial"
-                  onClick={onClose}
-                  className={`flex items-center gap-2 pl-10 pr-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                    pathname === "/tarificador/historial"
-                      ? "bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20"
-                      : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
-                  }`}
-                >
-                  <History size={13} />
-                  Historial de propuestas
-                </Link>
+                <>
+                  <Link
+                    href="/tarificador/historial"
+                    onClick={onClose}
+                    className={`flex items-center gap-2 pl-10 pr-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                      pathname === "/tarificador/historial"
+                        ? "bg-[#00D4AA]/10 text-[#00D4AA] border border-[#00D4AA]/20"
+                        : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+                    }`}
+                  >
+                    <History size={13} />
+                    Historial de propuestas
+                  </Link>
+                  <Link
+                    href="/tarificador/pipeline"
+                    onClick={onClose}
+                    className={`flex items-center gap-2 pl-10 pr-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                      pathname === "/tarificador/pipeline"
+                        ? "bg-[#C9A84C]/10 text-[#C9A84C] border border-[#C9A84C]/20"
+                        : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+                    }`}
+                  >
+                    <History size={13} />
+                    Pipeline Kanban
+                  </Link>
+                </>
               )}
             </div>
           );

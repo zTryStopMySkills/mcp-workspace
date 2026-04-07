@@ -13,6 +13,7 @@ export default async function DashboardPage() {
   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
   const currentMonth = new Date().toISOString().slice(0, 7);
+  const prevMonth = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().slice(0, 7);
 
   const [
     { data: allDocs },
@@ -20,6 +21,10 @@ export default async function DashboardPage() {
     { count: msgCount },
     { data: quotations },
     { data: targetData },
+    { data: overdueFollowUpsData },
+    { data: prevMonthQuotations },
+    { data: commissionRateData },
+    { data: monthClosedQuotations },
   ] = await Promise.all([
     supabaseAdmin
       .from("documents")
@@ -46,6 +51,31 @@ export default async function DashboardPage() {
       .eq("agent_id", agentId)
       .eq("month", currentMonth)
       .single(),
+    supabaseAdmin
+      .from("quotations")
+      .select("id, client_name, follow_up_date, status, client_phone")
+      .eq("agent_id", agentId)
+      .not("follow_up_date", "is", null)
+      .lte("follow_up_date", new Date().toISOString().slice(0, 10))
+      .not("status", "in", '("closed","lost")')
+      .order("follow_up_date"),
+    supabaseAdmin
+      .from("quotations")
+      .select("id, status, total_once")
+      .eq("agent_id", agentId)
+      .gte("created_at", prevMonth + "-01")
+      .lt("created_at", currentMonth + "-01"),
+    supabaseAdmin
+      .from("commission_rates")
+      .select("rate_percent")
+      .eq("agent_id", agentId)
+      .single(),
+    supabaseAdmin
+      .from("quotations")
+      .select("total_once")
+      .eq("agent_id", agentId)
+      .eq("status", "closed")
+      .gte("updated_at", currentMonth + "-01"),
   ]);
 
   const seenMap = new Map((assignments ?? []).map((a) => [a.document_id, a.seen_at]));
@@ -68,6 +98,17 @@ export default async function DashboardPage() {
 
   const monthlyTarget = targetData?.target_amount ?? null;
 
+  const overdueFollowUps = (overdueFollowUpsData ?? []) as { id: string; client_name: string; follow_up_date: string; client_phone: string | null }[];
+
+  const pmqs = prevMonthQuotations ?? [];
+  const prevMonthStat = {
+    closed: pmqs.filter(q => q.status === "closed").length,
+    pipeline: pmqs.filter(q => !["closed", "lost"].includes(q.status)).reduce((s, q) => s + (q.total_once ?? 0), 0),
+  };
+
+  const commissionRate = commissionRateData?.rate_percent ?? null;
+  const monthClosedAmount = (monthClosedQuotations ?? []).reduce((s, q) => s + (q.total_once ?? 0), 0);
+
   return (
     <DashboardLayout>
       <DashboardClient
@@ -79,6 +120,10 @@ export default async function DashboardPage() {
         recentMessages={msgCount ?? 0}
         quoteStat={quoteStat}
         monthlyTarget={monthlyTarget}
+        overdueFollowUps={overdueFollowUps}
+        prevMonthStat={prevMonthStat}
+        commissionRate={commissionRate}
+        monthClosedAmount={monthClosedAmount}
       />
     </DashboardLayout>
   );

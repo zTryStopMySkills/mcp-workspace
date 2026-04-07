@@ -33,6 +33,13 @@ export default async function ChatPage() {
   const { data: messages } = await messagesQuery
     .then(({ data, error }) => ({ data: (data ?? []).reverse(), error }));
 
+  // Agentes activos para menciones
+  const { data: agents } = await supabaseAdmin
+    .from("agents")
+    .select("id, nick, name")
+    .eq("is_active", true)
+    .order("nick");
+
   return (
     <DashboardLayout>
       <ChatWindow
@@ -42,6 +49,7 @@ export default async function ChatPage() {
         currentAgentId={session.user.id}
         currentAgentNick={session.user.nick}
         currentAgentName={session.user.name}
+        agents={(agents ?? []) as { id: string; nick: string; name: string }[]}
       />
     </DashboardLayout>
   );

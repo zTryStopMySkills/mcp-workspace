@@ -83,6 +83,8 @@ export interface Quotation {
   total_monthly: number;
   status: QuotationStatus;
   notes: string | null;
+  follow_up_date: string | null;
+  share_token: string | null;
   created_at: string;
   updated_at: string;
   agent?: { nick: string; name: string };

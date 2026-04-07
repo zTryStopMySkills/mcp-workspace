@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { rateLimitAsync } from "@/lib/rateLimit";
+import { notifyMany } from "@/lib/notify";
 
 // GET /api/messages?before=<ISO>&limit=40&channel_id=<uuid>
 export async function GET(req: NextRequest) {
@@ -60,5 +61,26 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Detectar menciones y notificar
+  const mentionNicks = [...content.matchAll(/\B@(\w+)/g)].map(m => m[1].toLowerCase());
+  if (mentionNicks.length > 0) {
+    const { data: mentioned } = await supabaseAdmin
+      .from("agents")
+      .select("id, nick")
+      .in("nick", mentionNicks)
+      .eq("is_active", true);
+
+    const ids = (mentioned ?? []).filter(a => a.id !== session.user.id).map(a => a.id);
+    if (ids.length > 0) {
+      notifyMany(ids, {
+        type: "message",
+        title: `@${session.user.nick} te ha mencionado en el chat`,
+        body: content.slice(0, 100),
+        href: "/chat",
+      });
+    }
+  }
+
   return NextResponse.json(data, { status: 201 });
 }

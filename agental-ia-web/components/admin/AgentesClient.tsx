@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Users, ToggleLeft, ToggleRight, Loader2, Eye, EyeOff, ShieldCheck, UserCheck, UserX, KeyRound, X } from "lucide-react";
+import { Plus, Users, ToggleLeft, ToggleRight, Loader2, Eye, EyeOff, ShieldCheck, UserCheck, UserX, KeyRound, X, Target } from "lucide-react";
 import type { Agent } from "@/types";
 import { formatDate, initials } from "@/lib/utils";
 
@@ -23,6 +23,9 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
   const [resetPasswordId, setResetPasswordId] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
+  const [targetAgentId, setTargetAgentId] = useState<string | null>(null);
+  const [targetInput, setTargetInput] = useState("");
+  const [savingTarget, setSavingTarget] = useState(false);
 
   async function createAgent(e: React.FormEvent) {
     e.preventDefault();
@@ -101,6 +104,27 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
       setError("Error de red. Inténtalo de nuevo.");
     } finally {
       setResetLoading(false);
+    }
+  }
+
+  async function saveTarget(agentId: string) {
+    const val = parseInt(targetInput);
+    if (!val || val <= 0) return;
+    setSavingTarget(true);
+    try {
+      await fetch("/api/targets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ target_amount: val, agent_id: agentId }),
+      });
+      setTargetAgentId(null);
+      setTargetInput("");
+      setSuccess("Objetivo mensual fijado correctamente.");
+      setTimeout(() => setSuccess(""), 4000);
+    } catch {
+      setError("Error al guardar el objetivo.");
+    } finally {
+      setSavingTarget(false);
     }
   }
 
@@ -272,9 +296,18 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
                 {agent.is_active ? "Activo" : "Inactivo"}
               </span>
 
+              {/* Fijar objetivo */}
+              <button
+                onClick={() => { setTargetAgentId(targetAgentId === agent.id ? null : agent.id); setTargetInput(""); setResetPasswordId(null); }}
+                className={`transition-colors shrink-0 ${targetAgentId === agent.id ? "text-[#00D4AA]" : "text-slate-500 hover:text-[#00D4AA]"}`}
+                title="Fijar objetivo mensual"
+              >
+                <Target size={16} />
+              </button>
+
               {/* Reset password */}
               <button
-                onClick={() => { setResetPasswordId(resetPasswordId === agent.id ? null : agent.id); setNewPassword(""); }}
+                onClick={() => { setResetPasswordId(resetPasswordId === agent.id ? null : agent.id); setNewPassword(""); setTargetAgentId(null); }}
                 className={`transition-colors shrink-0 ${resetPasswordId === agent.id ? "text-indigo-400" : "text-slate-500 hover:text-indigo-400"}`}
                 title="Cambiar contraseña"
               >
@@ -296,6 +329,43 @@ export function AgentesClient({ initialAgents }: AgentesClientProps) {
                 }
               </button>
             </div>
+            {/* Inline target form */}
+            <AnimatePresence>
+              {targetAgentId === agent.id && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex items-center gap-3 px-4 py-3 bg-[#00D4AA]/5 border border-[#00D4AA]/25 border-t-0 rounded-b-xl">
+                    <Target size={14} className="text-[#00D4AA] shrink-0" />
+                    <span className="text-xs text-slate-400 shrink-0">Objetivo este mes para {agent.name}:</span>
+                    <input
+                      type="number"
+                      value={targetInput}
+                      onChange={e => setTargetInput(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && saveTarget(agent.id)}
+                      placeholder="ej. 5000"
+                      min={1}
+                      className="w-28 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#00D4AA]/50 transition-colors"
+                    />
+                    <span className="text-slate-500 text-sm">€</span>
+                    <button
+                      onClick={() => saveTarget(agent.id)}
+                      disabled={savingTarget || !targetInput}
+                      className="px-4 py-2 bg-[#00D4AA] hover:bg-[#00D4AA]/80 disabled:opacity-40 text-black font-semibold rounded-lg text-xs transition-colors shrink-0"
+                    >
+                      {savingTarget ? <Loader2 size={13} className="animate-spin" /> : "Guardar"}
+                    </button>
+                    <button onClick={() => { setTargetAgentId(null); setTargetInput(""); }} className="text-slate-500 hover:text-white transition-colors shrink-0">
+                      <X size={14} />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Inline password reset form */}
             <AnimatePresence>
               {resetPasswordId === agent.id && (

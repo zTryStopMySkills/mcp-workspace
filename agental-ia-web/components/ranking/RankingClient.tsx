@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Medal, TrendingUp, CheckCircle2, Target } from "lucide-react";
+import { Trophy, Medal, TrendingUp, CheckCircle2, Target, Calendar, Clock, Settings, Loader2, Check } from "lucide-react";
 import type { RankingEntry } from "@/types";
 
 const MEDAL = [
@@ -10,18 +11,64 @@ const MEDAL = [
   { color: "#b45309", label: "3°", bg: "bg-amber-700/15 border-amber-700/30" },
 ];
 
-interface Props {
-  entries: RankingEntry[];
-  currentAgentId: string;
+interface Target {
+  target_closed: number;
+  target_amount: number;
 }
 
-export function RankingClient({ entries, currentAgentId }: Props) {
+interface Props {
+  allEntries: RankingEntry[];
+  monthEntries: RankingEntry[];
+  currentAgentId: string;
+  isAdmin: boolean;
+  target: Target | null;
+  monthClosed: number;
+  monthAmount: number;
+}
+
+export function RankingClient({ allEntries, monthEntries, currentAgentId, isAdmin, target: initialTarget, monthClosed, monthAmount }: Props) {
+  const [period, setPeriod] = useState<"month" | "all">("month");
+  const entries = period === "month" ? monthEntries : allEntries;
+  const monthName = new Date().toLocaleDateString("es-ES", { month: "long" });
+
+  // Target state
+  const [target, setTarget] = useState<Target | null>(initialTarget);
+  const [editingTarget, setEditingTarget] = useState(false);
+  const [tClosed, setTClosed] = useState(String(initialTarget?.target_closed ?? ""));
+  const [tAmount, setTAmount] = useState(String(initialTarget?.target_amount ?? ""));
+  const [savingTarget, setSavingTarget] = useState(false);
+
+  async function saveTarget() {
+    setSavingTarget(true);
+    const res = await fetch("/api/admin/targets", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ target_closed: Number(tClosed) || 0, target_amount: Number(tAmount) || 0 }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setTarget(data);
+      setEditingTarget(false);
+    }
+    setSavingTarget(false);
+  }
+
+  const progressClosed = target && target.target_closed > 0
+    ? Math.min(100, Math.round((monthClosed / target.target_closed) * 100))
+    : null;
+  const progressAmount = target && target.target_amount > 0
+    ? Math.min(100, Math.round((monthAmount / target.target_amount) * 100))
+    : null;
+
   if (entries.length === 0) {
     return (
-      <div className="text-center py-20 text-slate-500">
-        <Trophy size={40} className="mx-auto mb-3 opacity-30" />
-        <p className="font-medium mb-1">Sin propuestas aún</p>
-        <p className="text-sm">El ranking aparecerá cuando el equipo genere propuestas.</p>
+      <div>
+        <PeriodToggle period={period} setPeriod={setPeriod} monthName={monthName} />
+        <div className="text-center py-20 text-slate-500 mt-6">
+          <Trophy size={40} className="mx-auto mb-3 opacity-30" />
+          <p className="font-medium mb-1">Sin propuestas {period === "month" ? `en ${monthName}` : "aún"}</p>
+          <p className="text-sm">El ranking aparecerá cuando el equipo genere propuestas.</p>
+        </div>
       </div>
     );
   }
@@ -30,13 +77,134 @@ export function RankingClient({ entries, currentAgentId }: Props) {
   const rest = entries.slice(3);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      <PeriodToggle period={period} setPeriod={setPeriod} monthName={monthName} />
+
+      {/* Objetivo mensual */}
+      {(target || isAdmin) && period === "month" && (
+        <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Target size={16} className="text-[#C9A84C]" />
+              <p className="text-sm font-semibold text-white">
+                Objetivo de {monthName.charAt(0).toUpperCase() + monthName.slice(1)}
+              </p>
+            </div>
+            {isAdmin && !editingTarget && (
+              <button
+                onClick={() => { setEditingTarget(true); setTClosed(String(target?.target_closed ?? "")); setTAmount(String(target?.target_amount ?? "")); }}
+                className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
+              >
+                <Settings size={12} />
+                {target ? "Editar" : "Configurar objetivo"}
+              </button>
+            )}
+          </div>
+
+          {/* Edit form */}
+          {editingTarget && (
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={13} className="text-[#00D4AA]" />
+                <span className="text-xs text-slate-400">Webs cerradas:</span>
+                <input
+                  type="number"
+                  value={tClosed}
+                  onChange={e => setTClosed(e.target.value)}
+                  min={0}
+                  placeholder="ej. 10"
+                  className="w-20 px-2 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-white focus:outline-none focus:border-[#00D4AA]/50"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingUp size={13} className="text-[#C9A84C]" />
+                <span className="text-xs text-slate-400">Facturación (€):</span>
+                <input
+                  type="number"
+                  value={tAmount}
+                  onChange={e => setTAmount(e.target.value)}
+                  min={0}
+                  placeholder="ej. 8000"
+                  className="w-24 px-2 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-white focus:outline-none focus:border-[#C9A84C]/50"
+                />
+              </div>
+              <button
+                onClick={saveTarget}
+                disabled={savingTarget}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00D4AA] hover:bg-[#00D4AA]/80 disabled:opacity-40 text-black text-xs font-semibold rounded-lg transition-colors"
+              >
+                {savingTarget ? <Loader2 size={11} className="animate-spin" /> : <Check size={11} />}
+                Guardar
+              </button>
+              <button onClick={() => setEditingTarget(false)} className="text-xs text-slate-500 hover:text-white transition-colors">
+                Cancelar
+              </button>
+            </div>
+          )}
+
+          {/* Progress bars */}
+          {target && !editingTarget && (
+            <div className="space-y-3">
+              {target.target_closed > 0 && progressClosed !== null && (
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <CheckCircle2 size={11} className="text-[#00D4AA]" />
+                      Webs cerradas
+                    </span>
+                    <span className="text-xs font-semibold text-white">
+                      {monthClosed} / {target.target_closed}
+                      <span className={`ml-2 ${progressClosed >= 100 ? "text-[#00D4AA]" : "text-slate-500"}`}>
+                        {progressClosed}%
+                      </span>
+                    </span>
+                  </div>
+                  <div className="w-full bg-white/8 rounded-full h-2 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progressClosed}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                      className={`h-full rounded-full ${progressClosed >= 100 ? "bg-[#00D4AA]" : "bg-[#00D4AA]/60"}`}
+                    />
+                  </div>
+                </div>
+              )}
+              {target.target_amount > 0 && progressAmount !== null && (
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs text-slate-400 flex items-center gap-1.5">
+                      <TrendingUp size={11} className="text-[#C9A84C]" />
+                      Facturación
+                    </span>
+                    <span className="text-xs font-semibold text-white">
+                      {monthAmount.toLocaleString("es-ES")} € / {target.target_amount.toLocaleString("es-ES")} €
+                      <span className={`ml-2 ${progressAmount >= 100 ? "text-[#C9A84C]" : "text-slate-500"}`}>
+                        {progressAmount}%
+                      </span>
+                    </span>
+                  </div>
+                  <div className="w-full bg-white/8 rounded-full h-2 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progressAmount}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
+                      className={`h-full rounded-full ${progressAmount >= 100 ? "bg-[#C9A84C]" : "bg-[#C9A84C]/60"}`}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Podium top 3 */}
       {top3.length >= 2 && (
         <motion.div
+          key={period}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.35 }}
           className="grid grid-cols-3 gap-3"
         >
           {top3.map((entry, i) => {
@@ -48,8 +216,7 @@ export function RankingClient({ entries, currentAgentId }: Props) {
                 className={`relative p-5 rounded-2xl border text-center transition-all ${m.bg} ${isMe ? "ring-2 ring-[#00D4AA]" : ""}`}
               >
                 {i === 0 && <Trophy size={20} className="mx-auto mb-2" style={{ color: m.color }} />}
-                {i === 1 && <Medal size={20} className="mx-auto mb-2" style={{ color: m.color }} />}
-                {i === 2 && <Medal size={20} className="mx-auto mb-2" style={{ color: m.color }} />}
+                {i > 0 && <Medal size={20} className="mx-auto mb-2" style={{ color: m.color }} />}
                 <p className="text-xs font-bold mb-0.5" style={{ color: m.color }}>{m.label}</p>
                 <p className="font-bold text-white text-sm truncate">{entry.name}</p>
                 <p className="text-xs text-slate-500 mb-3">@{entry.nick}</p>
@@ -72,7 +239,7 @@ export function RankingClient({ entries, currentAgentId }: Props) {
 
           return (
             <motion.div
-              key={entry.agentId}
+              key={`${period}-${entry.agentId}`}
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.25, delay: i * 0.04 }}
@@ -125,6 +292,35 @@ export function RankingClient({ entries, currentAgentId }: Props) {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function PeriodToggle({ period, setPeriod, monthName }: { period: "month" | "all"; setPeriod: (p: "month" | "all") => void; monthName: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <button
+        onClick={() => setPeriod("month")}
+        className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-medium border transition-all ${
+          period === "month"
+            ? "bg-[#00D4AA]/15 border-[#00D4AA]/30 text-[#00D4AA]"
+            : "bg-white/[0.03] border-white/8 text-slate-400 hover:text-white"
+        }`}
+      >
+        <Calendar size={13} />
+        {monthName.charAt(0).toUpperCase() + monthName.slice(1)}
+      </button>
+      <button
+        onClick={() => setPeriod("all")}
+        className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-medium border transition-all ${
+          period === "all"
+            ? "bg-white/10 border-white/20 text-white"
+            : "bg-white/[0.03] border-white/8 text-slate-400 hover:text-white"
+        }`}
+      >
+        <Clock size={13} />
+        Todo el tiempo
+      </button>
     </div>
   );
 }

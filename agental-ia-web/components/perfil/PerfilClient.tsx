@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import { Camera, Save, Lock, User, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { Camera, Save, Lock, User, CheckCircle, XCircle, Loader2, TrendingUp, Phone } from "lucide-react";
 import { initials } from "@/lib/utils";
 
 interface PerfilData {
@@ -16,9 +16,13 @@ interface PerfilData {
 
 interface Props {
   perfil: PerfilData;
+  agentStats?: { total: number; closed: number; totalBilled: number; closeRate: number };
+  waTemplate?: string | null;
 }
 
-export function PerfilClient({ perfil }: Props) {
+const DEFAULT_WA_TEMPLATE = "Hola {cliente}, te escribo de Agentalia-webs en relación a tu propuesta. ¿Tienes un momento para hablar?";
+
+export function PerfilClient({ perfil, agentStats, waTemplate: initialWaTemplate }: Props) {
   const { update } = useSession();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -29,6 +33,10 @@ export function PerfilClient({ perfil }: Props) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [waTemplateText, setWaTemplateText] = useState(initialWaTemplate ?? DEFAULT_WA_TEMPLATE);
+  const [savingWa, setSavingWa] = useState(false);
+  const [waMsg, setWaMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
@@ -51,6 +59,24 @@ export function PerfilClient({ perfil }: Props) {
       setAvatarUrl(data.avatar_url);
     } else {
       setProfileMsg({ ok: false, text: data.error ?? "Error al subir el avatar" });
+    }
+  };
+
+  const handleSaveWaTemplate = async () => {
+    if (!waTemplateText.trim()) return;
+    setSavingWa(true);
+    setWaMsg(null);
+    const res = await fetch("/api/agents/me/whatsapp-template", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ template_text: waTemplateText.trim() }),
+    });
+    setSavingWa(false);
+    if (res.ok) {
+      setWaMsg({ ok: true, text: "Plantilla guardada correctamente" });
+    } else {
+      const data = await res.json();
+      setWaMsg({ ok: false, text: data.error ?? "Error al guardar" });
     }
   };
 
@@ -205,11 +231,82 @@ export function PerfilClient({ perfil }: Props) {
         </div>
       </motion.div>
 
+      {agentStats && agentStats.total > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.06 }}
+          className="bg-white/[0.03] border border-white/8 rounded-2xl p-6"
+        >
+          <h2 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
+            <TrendingUp size={16} className="text-[#00D4AA]" />
+            Mi rendimiento
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: "Propuestas", value: agentStats.total, color: "text-white" },
+              { label: "Cerradas", value: agentStats.closed, color: "text-[#00D4AA]" },
+              { label: "Tasa cierre", value: `${agentStats.closeRate}%`, color: "text-[#C9A84C]" },
+              { label: "Facturado", value: `${agentStats.totalBilled.toLocaleString("es-ES")} €`, color: "text-[#00D4AA]" },
+            ].map(s => (
+              <div key={s.label} className="text-center p-3 bg-white/[0.03] rounded-xl">
+                <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
+                <p className="text-xs text-[#8B95A9] mt-1">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Plantilla WhatsApp */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-white/[0.03] border border-white/8 rounded-2xl p-6"
+      >
+        <h2 className="text-base font-semibold text-white mb-1 flex items-center gap-2">
+          <Phone size={16} className="text-[#25D366]" />
+          Plantilla de WhatsApp
+        </h2>
+        <p className="text-xs text-slate-500 mb-4">
+          Variables disponibles: <code className="text-[#00D4AA] bg-[#00D4AA]/10 px-1 rounded">{"{cliente}"}</code>{" "}
+          <code className="text-[#00D4AA] bg-[#00D4AA]/10 px-1 rounded">{"{plan}"}</code>{" "}
+          <code className="text-[#00D4AA] bg-[#00D4AA]/10 px-1 rounded">{"{precio}"}</code>
+        </p>
+        <textarea
+          value={waTemplateText}
+          onChange={e => setWaTemplateText(e.target.value)}
+          rows={3}
+          maxLength={500}
+          className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#25D366]/50 focus:bg-white/[0.07] transition-all resize-none"
+          placeholder={DEFAULT_WA_TEMPLATE}
+        />
+        <div className="flex items-center justify-between mt-3">
+          <div>
+            {waMsg && (
+              <div className={`flex items-center gap-2 text-sm ${waMsg.ok ? "text-emerald-400" : "text-red-400"}`}>
+                {waMsg.ok ? <CheckCircle size={14} /> : <XCircle size={14} />}
+                {waMsg.text}
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleSaveWaTemplate}
+            disabled={savingWa || !waTemplateText.trim()}
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#25D366] text-black font-semibold text-sm rounded-xl hover:bg-[#1fb855] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {savingWa ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+            Guardar plantilla
+          </button>
+        </div>
+      </motion.div>
+
       {/* Cambiar contraseña */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.08 }}
+        transition={{ delay: 0.12 }}
         className="bg-white/[0.03] border border-white/8 rounded-2xl p-6"
       >
         <h2 className="text-base font-semibold text-white mb-4 flex items-center gap-2">

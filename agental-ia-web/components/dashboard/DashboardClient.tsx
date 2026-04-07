@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FolderOpen, MessageCircle, ArrowRight, FileText, Calculator, TrendingUp, CheckCircle2, Target, Loader2 } from "lucide-react";
+import { FolderOpen, MessageCircle, ArrowRight, FileText, Calculator, TrendingUp, CheckCircle2, Target, Loader2, AlertCircle, Phone, BadgeDollarSign } from "lucide-react";
 import { useState } from "react";
 import type { DocumentWithStatus } from "@/types";
 import { formatDate, fileTypeIcon, isNewDoc } from "@/lib/utils";
@@ -23,9 +23,13 @@ interface DashboardClientProps {
   recentMessages: number;
   quoteStat: QuoteStat;
   monthlyTarget: number | null;
+  overdueFollowUps?: { id: string; client_name: string; follow_up_date: string; client_phone: string | null }[];
+  prevMonthStat?: { closed: number; pipeline: number };
+  commissionRate?: number | null;
+  monthClosedAmount?: number;
 }
 
-export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCount, recentMessages, quoteStat, monthlyTarget: initialTarget }: DashboardClientProps) {
+export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCount, recentMessages, quoteStat, monthlyTarget: initialTarget, overdueFollowUps, prevMonthStat, commissionRate, monthClosedAmount }: DashboardClientProps) {
   const [monthlyTarget, setMonthlyTarget] = useState<number | null>(initialTarget);
   const [targetInput, setTargetInput] = useState("");
   const [savingTarget, setSavingTarget] = useState(false);
@@ -94,6 +98,11 @@ export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCou
           value={quoteStat.closed}
           color="gold"
           href="/tarificador/historial"
+          extra={prevMonthStat && quoteStat.closed !== prevMonthStat.closed ? (
+            <p className={`text-xs mt-1 ${quoteStat.closed >= prevMonthStat.closed ? "text-[#00D4AA]" : "text-red-400"}`}>
+              {quoteStat.closed >= prevMonthStat.closed ? "+" : ""}{quoteStat.closed - prevMonthStat.closed} vs mes anterior
+            </p>
+          ) : undefined}
         />
       </motion.div>
 
@@ -128,6 +137,35 @@ export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCou
             <div className="flex-1 min-w-0">
               <p className="text-xs text-[#C9A84C] mb-0.5">Tasa de cierre</p>
               <p className="text-2xl font-bold text-white">{quoteStat.closeRate}%</p>
+            </div>
+            <ArrowRight size={16} className="text-slate-600 shrink-0" />
+          </Link>
+        </motion.div>
+      )}
+
+      {/* Widget comisión mensual */}
+      {commissionRate != null && commissionRate > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-4"
+        >
+          <Link
+            href="/comisiones"
+            className="flex items-center gap-4 p-5 bg-emerald-500/8 border border-emerald-500/20 rounded-2xl hover:bg-emerald-500/12 transition-colors"
+          >
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
+              <BadgeDollarSign size={18} className="text-emerald-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-emerald-400 mb-0.5">Comisión estimada este mes</p>
+              <p className="text-2xl font-bold text-white">
+                {Math.round((monthClosedAmount ?? 0) * commissionRate / 100).toLocaleString("es-ES")} €
+              </p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                {(monthClosedAmount ?? 0).toLocaleString("es-ES")} € facturado × {commissionRate}%
+              </p>
             </div>
             <ArrowRight size={16} className="text-slate-600 shrink-0" />
           </Link>
@@ -201,6 +239,53 @@ export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCou
           </div>
         )}
       </motion.div>
+
+      {overdueFollowUps && overdueFollowUps.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.18 }}
+          className="mt-6 p-5 bg-amber-500/8 border border-amber-500/20 rounded-2xl"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <AlertCircle size={16} className="text-amber-400" />
+            <p className="text-sm font-semibold text-white">Follow-ups vencidos</p>
+            <span className="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">{overdueFollowUps.length}</span>
+          </div>
+          <div className="space-y-2">
+            {overdueFollowUps.slice(0, 3).map(q => (
+              <div key={q.id} className="flex items-center justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-white truncate">{q.client_name}</p>
+                  <p className="text-xs text-amber-400/70">
+                    Vencido: {new Date(q.follow_up_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short" })}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  {q.client_phone && (
+                    <a
+                      href={`https://wa.me/${q.client_phone.replace(/\D/g, "")}?text=Hola%20${encodeURIComponent(q.client_name)},%20te%20escribo%20de%20Agentalia-webs%20para%20dar%20seguimiento%20a%20tu%20propuesta.`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="p-1.5 text-amber-400 hover:text-[#25D366] hover:bg-white/5 rounded-lg transition-colors"
+                      title="WhatsApp"
+                    >
+                      <Phone size={13} />
+                    </a>
+                  )}
+                  <Link href="/tarificador/historial" className="p-1.5 text-slate-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
+            ))}
+            {overdueFollowUps.length > 3 && (
+              <Link href="/tarificador/historial" className="text-xs text-amber-400/70 hover:text-amber-400 transition-colors">
+                Ver {overdueFollowUps.length - 3} más →
+              </Link>
+            )}
+          </div>
+        </motion.div>
+      )}
 
       {/* Recent docs */}
       <motion.div
@@ -305,12 +390,13 @@ export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCou
   );
 }
 
-function StatCard({ icon, label, value, color, href }: {
+function StatCard({ icon, label, value, color, href, extra }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   color: "indigo" | "amber" | "teal" | "gold";
   href: string;
+  extra?: React.ReactNode;
 }) {
   const colors = {
     indigo: "bg-indigo-600/10 border-indigo-500/20",
@@ -326,6 +412,7 @@ function StatCard({ icon, label, value, color, href }: {
         <p className="text-xs text-slate-400 leading-tight">{label}</p>
       </div>
       <p className="text-3xl font-bold text-white">{value.toLocaleString("es-ES")}</p>
+      {extra}
     </Link>
   );
 }

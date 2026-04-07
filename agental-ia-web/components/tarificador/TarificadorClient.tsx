@@ -104,9 +104,10 @@ function StepDot({ n, current, label }: { n: number; current: number; label: str
 
 interface TarificadorClientProps {
   agentName: string;
+  initialCliente?: { empresa: string; sector: string; tieneWeb: boolean; urlWeb: string; email: string; telefono: string };
 }
 
-export function TarificadorClient({ agentName }: TarificadorClientProps) {
+export function TarificadorClient({ agentName, initialCliente }: TarificadorClientProps) {
   const [step, setStep] = useState(1);
   const [generatingProp, setGeneratingProp] = useState(false);
   const [generatingCont, setGeneratingCont] = useState(false);
@@ -116,9 +117,11 @@ export function TarificadorClient({ agentName }: TarificadorClientProps) {
   const [showTemplates, setShowTemplates] = useState(false);
   const [savingTemplate, setSavingTemplate] = useState(false);
 
-  const [cliente, setCliente] = useState({
-    empresa: "", sector: SECTORES[0], tieneWeb: false, urlWeb: "", email: "", telefono: ""
-  });
+  const [cliente, setCliente] = useState(
+    initialCliente ?? {
+      empresa: "", sector: SECTORES[0], tieneWeb: false, urlWeb: "", email: "", telefono: ""
+    }
+  );
   const [planSeleccionado, setPlanSeleccionado] = useState<PlanItem>(PLANES[1]);
   const [precioSaas, setPrecioSaas] = useState(1800);
   const [extrasSeleccionados, setExtrasSeleccionados] = useState<Set<string>>(new Set());

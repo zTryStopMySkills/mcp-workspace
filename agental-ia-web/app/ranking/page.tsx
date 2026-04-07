@@ -12,35 +12,48 @@ export default async function RankingPage() {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 
+  const currentMonth = new Date().toISOString().slice(0, 7);
+
   const { data: quotations } = await supabaseAdmin
     .from("quotations")
-    .select("agent_id, status, total_once, agent:agent_id(id, nick, name)");
+    .select("agent_id, status, total_once, created_at, agent:agent_id(id, nick, name)");
 
-  // Aggregate per agent
-  const map = new Map<string, { nick: string; name: string; total: number; closed: number; pipeline: number }>();
-
-  for (const q of quotations ?? []) {
-    const agent = q.agent as unknown as { id: string; nick: string; name: string } | null;
-    if (!agent) continue;
-    const existing = map.get(q.agent_id) ?? { nick: agent.nick, name: agent.name, total: 0, closed: 0, pipeline: 0 };
-    existing.total += 1;
-    if (q.status === "closed") existing.closed += 1;
-    if (!["closed", "lost"].includes(q.status)) existing.pipeline += q.total_once ?? 0;
-    map.set(q.agent_id, existing);
+  function buildEntries(qs: typeof quotations): RankingEntry[] {
+    const map = new Map<string, { nick: string; name: string; total: number; closed: number; pipeline: number }>();
+    for (const q of qs ?? []) {
+      const agent = q.agent as unknown as { id: string; nick: string; name: string } | null;
+      if (!agent) continue;
+      const existing = map.get(q.agent_id) ?? { nick: agent.nick, name: agent.name, total: 0, closed: 0, pipeline: 0 };
+      existing.total += 1;
+      if (q.status === "closed") existing.closed += 1;
+      if (!["closed", "lost"].includes(q.status)) existing.pipeline += q.total_once ?? 0;
+      map.set(q.agent_id, existing);
+    }
+    return [...map.entries()]
+      .sort((a, b) => b[1].closed - a[1].closed || b[1].pipeline - a[1].pipeline)
+      .map(([agentId, s], i) => ({
+        agentId, nick: s.nick, name: s.name,
+        total: s.total, closed: s.closed, pipeline: s.pipeline,
+        closeRate: s.total ? Math.round((s.closed / s.total) * 100) : 0,
+        position: i + 1,
+      }));
   }
 
-  const entries: RankingEntry[] = [...map.entries()]
-    .sort((a, b) => b[1].closed - a[1].closed || b[1].pipeline - a[1].pipeline)
-    .map(([agentId, s], i) => ({
-      agentId,
-      nick: s.nick,
-      name: s.name,
-      total: s.total,
-      closed: s.closed,
-      pipeline: s.pipeline,
-      closeRate: s.total ? Math.round((s.closed / s.total) * 100) : 0,
-      position: i + 1,
-    }));
+  const allEntries = buildEntries(quotations);
+  const monthEntries = buildEntries((quotations ?? []).filter(q => q.created_at?.startsWith(currentMonth)));
+
+  // Objetivo mensual del equipo
+  const { data: target } = await supabaseAdmin
+    .from("team_monthly_targets")
+    .select("target_closed, target_amount")
+    .eq("month", currentMonth)
+    .maybeSingle();
+
+  // Stats del mes actual para progreso
+  const monthClosed = monthEntries.reduce((s, e) => s + e.closed, 0);
+  const monthAmount = (quotations ?? [])
+    .filter(q => q.created_at?.startsWith(currentMonth) && q.status === "closed")
+    .reduce((s, q) => s + (q.total_once ?? 0), 0);
 
   return (
     <DashboardLayout>
@@ -52,7 +65,15 @@ export default async function RankingPage() {
           </div>
         </div>
         <p className="text-slate-400 text-sm mb-8">Clasificación por propuestas cerradas y pipeline activo.</p>
-        <RankingClient entries={entries} currentAgentId={session.user.id} />
+        <RankingClient
+          allEntries={allEntries}
+          monthEntries={monthEntries}
+          currentAgentId={session.user.id}
+          isAdmin={session.user.role === "admin"}
+          target={target ?? null}
+          monthClosed={monthClosed}
+          monthAmount={monthAmount}
+        />
       </div>
     </DashboardLayout>
   );
