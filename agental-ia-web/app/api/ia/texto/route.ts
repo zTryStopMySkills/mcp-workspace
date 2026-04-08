@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  if (!process.env.GOOGLE_AI_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return NextResponse.json({ error: "IA no configurada" }, { status: 503 });
   }
 
@@ -98,11 +98,18 @@ REGLAS DE FORMATO:
 ${channelRules[channel]}
 `.trim();
 
-  const { GoogleGenerativeAI } = await import("@google/generative-ai");
-  const genai = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
-  const model = genai.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: systemPrompt });
+  const Groq = (await import("groq-sdk")).default;
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-  const result = await model.generateContent(userMessage);
-  const text = result.response.text();
+  const response = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userMessage },
+    ],
+    max_tokens: 1024,
+  });
+
+  const text = response.choices[0]?.message?.content ?? "";
   return NextResponse.json({ text });
 }

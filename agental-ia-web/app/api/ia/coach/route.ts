@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    if (!process.env.GOOGLE_AI_API_KEY) {
+    if (!process.env.GROQ_API_KEY) {
       return NextResponse.json({ error: "IA no configurada" }, { status: 503 });
     }
 
@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({})) as { question?: string };
     const question = body.question ?? undefined;
 
-    // Fetch data server-side — never rely on client-sent stats
     const context = await assembleAgentContext(
       session.user.id,
       session.user.name,
@@ -60,19 +59,23 @@ Usa markdown con secciones (## título, listas con -). Máximo 400 palabras.`;
       ? `${statsContext}\n\nPregunta: ${question}`
       : `${statsContext}\n\nDame un análisis de mi rendimiento y consejos para mejorar.`;
 
-    const { GoogleGenerativeAI } = await import("@google/generative-ai");
-    const genai = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
-    const model = genai.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: systemPrompt });
+    const Groq = (await import("groq-sdk")).default;
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-    const result = await model.generateContent(userMessage);
-    const text = result.response.text();
+    const response = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
+      ],
+      max_tokens: 1024,
+    });
+
+    const text = response.choices[0]?.message?.content ?? "";
     return NextResponse.json({ text });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[ia/coach] error:", msg);
-    if (msg.includes("429") || msg.includes("quota") || msg.includes("Too Many Requests")) {
-      return NextResponse.json({ error: "Cuota de IA agotada. Contacta con el administrador." }, { status: 503 });
-    }
     return NextResponse.json({ error: "Error interno. Inténtalo de nuevo." }, { status: 500 });
   }
 }
