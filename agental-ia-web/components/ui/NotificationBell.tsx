@@ -39,8 +39,13 @@ export function NotificationBell() {
       .then(data => setNotifications(Array.isArray(data) ? data : []))
       .catch(() => {});
 
+    const channelName = `notifications-bell-${session.user.id}`;
+    // Remove stale channel if exists
+    const stale = supabase.getChannels().find(c => c.topic === `realtime:${channelName}`);
+    if (stale) supabase.removeChannel(stale);
+
     const channel = supabase
-      .channel("notifications-bell")
+      .channel(channelName)
       .on("postgres_changes", {
         event: "INSERT",
         schema: "public",

@@ -22,8 +22,11 @@ export function DocToast() {
   useEffect(() => {
     if (!session) return;
 
+    const toastName = `doc-toast-${session.user.id}`;
+    const stale = supabase.getChannels().find(c => c.topic === `realtime:${toastName}`);
+    if (stale) supabase.removeChannel(stale);
     const channel = supabase
-      .channel("doc-toast")
+      .channel(toastName)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "documents" },

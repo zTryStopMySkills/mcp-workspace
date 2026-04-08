@@ -85,8 +85,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       .then(({ count }) => setUnreadCount(count ?? 0));
 
     // Realtime: increment badge on new message if not on chat page
+    const msgsName = `sidebar-messages-${session?.user?.id ?? "x"}`;
+    const staleMsg = supabase.getChannels().find(c => c.topic === `realtime:${msgsName}`);
+    if (staleMsg) supabase.removeChannel(staleMsg);
     const channel = supabase
-      .channel("sidebar-messages")
+      .channel(msgsName)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, () => {
         const currentPath = window.location.pathname;
         if (currentPath !== "/chat") {
@@ -126,8 +129,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
     fetchUnreadDocs();
 
     // Realtime: refetch cuando llega un doc nuevo o una asignación nueva
+    const docsName = `sidebar-docs-${session?.user?.id ?? "x"}`;
+    const staleDocs = supabase.getChannels().find(c => c.topic === `realtime:${docsName}`);
+    if (staleDocs) supabase.removeChannel(staleDocs);
     const channel = supabase
-      .channel("sidebar-docs")
+      .channel(docsName)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "documents" }, () => {
         if (window.location.pathname !== "/documentos") fetchUnreadDocs();
       })
