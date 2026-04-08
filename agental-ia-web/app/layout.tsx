@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SessionWrapper } from "@/components/SessionWrapper";
 import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar";
+import { InstallPrompt } from "@/components/ui/InstallPrompt";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
@@ -33,8 +34,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body>
-        <ServiceWorkerRegistrar />
-        <SessionWrapper>{children}</SessionWrapper>
+        <InstallPrompt />
+        <SessionWrapper>
+          <ServiceWorkerRegistrar />
+          {children}
+        </SessionWrapper>
       </body>
     </html>
   );

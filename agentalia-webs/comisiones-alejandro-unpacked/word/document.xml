@@ -1,0 +1,2872 @@
+<?xml version="1.0" encoding="ascii"?>
+<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" xmlns:cx2="http://schemas.microsoft.com/office/drawing/2015/10/21/chartex" xmlns:cx3="http://schemas.microsoft.com/office/drawing/2016/5/9/chartex" xmlns:cx4="http://schemas.microsoft.com/office/drawing/2016/5/10/chartex" xmlns:cx5="http://schemas.microsoft.com/office/drawing/2016/5/11/chartex" xmlns:cx6="http://schemas.microsoft.com/office/drawing/2016/5/12/chartex" xmlns:cx7="http://schemas.microsoft.com/office/drawing/2016/5/13/chartex" xmlns:cx8="http://schemas.microsoft.com/office/drawing/2016/5/14/chartex" xmlns:aink="http://schemas.microsoft.com/office/drawing/2016/ink" xmlns:am3d="http://schemas.microsoft.com/office/drawing/2017/model3d" xmlns:w16cex="http://schemas.microsoft.com/office/word/2018/wordml/cex" xmlns:w16cid="http://schemas.microsoft.com/office/word/2016/wordml/cid" xmlns:w16="http://schemas.microsoft.com/office/word/2018/wordml" xmlns:w16sdtdh="http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash" xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex" mc:Ignorable="w14 w15 wp14">
+  <w:body>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="60" w:before="400"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="18"/>
+          <w:szCs w:val="18"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="80" w:before="200"/>
+        <w:jc w:val="left"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="0D1117"/>
+          <w:sz w:val="56"/>
+          <w:szCs w:val="56"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Comisiones</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="56"/>
+          <w:szCs w:val="56"/>
+        </w:rPr>
+        <w:t xml:space="preserve"> Agente Comercial</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="100" w:before="0"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="22"/>
+          <w:szCs w:val="22"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Agentalia-Webs  &#183;  Estructura de comisiones vigente  &#183;  Abril 2026</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="400" w:before="160"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="22"/>
+          <w:szCs w:val="22"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Agente: </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="0D1117"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Alejandro</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="160" w:before="360"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#9612; </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="0D1117"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Secci&#243;n 1</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">  Proyectos web &#8212; Comisi&#243;n 25% sobre precio de venta</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblW w:type="auto" w:w="100"/>
+        <w:tblBorders>
+          <w:top w:val="single" w:color="auto" w:sz="4"/>
+          <w:left w:val="single" w:color="auto" w:sz="4"/>
+          <w:bottom w:val="single" w:color="auto" w:sz="4"/>
+          <w:right w:val="single" w:color="auto" w:sz="4"/>
+          <w:insideH w:val="single" w:color="auto" w:sz="4"/>
+          <w:insideV w:val="single" w:color="auto" w:sz="4"/>
+        </w:tblBorders>
+        <w:tblCellMar>
+          <w:top w:type="dxa" w:w="80"/>
+          <w:left w:type="dxa" w:w="160"/>
+          <w:bottom w:type="dxa" w:w="80"/>
+          <w:right w:type="dxa" w:w="160"/>
+        </w:tblCellMar>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2100"/>
+        <w:gridCol w:w="1900"/>
+        <w:gridCol w:w="1860"/>
+        <w:gridCol w:w="3500"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:trPr>
+          <w:tblHeader/>
+        </w:trPr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Plan</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1900"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Precio de venta</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1860"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Comisi&#243;n (25%)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Descripci&#243;n</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">B&#225;sico</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1900"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">399 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1860"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">99,75 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="6B7280"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Landing page profesional &#183; entrega 24-72h</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Est&#225;ndar</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1900"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">649 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1860"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">162,25 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="6B7280"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Web completa + blog + SEO avanzado &#183; 1-7 d&#237;as</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Premium</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1900"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">999 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1860"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">249,75 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="6B7280"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Sistema reservas/pedidos + panel admin &#183; 1-7 d&#237;as</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">SaaS / A medida</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1900"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">desde 1.800 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1860"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">desde 450 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="6B7280"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Soluci&#243;n empresarial &#183; precio seg&#250;n proyecto</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="80"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="240" w:before="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="18"/>
+          <w:szCs w:val="18"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#8505;  </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:i/>
+          <w:iCs/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="18"/>
+          <w:szCs w:val="18"/>
+        </w:rPr>
+        <w:t xml:space="preserve">La comisi&#243;n se abona una &#250;nica vez por proyecto, al confirmar el pago del cliente.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="160" w:before="360"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#9612; </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="0D1117"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Secci&#243;n 2</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">  Servicios mensuales &#8212; Comisi&#243;n 10% recurrente</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblW w:type="auto" w:w="100"/>
+        <w:tblBorders>
+          <w:top w:val="single" w:color="auto" w:sz="4"/>
+          <w:left w:val="single" w:color="auto" w:sz="4"/>
+          <w:bottom w:val="single" w:color="auto" w:sz="4"/>
+          <w:right w:val="single" w:color="auto" w:sz="4"/>
+          <w:insideH w:val="single" w:color="auto" w:sz="4"/>
+          <w:insideV w:val="single" w:color="auto" w:sz="4"/>
+        </w:tblBorders>
+        <w:tblCellMar>
+          <w:top w:type="dxa" w:w="80"/>
+          <w:left w:type="dxa" w:w="160"/>
+          <w:bottom w:type="dxa" w:w="80"/>
+          <w:right w:type="dxa" w:w="160"/>
+        </w:tblCellMar>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2500"/>
+        <w:gridCol w:w="1720"/>
+        <w:gridCol w:w="2040"/>
+        <w:gridCol w:w="3100"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:trPr>
+          <w:tblHeader/>
+        </w:trPr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Servicio</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1720"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Precio/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2040"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Comisi&#243;n mensual (10%)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Ingresos anuales por cliente</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Mantenimiento web</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1720"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">39 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2040"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">3,90 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">46,80 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">SEO + Posicionamiento</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1720"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">99 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2040"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">9,90 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">118,80 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Gesti&#243;n redes sociales</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1720"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">149 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2040"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">14,90 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">178,80 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2500"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Pack completo</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="1720"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">249 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2040"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">24,90 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="3100"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">298,80 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="80"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="240" w:before="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="18"/>
+          <w:szCs w:val="18"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#8505;  </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:i/>
+          <w:iCs/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="18"/>
+          <w:szCs w:val="18"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Comisi&#243;n cobrada cada mes mientras el cliente mantenga el servicio activo. Sin l&#237;mite de tiempo.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="160" w:before="360"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#9612; </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="0D1117"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Secci&#243;n 3</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">  Ejemplo pr&#225;ctico &#8212; 4 ventas en un mismo mes</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblW w:type="auto" w:w="100"/>
+        <w:tblBorders>
+          <w:top w:val="single" w:color="auto" w:sz="4"/>
+          <w:left w:val="single" w:color="auto" w:sz="4"/>
+          <w:bottom w:val="single" w:color="auto" w:sz="4"/>
+          <w:right w:val="single" w:color="auto" w:sz="4"/>
+          <w:insideH w:val="single" w:color="auto" w:sz="4"/>
+          <w:insideV w:val="single" w:color="auto" w:sz="4"/>
+        </w:tblBorders>
+        <w:tblCellMar>
+          <w:top w:type="dxa" w:w="80"/>
+          <w:left w:type="dxa" w:w="160"/>
+          <w:bottom w:type="dxa" w:w="80"/>
+          <w:right w:type="dxa" w:w="160"/>
+        </w:tblCellMar>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2800"/>
+        <w:gridCol w:w="2000"/>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2400"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:trPr>
+          <w:tblHeader/>
+        </w:trPr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2800"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Venta cerrada</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2000"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Comisi&#243;n venta</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Comisi&#243;n/mes recurrente</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2400"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">Ingreso anual generado</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2800"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">1 cliente &#183; Plan B&#225;sico + Pack completo</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2000"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">99,75 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">24,90 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2400"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">298,80 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2800"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">1 cliente &#183; Plan Est&#225;ndar + SEO</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2000"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">162,25 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">9,90 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2400"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">118,80 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2800"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">1 cliente &#183; Plan Premium + Pack completo</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2000"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">249,75 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">24,90 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2400"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="FFFFFF" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">298,80 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2800"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="left"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="111111"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">1 cliente &#183; SaaS a medida (2.500 &#8364;)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2000"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="E6FAF7" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="007A62"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">625,00 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="6B7280"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">&#8212;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2400"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:left w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:bottom w:val="single" w:color="D5D8DC" w:sz="4"/>
+              <w:right w:val="single" w:color="D5D8DC" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="F4F6F9" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="100"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="100"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+            <w:vAlign w:val="center"/>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b w:val="false"/>
+                <w:bCs w:val="false"/>
+                <w:color w:val="6B7280"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">&#8212;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2800"/>
+            <w:gridSpan w:val="1"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="20"/>
+                <w:szCs w:val="20"/>
+              </w:rPr>
+              <w:t xml:space="preserve">TOTAL (ese mes)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2000"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="FFFFFF"/>
+                <w:sz w:val="22"/>
+                <w:szCs w:val="22"/>
+              </w:rPr>
+              <w:t xml:space="preserve">1.136,75 &#8364;</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="22"/>
+                <w:szCs w:val="22"/>
+              </w:rPr>
+              <w:t xml:space="preserve">59,70 &#8364;/mes</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2400"/>
+            <w:tcBorders>
+              <w:top w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:left w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:bottom w:val="single" w:color="00D4AA" w:sz="4"/>
+              <w:right w:val="single" w:color="00D4AA" w:sz="4"/>
+            </w:tcBorders>
+            <w:shd w:fill="0D1117" w:val="clear"/>
+            <w:tcMar>
+              <w:top w:type="dxa" w:w="120"/>
+              <w:left w:type="dxa" w:w="160"/>
+              <w:bottom w:type="dxa" w:w="120"/>
+              <w:right w:type="dxa" w:w="160"/>
+            </w:tcMar>
+          </w:tcPr>
+          <w:p>
+            <w:pPr>
+              <w:jc w:val="center"/>
+            </w:pPr>
+            <w:r>
+              <w:rPr>
+                <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+                <w:b/>
+                <w:bCs/>
+                <w:color w:val="00D4AA"/>
+                <w:sz w:val="22"/>
+                <w:szCs w:val="22"/>
+              </w:rPr>
+              <w:t xml:space="preserve">716,40 &#8364;/a&#241;o</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="80"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="240" w:before="80"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="C9A84C"/>
+          <w:sz w:val="18"/>
+          <w:szCs w:val="18"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#9733;  </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:i/>
+          <w:iCs/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="18"/>
+          <w:szCs w:val="18"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Cuanto antes se cierren mensualidades, antes se genera el colch&#243;n de ingresos recurrentes que se acumula mes a mes.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="160" w:before="360"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">&#9612; </w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="0D1117"/>
+          <w:sz w:val="26"/>
+          <w:szCs w:val="26"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Secci&#243;n 4</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">  Condiciones</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="80"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListParagraph"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="2"/>
+        </w:numPr>
+        <w:spacing w:after="60" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="111111"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Las comisiones de venta se abonan una vez confirmado el pago del cliente.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListParagraph"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="2"/>
+        </w:numPr>
+        <w:spacing w:after="60" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="111111"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Las comisiones mensuales se abonan los primeros 5 d&#237;as del mes siguiente.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListParagraph"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="2"/>
+        </w:numPr>
+        <w:spacing w:after="60" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="111111"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">La comisi&#243;n mensual es recurrente mientras el cliente mantenga el servicio activo.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListParagraph"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="2"/>
+        </w:numPr>
+        <w:spacing w:after="60" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="111111"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">En proyectos SaaS/A medida, la comisi&#243;n se calcula sobre el precio final acordado.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListParagraph"/>
+        <w:numPr>
+          <w:ilvl w:val="0"/>
+          <w:numId w:val="2"/>
+        </w:numPr>
+        <w:spacing w:after="60" w:before="60"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="111111"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Agentalia-Webs se reserva el derecho a revisar estas condiciones con 30 d&#237;as de preaviso.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="300"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pBdr>
+          <w:top w:val="single" w:color="D5D8DC" w:sz="4"/>
+        </w:pBdr>
+        <w:spacing w:after="60" w:before="200"/>
+      </w:pPr>
+      <w:r>
+        <w:t xml:space="preserve"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="40" w:before="120"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:bCs/>
+          <w:color w:val="00D4AA"/>
+          <w:sz w:val="22"/>
+          <w:szCs w:val="22"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Agentalia-Webs</w:t>
+      </w:r>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="20"/>
+          <w:szCs w:val="20"/>
+        </w:rPr>
+        <w:t xml:space="preserve">  &#183;  Abril 2026</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:spacing w:after="0" w:before="0"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:cs="Arial" w:eastAsia="Arial" w:hAnsi="Arial"/>
+          <w:color w:val="6B7280"/>
+          <w:sz w:val="16"/>
+          <w:szCs w:val="16"/>
+        </w:rPr>
+        <w:t xml:space="preserve">Documento generado para uso interno y confidencial del agente comercial indicado.</w:t>
+      </w:r>
+    </w:p>
+    <w:sectPr>
+      <w:headerReference w:type="default" r:id="rId7"/>
+      <w:footerReference w:type="default" r:id="rId8"/>
+      <w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/>
+      <w:pgMar w:top="1080" w:right="1080" w:bottom="1080" w:left="1080" w:header="708" w:footer="708" w:gutter="0"/>
+      <w:pgNumType/>
+      <w:docGrid w:linePitch="360"/>
+    </w:sectPr>
+  </w:body>
+</w:document>

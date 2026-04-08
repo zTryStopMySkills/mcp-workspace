@@ -16,9 +16,16 @@ interface Target {
   target_amount: number;
 }
 
+interface HistoricalMonth {
+  month: string;
+  label: string;
+  entries: RankingEntry[];
+}
+
 interface Props {
   allEntries: RankingEntry[];
   monthEntries: RankingEntry[];
+  historicalMonths?: HistoricalMonth[];
   currentAgentId: string;
   isAdmin: boolean;
   target: Target | null;
@@ -26,9 +33,16 @@ interface Props {
   monthAmount: number;
 }
 
-export function RankingClient({ allEntries, monthEntries, currentAgentId, isAdmin, target: initialTarget, monthClosed, monthAmount }: Props) {
-  const [period, setPeriod] = useState<"month" | "all">("month");
-  const entries = period === "month" ? monthEntries : allEntries;
+export function RankingClient({ allEntries, monthEntries, historicalMonths, currentAgentId, isAdmin, target: initialTarget, monthClosed, monthAmount }: Props) {
+  const [period, setPeriod] = useState<"month" | "all" | string>("month");
+  const currentMonthKey = new Date().toISOString().slice(0, 7);
+
+  const entries = period === "all"
+    ? allEntries
+    : period === "month"
+    ? monthEntries
+    : (historicalMonths?.find(m => m.month === period)?.entries ?? []);
+
   const monthName = new Date().toLocaleDateString("es-ES", { month: "long" });
 
   // Target state
@@ -63,7 +77,7 @@ export function RankingClient({ allEntries, monthEntries, currentAgentId, isAdmi
   if (entries.length === 0) {
     return (
       <div>
-        <PeriodToggle period={period} setPeriod={setPeriod} monthName={monthName} />
+        <PeriodToggle period={period} setPeriod={setPeriod} monthName={monthName} historicalMonths={historicalMonths} currentMonthKey={currentMonthKey} />
         <div className="text-center py-20 text-slate-500 mt-6">
           <Trophy size={40} className="mx-auto mb-3 opacity-30" />
           <p className="font-medium mb-1">Sin propuestas {period === "month" ? `en ${monthName}` : "aún"}</p>
@@ -78,7 +92,7 @@ export function RankingClient({ allEntries, monthEntries, currentAgentId, isAdmi
 
   return (
     <div className="space-y-5">
-      <PeriodToggle period={period} setPeriod={setPeriod} monthName={monthName} />
+      <PeriodToggle period={period} setPeriod={setPeriod} monthName={monthName} historicalMonths={historicalMonths} currentMonthKey={currentMonthKey} />
 
       {/* Objetivo mensual */}
       {(target || isAdmin) && period === "month" && (
@@ -296,9 +310,17 @@ export function RankingClient({ allEntries, monthEntries, currentAgentId, isAdmi
   );
 }
 
-function PeriodToggle({ period, setPeriod, monthName }: { period: "month" | "all"; setPeriod: (p: "month" | "all") => void; monthName: string }) {
+function PeriodToggle({
+  period, setPeriod, monthName, historicalMonths, currentMonthKey
+}: {
+  period: string;
+  setPeriod: (p: string) => void;
+  monthName: string;
+  historicalMonths?: { month: string; label: string; entries: RankingEntry[] }[];
+  currentMonthKey: string;
+}) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 flex-wrap">
       <button
         onClick={() => setPeriod("month")}
         className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-medium border transition-all ${
@@ -321,6 +343,24 @@ function PeriodToggle({ period, setPeriod, monthName }: { period: "month" | "all
         <Clock size={13} />
         Todo el tiempo
       </button>
+      {/* Historical month selector */}
+      {historicalMonths && historicalMonths.filter(m => m.month !== currentMonthKey).length > 0 && (
+        <select
+          value={period.length === 7 && period !== currentMonthKey ? period : ""}
+          onChange={e => { if (e.target.value) setPeriod(e.target.value); }}
+          className="px-3 py-1.5 rounded-xl text-sm font-medium border bg-white/[0.03] border-white/8 text-slate-400 hover:text-white focus:outline-none focus:border-white/20 transition-all cursor-pointer"
+          style={{ background: "#0D1117" }}
+        >
+          <option value="" disabled>Mes anterior…</option>
+          {historicalMonths
+            .filter(m => m.month !== currentMonthKey)
+            .map(m => (
+              <option key={m.month} value={m.month} style={{ background: "#0D1117" }}>
+                {m.label.charAt(0).toUpperCase() + m.label.slice(1)}
+              </option>
+            ))}
+        </select>
+      )}
     </div>
   );
 }

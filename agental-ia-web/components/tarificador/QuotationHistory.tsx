@@ -6,8 +6,8 @@ import { formatDate } from "@/lib/utils";
 import type { Quotation, QuotationStatus } from "@/types";
 import {
   Clock, Send, MessageCircle, CheckCircle2, XCircle,
-  ChevronDown, Trash2, Loader2, FileDown, FileText, MoreHorizontal,
-  Phone, CalendarClock, AlertCircle, ExternalLink, Share2, Check, Download
+  Trash2, Loader2, FileDown, FileText, MoreHorizontal,
+  Phone, CalendarClock, AlertCircle, ExternalLink, Share2, Check, Download, Copy
 } from "lucide-react";
 import Link from "next/link";
 
@@ -37,6 +37,7 @@ export function QuotationHistory({ initialQuotations, isAdmin }: Props) {
   const [savingFollowUp, setSavingFollowUp] = useState(false);
   const [sharingId, setSharingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [cloningId, setCloningId] = useState<string | null>(null);
 
   const filtered = filter === "all" ? quotations : quotations.filter(q => q.status === filter);
 
@@ -143,6 +144,69 @@ export function QuotationHistory({ initialQuotations, isAdmin }: Props) {
         notaInterna: q.notes ?? "",
       }, q.agent?.name ?? "Agente");
     } catch { alert("Error al generar el DOCX"); }
+  }
+
+  async function cloneQuotation(q: Quotation) {
+    setCloningId(q.id);
+    try {
+      const res = await fetch("/api/quotations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          client_name: `${q.client_name} (copia)`,
+          client_email: q.client_email,
+          client_phone: q.client_phone,
+          client_sector: q.client_sector,
+          has_web: q.has_web,
+          client_web_url: q.client_web_url,
+          plan_id: q.plan_id,
+          plan_name: q.plan_name,
+          plan_price: q.plan_price,
+          extras: q.extras,
+          services: q.services,
+          total_once: q.total_once,
+          total_monthly: q.total_monthly,
+          status: "draft",
+          notes: q.notes,
+        }),
+      });
+      if (res.ok) {
+        const newQ = await res.json();
+        setQuotations(prev => [newQ, ...prev]);
+      }
+    } catch { /* silently ignore */ }
+    setCloningId(null);
+  }
+
+  function buildWhatsAppUrl(q: Quotation, mode: "followup" | "proposal" = "proposal", shareLink?: string) {
+    const phone = q.client_phone?.replace(/\D/g, "");
+    if (!phone) return null;
+    const price = `${q.total_once.toLocaleString("es-ES")} €`;
+    const monthly = q.total_monthly > 0 ? ` + ${q.total_monthly.toLocaleString("es-ES")} €/mes` : "";
+
+    let text: string;
+    if (mode === "followup") {
+      text = `Hola ${q.client_name} 👋, te escribo de Agental.IA para hacer seguimiento a tu propuesta del plan *${q.plan_name}* (${price}${monthly}). ¿Tienes alguna duda o necesitas algo más? Estoy a tu disposición.`;
+    } else if (shareLink) {
+      text = `Hola ${q.client_name} 👋, te comparto la propuesta personalizada que hemos preparado para ti:\n\n📋 *Plan ${q.plan_name}* — ${price}${monthly}\n\n🔗 Ver propuesta: ${shareLink}\n\nCualquier pregunta, aquí estoy. ¡Espero que sea de tu agrado!`;
+    } else {
+      text = `Hola ${q.client_name} 👋, te escribo de Agental.IA en relación a tu propuesta del plan *${q.plan_name}* (${price}${monthly}). ¿Tienes alguna pregunta?`;
+    }
+    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  }
+
+  async function shareViaWhatsApp(q: Quotation) {
+    setSharingId(q.id);
+    try {
+      const res = await fetch(`/api/quotations/${q.id}/share`, { method: "POST" });
+      if (res.ok) {
+        const { token } = await res.json();
+        const shareLink = `${window.location.origin}/p/${token}`;
+        const url = buildWhatsAppUrl(q, "proposal", shareLink);
+        if (url) window.open(url, "_blank", "noopener,noreferrer");
+      }
+    } catch { /* silently ignore */ }
+    setSharingId(null);
   }
 
   async function downloadContract(q: Quotation) {
@@ -267,18 +331,21 @@ export function QuotationHistory({ initialQuotations, isAdmin }: Props) {
 
                   {/* Actions */}
                   <div className="flex items-center gap-1 shrink-0 relative">
-                    {/* WhatsApp */}
-                    {q.client_phone && (
-                      <a
-                        href={`https://wa.me/${q.client_phone.replace(/\D/g, "")}?text=Hola%20${encodeURIComponent(q.client_name)},%20te%20escribo%20de%20Agentalia-webs%20en%20relación%20a%20tu%20propuesta.`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="Contactar por WhatsApp"
-                        className="p-2 rounded-lg text-slate-400 hover:text-[#25D366] hover:bg-white/5 transition-colors"
-                      >
-                        <Phone size={14} />
-                      </a>
-                    )}
+                    {/* WhatsApp follow-up / enviar propuesta */}
+                    {q.client_phone && (() => {
+                      const followUpUrl = buildWhatsAppUrl(q, "followup");
+                      return (
+                        <a
+                          href={followUpUrl ?? "#"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={isOverdue ? "Seguimiento vencido — enviar WhatsApp" : "Contactar por WhatsApp"}
+                          className={`p-2 rounded-lg transition-colors hover:bg-white/5 ${isOverdue ? "text-amber-400 hover:text-[#25D366]" : "text-slate-400 hover:text-[#25D366]"}`}
+                        >
+                          <Phone size={14} />
+                        </a>
+                      );
+                    })()}
                     {/* Follow-up date */}
                     <button
                       onClick={() => { setEditFollowUp(isEditingFollowUp ? null : q.id); setFollowUpInput(q.follow_up_date ?? ""); }}
@@ -296,10 +363,11 @@ export function QuotationHistory({ initialQuotations, isAdmin }: Props) {
                     >
                       <ExternalLink size={14} />
                     </Link>
+                    {/* Copiar link */}
                     <button
                       onClick={() => shareQuotation(q)}
                       disabled={sharingId === q.id}
-                      title={copiedId === q.id ? "¡Link copiado!" : "Compartir link con cliente"}
+                      title={copiedId === q.id ? "¡Link copiado!" : "Copiar link de propuesta"}
                       className={`p-2 rounded-lg transition-colors ${
                         copiedId === q.id
                           ? "text-[#00D4AA] bg-[#00D4AA]/10"
@@ -313,6 +381,20 @@ export function QuotationHistory({ initialQuotations, isAdmin }: Props) {
                         : <Share2 size={14} />
                       }
                     </button>
+                    {/* Enviar por WhatsApp con link */}
+                    {q.client_phone && (
+                      <button
+                        onClick={() => shareViaWhatsApp(q)}
+                        disabled={sharingId === q.id}
+                        title="Enviar propuesta por WhatsApp"
+                        className="p-2 rounded-lg text-slate-400 hover:text-[#25D366] hover:bg-white/5 transition-colors"
+                      >
+                        {sharingId === q.id
+                          ? <Loader2 size={14} className="animate-spin" />
+                          : <MessageCircle size={14} />
+                        }
+                      </button>
+                    )}
                     <button onClick={() => downloadProp(q)} title="Descargar propuesta DOCX" className="p-2 rounded-lg text-slate-400 hover:text-[#C9A84C] hover:bg-white/5 transition-colors">
                       <FileDown size={14} />
                     </button>
@@ -346,6 +428,14 @@ export function QuotationHistory({ initialQuotations, isAdmin }: Props) {
                             </button>
                           ))}
                           <div className="border-t border-white/8 mt-1 pt-1">
+                            <button
+                              onClick={() => { setOpenMenu(null); cloneQuotation(q); }}
+                              disabled={cloningId === q.id}
+                              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-300 hover:bg-white/5 transition-colors"
+                            >
+                              {cloningId === q.id ? <Loader2 size={11} className="animate-spin" /> : <Copy size={11} />}
+                              Duplicar propuesta
+                            </button>
                             <button
                               onClick={() => { setOpenMenu(null); deleteQuotation(q.id); }}
                               disabled={deleting === q.id}

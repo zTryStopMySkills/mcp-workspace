@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { initials } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import { NotificationBell } from "./NotificationBell";
 
 interface SidebarProps {
   open: boolean;
@@ -164,12 +165,15 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             <span className="text-[#00D4AA]">.IA</span>
           </span>
         </Link>
-        <button
-          onClick={onClose}
-          className="lg:hidden text-[#8B95A9] hover:text-white transition-colors ml-2 shrink-0"
-        >
-          <X size={20} />
-        </button>
+        <div className="flex items-center gap-1 shrink-0">
+          <NotificationBell />
+          <button
+            onClick={onClose}
+            className="lg:hidden text-[#8B95A9] hover:text-white transition-colors ml-1"
+          >
+            <X size={20} />
+          </button>
+        </div>
       </div>
 
       {/* Navigation */}

@@ -1,6 +1,8 @@
 import { supabaseAdmin } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import { PrintButton } from "@/components/tarificador/PrintButton";
+import { AcceptButton } from "@/components/tarificador/AcceptButton";
+import { DownloadDocxButton } from "@/components/tarificador/DownloadDocxButton";
 
 interface PageProps {
   params: Promise<{ token: string }>;
@@ -32,8 +34,31 @@ export default async function PublicProposalPage({ params }: PageProps) {
 
       {/* Print toolbar */}
       <div className="no-print fixed top-4 right-4 z-50 flex gap-2">
+        <DownloadDocxButton quotation={{
+          client_name: q.client_name,
+          client_sector: q.client_sector,
+          has_web: q.has_web,
+          client_web_url: q.client_web_url,
+          client_email: q.client_email,
+          client_phone: q.client_phone,
+          plan_id: q.plan_id,
+          plan_name: q.plan_name,
+          plan_price: q.plan_price,
+          extras,
+          services,
+          notes: q.notes,
+          agent_name: agentName,
+        }} />
         <PrintButton />
       </div>
+
+      {/* Accepted banner */}
+      {q.status === "closed" && (
+        <div className="no-print fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-2 rounded-full text-sm font-semibold text-white shadow-lg"
+          style={{ background: "linear-gradient(135deg, #00D4AA, #00b894)" }}>
+          ✅ Propuesta aceptada
+        </div>
+      )}
 
       {/* Proposal document */}
       <div className="min-h-screen bg-white text-[#1a1a2e] font-sans">
@@ -136,6 +161,13 @@ export default async function PublicProposalPage({ params }: PageProps) {
             <div className="mb-10 p-5 rounded-xl bg-gray-50 border border-gray-200">
               <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">Observaciones</p>
               <p className="text-sm text-gray-600 whitespace-pre-wrap">{q.notes}</p>
+            </div>
+          )}
+
+          {/* Accept button — only if not closed/lost */}
+          {!["closed", "lost"].includes(q.status) && (
+            <div className="no-print">
+              <AcceptButton token={q.share_token} />
             </div>
           )}
 

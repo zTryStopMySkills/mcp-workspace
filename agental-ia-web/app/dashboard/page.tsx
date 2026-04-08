@@ -14,6 +14,7 @@ export default async function DashboardPage() {
 
   const currentMonth = new Date().toISOString().slice(0, 7);
   const prevMonth = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().slice(0, 7);
+  const sixMonthsAgo = new Date(new Date().setMonth(new Date().getMonth() - 5)).toISOString().slice(0, 7) + "-01";
 
   const [
     { data: allDocs },
@@ -25,6 +26,7 @@ export default async function DashboardPage() {
     { data: prevMonthQuotations },
     { data: commissionRateData },
     { data: monthClosedQuotations },
+    { data: chartQuotations },
   ] = await Promise.all([
     supabaseAdmin
       .from("documents")
@@ -76,6 +78,11 @@ export default async function DashboardPage() {
       .eq("agent_id", agentId)
       .eq("status", "closed")
       .gte("updated_at", currentMonth + "-01"),
+    supabaseAdmin
+      .from("quotations")
+      .select("status, total_once, created_at")
+      .eq("agent_id", agentId)
+      .gte("created_at", sixMonthsAgo),
   ]);
 
   const seenMap = new Map((assignments ?? []).map((a) => [a.document_id, a.seen_at]));
@@ -109,6 +116,21 @@ export default async function DashboardPage() {
   const commissionRate = commissionRateData?.rate_percent ?? null;
   const monthClosedAmount = (monthClosedQuotations ?? []).reduce((s, q) => s + (q.total_once ?? 0), 0);
 
+  // Build last 6 months chart data
+  const chartData = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - (5 - i));
+    const month = d.toISOString().slice(0, 7);
+    const label = d.toLocaleDateString("es-ES", { month: "short" });
+    const qs = (chartQuotations ?? []).filter(q => q.created_at?.startsWith(month));
+    return {
+      mes: label,
+      creadas: qs.length,
+      cerradas: qs.filter(q => q.status === "closed").length,
+      volumen: qs.filter(q => q.status === "closed").reduce((s, q) => s + (q.total_once ?? 0), 0),
+    };
+  });
+
   return (
     <DashboardLayout>
       <DashboardClient
@@ -124,6 +146,7 @@ export default async function DashboardPage() {
         prevMonthStat={prevMonthStat}
         commissionRate={commissionRate}
         monthClosedAmount={monthClosedAmount}
+        chartData={chartData}
       />
     </DashboardLayout>
   );

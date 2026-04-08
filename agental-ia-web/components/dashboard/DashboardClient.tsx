@@ -6,6 +6,7 @@ import { FolderOpen, MessageCircle, ArrowRight, FileText, Calculator, TrendingUp
 import { useState } from "react";
 import type { DocumentWithStatus } from "@/types";
 import { formatDate, fileTypeIcon, isNewDoc } from "@/lib/utils";
+import { PipelineChart } from "./PipelineChart";
 
 interface QuoteStat {
   total: number;
@@ -27,9 +28,10 @@ interface DashboardClientProps {
   prevMonthStat?: { closed: number; pipeline: number };
   commissionRate?: number | null;
   monthClosedAmount?: number;
+  chartData?: { mes: string; creadas: number; cerradas: number; volumen: number }[];
 }
 
-export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCount, recentMessages, quoteStat, monthlyTarget: initialTarget, overdueFollowUps, prevMonthStat, commissionRate, monthClosedAmount }: DashboardClientProps) {
+export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCount, recentMessages, quoteStat, monthlyTarget: initialTarget, overdueFollowUps, prevMonthStat, commissionRate, monthClosedAmount, chartData }: DashboardClientProps) {
   const [monthlyTarget, setMonthlyTarget] = useState<number | null>(initialTarget);
   const [targetInput, setTargetInput] = useState("");
   const [savingTarget, setSavingTarget] = useState(false);
@@ -140,6 +142,19 @@ export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCou
             </div>
             <ArrowRight size={16} className="text-slate-600 shrink-0" />
           </Link>
+        </motion.div>
+      )}
+
+      {/* Pipeline chart — últimos 6 meses */}
+      {chartData && chartData.some(d => d.creadas > 0) && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.22 }}
+          className="mt-4 p-5 bg-white/[0.03] border border-white/8 rounded-2xl"
+        >
+          <p className="text-xs text-slate-400 mb-4 font-medium uppercase tracking-wide">Propuestas · últimos 6 meses</p>
+          <PipelineChart data={chartData} />
         </motion.div>
       )}
 
@@ -264,7 +279,7 @@ export function DashboardClient({ agentName, agentNick, agentId, docs, unseenCou
                 <div className="flex items-center gap-1 shrink-0">
                   {q.client_phone && (
                     <a
-                      href={`https://wa.me/${q.client_phone.replace(/\D/g, "")}?text=Hola%20${encodeURIComponent(q.client_name)},%20te%20escribo%20de%20Agentalia-webs%20para%20dar%20seguimiento%20a%20tu%20propuesta.`}
+                      href={`https://wa.me/${q.client_phone.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola ${q.client_name} 👋, te escribo de Agental.IA para hacer seguimiento a tu propuesta. ¿Tienes alguna pregunta o necesitas algo más para avanzar?`)}`}
                       target="_blank" rel="noopener noreferrer"
                       className="p-1.5 text-amber-400 hover:text-[#25D366] hover:bg-white/5 rounded-lg transition-colors"
                       title="WhatsApp"

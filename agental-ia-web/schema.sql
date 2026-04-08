@@ -177,6 +177,9 @@ CREATE TABLE IF NOT EXISTS quotations (
   total_monthly INTEGER NOT NULL DEFAULT 0,
   status TEXT DEFAULT 'draft' CHECK (status IN ('draft','sent','negotiating','closed','lost')),
   notes TEXT,
+  share_token UUID UNIQUE,
+  accepted_at TIMESTAMPTZ,
+  accepted_ip TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -268,4 +271,16 @@ CREATE TABLE IF NOT EXISTS agent_monthly_targets (
   target_amount INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(agent_id, month)
+);
+
+-- =============================================================
+-- Push subscriptions (PWA push notifications)
+-- =============================================================
+CREATE TABLE IF NOT EXISTS push_subscriptions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  agent_id UUID REFERENCES agents(id) ON DELETE CASCADE NOT NULL,
+  endpoint TEXT NOT NULL,
+  subscription TEXT NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(agent_id, endpoint)
 );

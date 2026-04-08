@@ -42,6 +42,16 @@ export default async function RankingPage() {
   const allEntries = buildEntries(quotations);
   const monthEntries = buildEntries((quotations ?? []).filter(q => q.created_at?.startsWith(currentMonth)));
 
+  // Build last 6 months for historical selector
+  const historicalMonths = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    const month = d.toISOString().slice(0, 7);
+    const label = d.toLocaleDateString("es-ES", { month: "long", year: "numeric" });
+    const entries = buildEntries((quotations ?? []).filter(q => q.created_at?.startsWith(month)));
+    return { month, label, entries };
+  });
+
   // Objetivo mensual del equipo
   const { data: target } = await supabaseAdmin
     .from("team_monthly_targets")
@@ -68,6 +78,7 @@ export default async function RankingPage() {
         <RankingClient
           allEntries={allEntries}
           monthEntries={monthEntries}
+          historicalMonths={historicalMonths}
           currentAgentId={session.user.id}
           isAdmin={session.user.role === "admin"}
           target={target ?? null}
