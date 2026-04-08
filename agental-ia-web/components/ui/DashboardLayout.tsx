@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { GlobalSearch } from "./GlobalSearch";
-import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { NotificationBell } from "@/components/ui/NotificationBell";
 import { DocToast } from "./DocToast";
 import { IAWidget } from "@/components/ia/IAWidget";
 
