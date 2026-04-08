@@ -70,6 +70,9 @@ Usa markdown con secciones (## título, listas con -). Máximo 400 palabras.`;
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[ia/coach] error:", msg);
-    return NextResponse.json({ error: `Error: ${msg}` }, { status: 500 });
+    if (msg.includes("429") || msg.includes("quota") || msg.includes("Too Many Requests")) {
+      return NextResponse.json({ error: "Cuota de IA agotada. Contacta con el administrador." }, { status: 503 });
+    }
+    return NextResponse.json({ error: "Error interno. Inténtalo de nuevo." }, { status: 500 });
   }
 }
