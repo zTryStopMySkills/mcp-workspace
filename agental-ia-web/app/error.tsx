@@ -27,6 +27,9 @@ export default function GlobalError({
           Se produjo un error inesperado. Puedes intentar recargar la página o volver al panel principal.
         </p>
 
+        <p className="text-xs text-red-400/70 font-mono mb-3 break-all px-2">
+          {error.message}
+        </p>
         {error.digest && (
           <p className="text-xs text-[#8B95A9]/50 font-mono mb-6">
             Referencia: {error.digest}
