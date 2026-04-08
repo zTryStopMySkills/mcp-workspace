@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.GOOGLE_AI_API_KEY) {
     return NextResponse.json({ error: "IA no configurada" }, { status: 503 });
   }
 
@@ -73,16 +73,11 @@ REGLAS DE FORMATO:
 ${channelRules[channel]}
 `.trim();
 
-  const { Anthropic } = await import("@anthropic-ai/sdk");
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const { GoogleGenerativeAI } = await import("@google/generative-ai");
+  const genai = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
+  const model = genai.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: systemPrompt });
 
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 512,
-    system: systemPrompt,
-    messages: [{ role: "user", content: userMessage }],
-  });
-
-  const text = response.content.find((c) => c.type === "text")?.text ?? "";
+  const result = await model.generateContent(userMessage);
+  const text = result.response.text();
   return NextResponse.json({ text });
 }

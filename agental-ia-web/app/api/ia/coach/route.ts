@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-    if (!process.env.ANTHROPIC_API_KEY) {
+    if (!process.env.GOOGLE_AI_API_KEY) {
       return NextResponse.json({ error: "IA no configurada" }, { status: 503 });
     }
 
@@ -60,25 +60,16 @@ Usa markdown con secciones (## título, listas con -). Máximo 400 palabras.`;
       ? `${statsContext}\n\nPregunta: ${question}`
       : `${statsContext}\n\nDame un análisis de mi rendimiento y consejos para mejorar.`;
 
-    const { Anthropic } = await import("@anthropic-ai/sdk");
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const { GoogleGenerativeAI } = await import("@google/generative-ai");
+    const genai = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
+    const model = genai.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: systemPrompt });
 
-    const response = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
-    });
-
-    const text = response.content.find((c) => c.type === "text")?.text ?? "";
+    const result = await model.generateContent(userMessage);
+    const text = result.response.text();
     return NextResponse.json({ text });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[ia/coach] error:", msg);
-    // Créditos insuficientes
-    if (msg.includes("credit balance")) {
-      return NextResponse.json({ error: "Créditos de IA agotados. Contacta con el administrador." }, { status: 503 });
-    }
     return NextResponse.json({ error: "Error interno. Inténtalo de nuevo." }, { status: 500 });
   }
 }

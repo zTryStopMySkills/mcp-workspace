@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.GOOGLE_AI_API_KEY) {
     return NextResponse.json({ error: "IA no configurada" }, { status: 503 });
   }
 
@@ -114,23 +114,18 @@ ${JSON.stringify(quotationsList, null, 2)}
 Tasa de cierre histórica por sector:
 ${JSON.stringify(sectorCloseRates, null, 2)}`;
 
-  const { Anthropic } = await import("@anthropic-ai/sdk");
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const { GoogleGenerativeAI } = await import("@google/generative-ai");
+  const genai = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
+  const model = genai.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: systemPrompt });
 
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 2048,
-    system: systemPrompt,
-    messages: [{ role: "user", content: userMessage }],
-  });
-
-  const rawText = response.content.find((c) => c.type === "text")?.text ?? "{}";
+  const result = await model.generateContent(userMessage);
+  const rawText = result.response.text() ?? "{}";
 
   try {
     const parsed = JSON.parse(rawText) as PipelineAnalysisResponse;
     return NextResponse.json(parsed);
   } catch {
-    // Claude sometimes wraps JSON in code blocks despite instructions — strip them
+    // Gemini sometimes wraps JSON in code blocks despite instructions — strip them
     const cleaned = rawText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
     try {
       const parsed = JSON.parse(cleaned) as PipelineAnalysisResponse;
