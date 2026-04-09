@@ -70,6 +70,7 @@ export default function WorkshopModal({ workshop, onClose }: Props) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 60, scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+          role="dialog" aria-modal="true"
           className="bg-white w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col"
           style={{ maxHeight: '92vh' }}
           role="dialog"

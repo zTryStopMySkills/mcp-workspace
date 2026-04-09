@@ -108,6 +108,7 @@ export default function BookingModal({ pack, onClose }: Props) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 40, scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+          role="dialog" aria-modal="true"
           className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl"
         >
           {/* Header */}
