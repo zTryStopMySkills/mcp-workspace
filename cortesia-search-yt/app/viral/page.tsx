@@ -3,7 +3,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import type { YTVideo } from "@/lib/youtube";
 import { formatNumber, timeAgo, coefficientLabel } from "@/lib/youtube";
-import { VIDEO_PRESETS, trackQuotaUsage } from "@/lib/ai-presets";
+import { VIDEO_PRESETS } from "@/lib/ai-presets";
 
 type SortKey = "viralScore" | "viralCoefficient" | "viewCount" | "engagementRate" | "viewsPerDay";
 type Analysis = Record<string, string | string[]>;
@@ -300,7 +300,7 @@ function ViralPageContent() {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setVideos(data.videos || []);
-      trackQuotaUsage(102);
+      fetch("/api/quota", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ units: 102 }) });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error desconocido");
     } finally {

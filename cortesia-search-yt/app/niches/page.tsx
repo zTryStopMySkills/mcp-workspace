@@ -2,7 +2,7 @@
 import { useState } from "react";
 import type { YTChannel } from "@/lib/youtube";
 import { formatNumber, timeAgo, trendLabel, sizeCategoryLabel } from "@/lib/youtube";
-import { CHANNEL_PRESETS, trackQuotaUsage } from "@/lib/ai-presets";
+import { CHANNEL_PRESETS } from "@/lib/ai-presets";
 
 type SortKey = "nicheScore" | "efficiencyRatio" | "recentAvgViews" | "trendRatio" | "subscriberCount";
 type Analysis = Record<string, string>;
@@ -232,7 +232,7 @@ export default function NichesPage() {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setChannels(data.channels || []);
-      trackQuotaUsage(123);
+      fetch("/api/quota", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ units: 123 }) });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error");
     } finally {
