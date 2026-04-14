@@ -26,6 +26,7 @@ export default function SavedPage() {
   const [items, setItems] = useState<(SavedVideo | SavedChannel | SavedKeyword | ThumbnailJob)[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
 
   // Reference channels watchlist
   const [watchlistVideos, setWatchlistVideos] = useState<Record<string, YTVideo[]>>({});
@@ -33,6 +34,7 @@ export default function SavedPage() {
   const [watchlistOpen, setWatchlistOpen] = useState<string | null>(null);
 
   useEffect(() => {
+    setSearch("");
     load();
   }, [tab]);
 
@@ -98,6 +100,17 @@ export default function SavedPage() {
     { key: "thumbnails", icon: "🖼️", label: "Miniaturas" },
   ];
 
+  const filteredItems = search.trim()
+    ? items.filter((item) => {
+        const s = search.toLowerCase();
+        const v = item as Record<string, unknown>;
+        return (
+          String(v.title ?? v.keyword ?? v.prompt ?? "").toLowerCase().includes(s) ||
+          String(v.channel_title ?? "").toLowerCase().includes(s)
+        );
+      })
+    : items;
+
   return (
     <div>
       {error && (
@@ -134,6 +147,16 @@ export default function SavedPage() {
         ))}
       </div>
 
+      {items.length > 0 && (
+        <input
+          className="input"
+          style={{ marginBottom: 16 }}
+          placeholder={`Buscar en ${tab}...`}
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+      )}
+
       {loading ? (
         <div className="grid-results">
           {Array(6).fill(0).map((_, i) => (
@@ -150,7 +173,7 @@ export default function SavedPage() {
         </div>
       ) : tab === "videos" ? (
         <div className="grid-results">
-          {(items as SavedVideo[]).map(item => (
+          {(filteredItems as SavedVideo[]).map(item => (
             <div key={item.id} className="card" style={{ padding: 0, overflow: "hidden" }}>
               <a href={`https://youtube.com/watch?v=${item.video_id}`} target="_blank" rel="noopener noreferrer" style={{ display: "block" }}>
                 {item.thumbnail_url && (
@@ -173,7 +196,7 @@ export default function SavedPage() {
         </div>
       ) : tab === "channels" ? (
         <div className="grid-results">
-          {(items as SavedChannel[]).map(item => (
+          {(filteredItems as SavedChannel[]).map(item => (
             <div key={item.id} className="card" style={{ padding: 16 }}>
               <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
                 {item.thumbnail_url && (
@@ -195,7 +218,7 @@ export default function SavedPage() {
         </div>
       ) : tab === "keywords" ? (
         <div className="grid-results">
-          {(items as SavedKeyword[]).map(item => (
+          {(filteredItems as SavedKeyword[]).map(item => (
             <div key={item.id} className="card" style={{ padding: 16 }}>
               <div style={{ fontSize: 16, fontWeight: 700, color: "var(--accent)", marginBottom: 8 }}>{item.keyword}</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 12 }}>
@@ -211,7 +234,7 @@ export default function SavedPage() {
         </div>
       ) : (
         <div className="grid-results">
-          {(items as ThumbnailJob[]).map(item => (
+          {(filteredItems as ThumbnailJob[]).map(item => (
             <div key={item.id} className="card" style={{ padding: 0, overflow: "hidden" }}>
               {item.result_url && (
                 <img src={item.result_url} alt="Miniatura" style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", display: "block" }} />
