@@ -371,15 +371,20 @@ function ViralPageContent() {
 
   async function saveVideo(video: YTVideo) {
     if (savedIds.has(video.id)) return;
-    await fetch("/api/saved", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "video",
-        item: { video_id: video.id, title: video.title, channel_title: video.channelTitle, thumbnail_url: video.thumbnailUrl, view_count: video.viewCount, like_count: video.likeCount, viral_score: video.viralScore, published_at: video.publishedAt },
-      }),
-    });
-    setSavedIds(prev => new Set([...prev, video.id]));
+    try {
+      const res = await fetch("/api/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "video",
+          item: { video_id: video.id, title: video.title, channel_title: video.channelTitle, thumbnail_url: video.thumbnailUrl, view_count: video.viewCount, like_count: video.likeCount, viral_score: video.viralScore, published_at: video.publishedAt },
+        }),
+      });
+      if (!res.ok) throw new Error("Error guardando vídeo");
+      setSavedIds(prev => new Set([...prev, video.id]));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al guardar");
+    }
   }
 
   const sorted = [...videos].sort((a, b) => {

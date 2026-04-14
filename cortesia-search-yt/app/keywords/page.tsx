@@ -105,15 +105,20 @@ export default function KeywordsPage() {
 
   async function saveKeyword() {
     if (!query.trim() || saved.includes(query)) return;
-    await fetch("/api/saved", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "keyword",
-        item: { keyword: query, related: keywords.slice(0, 10) },
-      }),
-    });
-    setSaved(prev => [...prev, query]);
+    try {
+      const res = await fetch("/api/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "keyword",
+          item: { keyword: query, related: keywords.slice(0, 10) },
+        }),
+      });
+      if (!res.ok) throw new Error("Error guardando keyword");
+      setSaved(prev => [...prev, query]);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al guardar");
+    }
   }
 
   function selectKeyword(kw: string) {

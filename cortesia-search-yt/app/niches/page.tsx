@@ -264,12 +264,17 @@ export default function NichesPage() {
 
   async function saveChannel(ch: YTChannel) {
     if (savedIds.has(ch.id)) return;
-    await fetch("/api/saved", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "channel", item: { channel_id: ch.id, title: ch.title, thumbnail_url: ch.thumbnailUrl, subscriber_count: ch.subscriberCount, avg_views_per_video: ch.avgViewsPerVideo, growth_score: ch.nicheScore } }),
-    });
-    setSavedIds(prev => new Set([...prev, ch.id]));
+    try {
+      const res = await fetch("/api/saved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "channel", item: { channel_id: ch.id, title: ch.title, thumbnail_url: ch.thumbnailUrl, subscriber_count: ch.subscriberCount, avg_views_per_video: ch.avgViewsPerVideo, growth_score: ch.nicheScore } }),
+      });
+      if (!res.ok) throw new Error("Error guardando canal");
+      setSavedIds(prev => new Set([...prev, ch.id]));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al guardar");
+    }
   }
 
   const filteredChannels = filterSize
