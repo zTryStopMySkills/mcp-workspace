@@ -1,4 +1,4 @@
-export type AgentRole = "admin" | "agent";
+export type AgentRole = "admin" | "agent" | "editor";
 
 export interface SearchResult {
   type: "document" | "message" | "workspace_item";
