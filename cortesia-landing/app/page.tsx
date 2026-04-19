@@ -2,7 +2,6 @@ import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { Services } from "@/components/Services";
 import { AcademyPitch } from "@/components/AcademyPitch";
-import { Portfolio } from "@/components/Portfolio";
 import { VideoFeed } from "@/components/VideoFeed";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
@@ -16,7 +15,6 @@ export default function Home() {
         <Hero />
         <Services />
         <AcademyPitch />
-        <Portfolio />
         <VideoFeed />
 
         {/* Contact section */}

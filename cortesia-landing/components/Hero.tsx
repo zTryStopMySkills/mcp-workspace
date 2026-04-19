@@ -59,24 +59,6 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-20 grid grid-cols-3 gap-8 max-w-xl mx-auto"
-        >
-          {[
-            { value: "10+", label: "Webs entregadas" },
-            { value: "IA", label: "Nativos en IA" },
-            { value: "24/7", label: "Agentes activos" }
-          ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-3xl font-bold text-white mb-1">{s.value}</p>
-              <p className="text-sm text-[#8B95A9]">{s.label}</p>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );
