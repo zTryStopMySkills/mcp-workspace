@@ -10,15 +10,18 @@ export default async function AdminAcademyPage() {
   if (!session || session.user.role !== "admin") redirect("/chat");
 
   const supabase = getSupabaseAdmin();
-  const { data: students } = await supabase
+  const { data: students, count } = await supabase
     .from("academy_users")
-    .select("id, nick, tier, is_active, created_at, stripe_customer_id")
+    .select("id, nick, tier, is_active, created_at, stripe_customer_id", { count: "exact" })
     .order("created_at", { ascending: false })
     .limit(50);
 
   return (
     <DashboardLayout>
-      <AcademyAdminClient initialStudents={students ?? []} />
+      <AcademyAdminClient
+        initialStudents={students ?? []}
+        initialTotal={count ?? (students?.length ?? 0)}
+      />
     </DashboardLayout>
   );
 }

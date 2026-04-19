@@ -45,9 +45,19 @@ export async function POST(req: Request) {
         if (!email) break;
 
         // Generar credenciales
-        const nick = email.split("@")[0].toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20);
+        let nick = email.split("@")[0].toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20);
         const password = crypto.randomBytes(9).toString("base64").replace(/[+/=]/g, "").slice(0, 12);
         const passwordHash = await bcrypt.hash(password, 12);
+
+        // Nick uniqueness check — if nick already exists for a different email, append 4-digit suffix
+        const { data: existingNick } = await supabase
+          .from("academy_users")
+          .select("id")
+          .eq("nick", nick)
+          .maybeSingle();
+        if (existingNick) {
+          nick = nick.slice(0, 16) + Math.floor(Math.random() * 9000 + 1000).toString();
+        }
 
         // Upsert user
         const { error } = await supabase.from("academy_users").upsert(
