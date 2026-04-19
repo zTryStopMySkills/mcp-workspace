@@ -1,9 +1,9 @@
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { searchRag } from "@/lib/rag";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! });
 
 const SYSTEM = `Eres el asistente interno de CortesIA Corporation. Tienes acceso a la documentación completa del ecosistema: Cockpit, Bot AI Intel, Nexus Hub, Academy y SonarForge.
 
@@ -25,24 +25,35 @@ export async function POST(req: Request) {
       ? chunks.map((c, i) => `[Fuente ${i + 1}: ${c.source}${c.section ? ` › ${c.section}` : ""}]\n${c.content}`).join("\n\n---\n\n")
       : "No se encontró contexto relevante en la base de conocimiento.";
 
-    const stream = anthropic.messages.stream({
-      model: "claude-sonnet-4-6",
+    const groqMessages = [
+      { role: "system" as const, content: `${SYSTEM}\n\n<context>\n${context}\n</context>` },
+      ...messages.map((m: { role: string; content: string }) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      })),
+    ];
+
+    const stream = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
       max_tokens: 2048,
-      system: [
-        { type: "text", text: `${SYSTEM}\n\n<context>\n${context}\n</context>`, cache_control: { type: "ephemeral" } },
-      ],
-      messages: messages.map((m: { role: string; content: string }) => ({ role: m.role, content: m.content })),
+      messages: groqMessages,
+      stream: true,
     });
 
     const readable = new ReadableStream({
       async start(controller) {
         const enc = new TextEncoder();
         if (chunks.length) {
-          controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "sources", sources: chunks.map((c) => ({ source: c.source, section: c.section, similarity: c.similarity })) })}\n\n`));
+          controller.enqueue(
+            enc.encode(
+              `data: ${JSON.stringify({ type: "sources", sources: chunks.map((c) => ({ source: c.source, section: c.section, similarity: c.similarity })) })}\n\n`
+            )
+          );
         }
-        for await (const event of stream) {
-          if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-            controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text: event.delta.text })}\n\n`));
+        for await (const chunk of stream) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) {
+            controller.enqueue(enc.encode(`data: ${JSON.stringify({ type: "text", text })}\n\n`));
           }
         }
         controller.enqueue(enc.encode("data: [DONE]\n\n"));
