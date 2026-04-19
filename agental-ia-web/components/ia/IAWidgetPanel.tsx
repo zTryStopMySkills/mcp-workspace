@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Brain, Wand2, ExternalLink, Send } from "lucide-react";
+import { Brain, Wand2, ExternalLink, Send, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { IAResponseBlock } from "./shared/IAResponseBlock";
 import { IAErrorAlert } from "./shared/IAErrorAlert";
@@ -9,7 +9,7 @@ import { IALoadingDots } from "./shared/IALoadingDots";
 import type { TextoChannel, TextoObjective } from "@/types/ia";
 import type { Quotation } from "@/types";
 
-type WidgetTab = "coach" | "texto";
+type WidgetTab = "coach" | "texto" | "cerebro";
 
 interface IAWidgetPanelProps {
   quotations: Quotation[];
@@ -26,11 +26,11 @@ export function IAWidgetPanel({ quotations, agentStats, teamStats, overdueCount 
       {/* Panel header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/8">
         <p className="text-sm font-semibold text-white">
-          <span className="text-[#00D4AA]">IA</span> Comercial
+          <span className="text-[#7DD3FC]">IA</span> Comercial
         </p>
         <Link
           href="/ia"
-          className="text-xs text-slate-400 hover:text-[#00D4AA] flex items-center gap-1 transition-colors"
+          className="text-xs text-slate-400 hover:text-[#7DD3FC] flex items-center gap-1 transition-colors"
         >
           <ExternalLink size={12} />
           Ver completo
@@ -43,23 +43,34 @@ export function IAWidgetPanel({ quotations, agentStats, teamStats, overdueCount 
           onClick={() => setActiveTab("coach")}
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
             activeTab === "coach"
-              ? "bg-[#00D4AA]/15 text-[#00D4AA] border border-[#00D4AA]/25"
+              ? "bg-[#7DD3FC]/15 text-[#7DD3FC] border border-[#7DD3FC]/25"
               : "text-slate-400 hover:text-white hover:bg-white/5"
           }`}
         >
-          <Brain size={13} />
+          <TrendingUp size={13} />
           Coach
         </button>
         <button
           onClick={() => setActiveTab("texto")}
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
             activeTab === "texto"
-              ? "bg-[#00D4AA]/15 text-[#00D4AA] border border-[#00D4AA]/25"
+              ? "bg-[#7DD3FC]/15 text-[#7DD3FC] border border-[#7DD3FC]/25"
               : "text-slate-400 hover:text-white hover:bg-white/5"
           }`}
         >
           <Wand2 size={13} />
           Texto
+        </button>
+        <button
+          onClick={() => setActiveTab("cerebro")}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            activeTab === "cerebro"
+              ? "bg-[#7DD3FC]/15 text-[#7DD3FC] border border-[#7DD3FC]/25"
+              : "text-slate-400 hover:text-white hover:bg-white/5"
+          }`}
+        >
+          <Brain size={13} />
+          Cerebro
         </button>
       </div>
 
@@ -73,6 +84,7 @@ export function IAWidgetPanel({ quotations, agentStats, teamStats, overdueCount 
           />
         )}
         {activeTab === "texto" && <MiniTextoTab quotations={quotations} />}
+        {activeTab === "cerebro" && <MiniBrainTab />}
       </div>
     </div>
   );
@@ -127,7 +139,7 @@ function MiniCoachTab({
         <button
           onClick={() => fetchCoach()}
           disabled={!agentStats}
-          className="w-full py-2 rounded-lg bg-[#00D4AA]/15 border border-[#00D4AA]/25 text-[#00D4AA] text-xs font-semibold hover:bg-[#00D4AA]/25 transition-colors disabled:opacity-40"
+          className="w-full py-2 rounded-lg bg-[#7DD3FC]/15 border border-[#7DD3FC]/25 text-[#7DD3FC] text-xs font-semibold hover:bg-[#7DD3FC]/25 transition-colors disabled:opacity-40"
         >
           Obtener consejo rápido
         </button>
@@ -146,12 +158,12 @@ function MiniCoachTab({
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Pregunta al coach..."
           disabled={isLoading}
-          className="flex-1 bg-white/[0.04] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#00D4AA]/50 disabled:opacity-50"
+          className="flex-1 bg-white/[0.04] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#7DD3FC]/50 disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={!question.trim() || isLoading}
-          className="px-2.5 py-1.5 rounded-lg bg-[#00D4AA] text-black hover:bg-[#2DD4BF] transition-colors disabled:opacity-40"
+          className="px-2.5 py-1.5 rounded-lg bg-[#7DD3FC] text-black hover:bg-[#2DD4BF] transition-colors disabled:opacity-40"
         >
           <Send size={12} />
         </button>
@@ -160,7 +172,7 @@ function MiniCoachTab({
       {text && (
         <Link
           href="/ia?tab=coach"
-          className="block text-center text-xs text-slate-400 hover:text-[#00D4AA] transition-colors"
+          className="block text-center text-xs text-slate-400 hover:text-[#7DD3FC] transition-colors"
         >
           Ver análisis completo →
         </Link>
@@ -209,7 +221,7 @@ function MiniTextoTab({ quotations }: { quotations: Quotation[] }) {
       <select
         value={quotationId}
         onChange={(e) => setQuotationId(e.target.value)}
-        className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#00D4AA]/50 appearance-none"
+        className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#7DD3FC]/50 appearance-none"
       >
         <option value="">Selecciona propuesta...</option>
         {quotations.slice(0, 10).map((q) => (
@@ -226,7 +238,7 @@ function MiniTextoTab({ quotations }: { quotations: Quotation[] }) {
             onClick={() => setChannel(c)}
             className={`flex-1 py-1.5 rounded-lg text-xs font-medium border transition-all ${
               channel === c
-                ? "bg-[#00D4AA]/15 border-[#00D4AA]/30 text-[#00D4AA]"
+                ? "bg-[#7DD3FC]/15 border-[#7DD3FC]/30 text-[#7DD3FC]"
                 : "border-white/10 text-slate-400 hover:text-white"
             }`}
           >
@@ -248,7 +260,7 @@ function MiniTextoTab({ quotations }: { quotations: Quotation[] }) {
       <button
         onClick={handleGenerate}
         disabled={!quotationId || isLoading}
-        className="w-full py-1.5 rounded-lg bg-[#00D4AA]/15 border border-[#00D4AA]/25 text-[#00D4AA] text-xs font-semibold hover:bg-[#00D4AA]/25 transition-colors disabled:opacity-40"
+        className="w-full py-1.5 rounded-lg bg-[#7DD3FC]/15 border border-[#7DD3FC]/25 text-[#7DD3FC] text-xs font-semibold hover:bg-[#7DD3FC]/25 transition-colors disabled:opacity-40"
       >
         {isLoading ? "Generando..." : "Generar texto"}
       </button>
@@ -277,11 +289,104 @@ function MiniTextoTab({ quotations }: { quotations: Quotation[] }) {
       {text && (
         <Link
           href="/ia?tab=textos"
-          className="block text-center text-xs text-slate-400 hover:text-[#00D4AA] transition-colors"
+          className="block text-center text-xs text-slate-400 hover:text-[#7DD3FC] transition-colors"
         >
           Abre el generador completo →
         </Link>
       )}
+    </div>
+  );
+}
+
+function MiniBrainTab() {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [sources, setSources] = useState<{ source: string; section: string | null; similarity: number }[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = question.trim();
+    if (!q || isLoading) return;
+    setIsLoading(true);
+    setAnswer("");
+    setSources([]);
+    setError(null);
+    setQuestion("");
+
+    const res = await fetch("/api/rag/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [{ role: "user", content: q }], limit: 4 }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: `Error ${res.status}` }));
+      setError(err.error ?? "Error desconocido");
+      setIsLoading(false);
+      return;
+    }
+
+    const reader = res.body!.getReader();
+    const dec = new TextDecoder();
+    let buf = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split("\n\n");
+      buf = lines.pop() ?? "";
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const payload = line.slice(6);
+        if (payload === "[DONE]") break;
+        try {
+          const ev = JSON.parse(payload);
+          if (ev.type === "sources") setSources(ev.sources);
+          else if (ev.type === "text") setAnswer((a) => a + ev.text);
+        } catch {}
+      }
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="space-y-2.5">
+      <form onSubmit={handleSubmit} className="flex gap-1.5">
+        <input
+          type="text"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          placeholder="Pregunta sobre el proyecto..."
+          disabled={isLoading}
+          className="flex-1 bg-white/[0.04] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#7DD3FC]/50 disabled:opacity-50"
+        />
+        <button
+          type="submit"
+          disabled={!question.trim() || isLoading}
+          className="px-2.5 py-1.5 rounded-lg bg-[#7DD3FC] text-black hover:bg-[#2DD4BF] transition-colors disabled:opacity-40"
+        >
+          <Send size={12} />
+        </button>
+      </form>
+
+      {isLoading && !answer && <IALoadingDots />}
+      {error && <IAErrorAlert message={error} onRetry={() => {}} />}
+      {answer && <IAResponseBlock text={answer} isStreaming={isLoading} compact />}
+      {sources.length > 0 && !isLoading && (
+        <p className="text-[10px] text-slate-500">
+          {sources.length} fuente{sources.length > 1 ? "s" : ""}:{" "}
+          {sources.map((s) => s.source.split("/").pop()).join(", ")}
+        </p>
+      )}
+
+      <Link
+        href="/rag"
+        className="block text-center text-xs text-slate-400 hover:text-[#7DD3FC] transition-colors"
+      >
+        Abrir Cerebro completo →
+      </Link>
     </div>
   );
 }
