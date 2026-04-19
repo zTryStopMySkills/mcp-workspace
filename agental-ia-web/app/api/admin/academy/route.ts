@@ -2,8 +2,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
-function adminGuard(session: Awaited<ReturnType<typeof getServerSession>>) {
-  if (!session || session.user.role !== "admin") {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function adminGuard(session: any) {
+  if (!session || session.user?.role !== "admin") {
     return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403, headers: { "Content-Type": "application/json" } });
   }
   return null;
